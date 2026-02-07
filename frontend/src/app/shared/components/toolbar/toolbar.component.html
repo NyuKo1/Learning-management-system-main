@@ -1,11 +1,15 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row class="mat-elevation-z8 h-28">
-    <a routerLink="/" class="m-auto">
-      <img src="assets/logo.png" alt="University of Toronto" />
-    </a>
-  </mat-toolbar-row>
+    <mat-toolbar-row class="mat-elevation-z8 h-20 md:h-28 transition-all">
+        <a routerLink="/" class="flex items-center justify-center h-full w-full p-2">
+            <img
+                    src="assets/logo.png"
+                    alt="Logo"
+                    class="max-h-full w-auto object-contain"
+            />
+        </a>
+    </mat-toolbar-row>
   <mat-toolbar-row>
-    <div class="m-auto">
+    <div class="flex flex-wrap justify-center items-center w-full gap-2">
       <a mat-button routerLink="/about" class="md:text-lg">About</a>
       <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
       <a
