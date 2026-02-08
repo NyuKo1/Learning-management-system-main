@@ -1,9 +1,61 @@
-/* You can add global styles to this file, and also import other style files */
-
+/* Импортируем Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Импортируем инструменты темизации Material */
+@use '@angular/material' as mat;
+
+/* Подключаем базовые стили Material */
+@include mat.core();
+
+/* --- Настройка палитры (можете выбрать свои цвета) --- */
+$my-primary: mat.define-palette(mat.$indigo-palette);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$red-palette);
+
+/* --- Создаем СВЕТЛУЮ тему --- */
+$my-light-theme: mat.define-light-theme((
+        color: (
+                primary: $my-primary,
+                accent: $my-accent,
+                warn: $my-warn,
+        )
+));
+
+/* --- Создаем ТЕМНУЮ тему --- */
+$my-dark-theme: mat.define-dark-theme((
+        color: (
+                primary: $my-primary,
+                accent: $my-accent,
+                warn: $my-warn,
+        )
+));
+
+/* --- Применение тем --- */
+
+/* По умолчанию применяем светлую тему */
+@include mat.all-component-themes($my-light-theme);
+
+/* Когда у родительского элемента есть класс .dark, применяем темную тему Material */
+.dark {
+  @include mat.all-component-themes($my-dark-theme);
+
+  /* Дополнительный фикс для фона контента Material */
+  .mat-app-background {
+    background-color: #303030; /* Цвет фона для темной темы Material */
+    color: white;
+  }
+}
+
+/* Глобальные настройки тела страницы */
 body {
-  @apply antialiased text-slate-900 bg-white dark:bg-slate-900 dark:text-slate-100;
+  @apply antialiased text-slate-900 bg-white; /* Tailwind стили по умолчанию */
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* Стили для темной темы через Tailwind для body */
+.dark body {
+  @apply bg-slate-900 text-slate-100;
 }
