@@ -1,10 +1,10 @@
-/* Импортируем Tailwind */
+/* Сначала импортируем инструменты темизации Material (должно быть первым!) */
+@use '@angular/material' as mat;
+
+/* Затем импортируем Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Импортируем инструменты темизации Material */
-@use '@angular/material' as mat;
 
 /* Подключаем базовые стили Material */
 @include mat.core();
