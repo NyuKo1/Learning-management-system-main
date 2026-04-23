@@ -22,11 +22,12 @@ $dark-theme : mat.define-dark-theme((color:(primary:$primary, accent:$accent, wa
 
 /* ── 6. Dark theme ──────────────────────────────────────────────── */
 /*
-   We use html.dark (not just .dark) so this block is maximally specific
-   and reliably beats Tailwind's  important:true  utilities.
+   html.dark beats Tailwind's important:true utilities due to higher specificity.
+   Only all-component-colors is used here (not all-component-themes) to avoid
+   regenerating density and typography styles that are identical between themes.
 */
 html.dark {
-  @include mat.all-component-themes($dark-theme);
+  @include mat.all-component-colors($dark-theme);
 
   background-color: #121212;
   color: rgba(255, 255, 255, 0.87);
