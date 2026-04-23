@@ -42,6 +42,7 @@ public class SecurityConfig {
                 .antMatchers(
                         HttpMethod.GET,
                         "/actuator/**",
+                        "/docs/**",
                         "/refresh").permitAll()
                 .antMatchers(
                         HttpMethod.POST,
