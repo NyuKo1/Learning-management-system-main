@@ -1,61 +1,157 @@
-/* Сначала импортируем инструменты темизации Material (должно быть первым!) */
+/* ── 1. Material theming tools (must be first) ─────────────────── */
 @use '@angular/material' as mat;
 
-/* Затем импортируем Tailwind */
+/* ── 2. Tailwind layers ─────────────────────────────────────────── */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Подключаем базовые стили Material */
+/* ── 3. Material core ───────────────────────────────────────────── */
 @include mat.core();
 
-/* --- Настройка палитры (можете выбрать свои цвета) --- */
-$my-primary: mat.define-palette(mat.$indigo-palette);
-$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$my-warn: mat.define-palette(mat.$red-palette);
+/* ── 4. Palettes ────────────────────────────────────────────────── */
+$primary : mat.define-palette(mat.$indigo-palette);
+$accent  : mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$warn    : mat.define-palette(mat.$red-palette);
 
-/* --- Создаем СВЕТЛУЮ тему --- */
-$my-light-theme: mat.define-light-theme((
-        color: (
-                primary: $my-primary,
-                accent: $my-accent,
-                warn: $my-warn,
-        )
-));
+$light-theme: mat.define-light-theme((color:(primary:$primary, accent:$accent, warn:$warn)));
+$dark-theme : mat.define-dark-theme ((color:(primary:$primary, accent:$accent, warn:$warn)));
 
-/* --- Создаем ТЕМНУЮ тему --- */
-$my-dark-theme: mat.define-dark-theme((
-        color: (
-                primary: $my-primary,
-                accent: $my-accent,
-                warn: $my-warn,
-        )
-));
+/* ── 5. Default (light) theme ───────────────────────────────────── */
+@include mat.all-component-themes($light-theme);
 
-/* --- Применение тем --- */
+/* ── 6. Dark theme ──────────────────────────────────────────────── */
+/*
+   We use html.dark (not just .dark) so this block is maximally specific
+   and reliably beats Tailwind's  important:true  utilities.
+*/
+html.dark {
+  @include mat.all-component-themes($dark-theme);
 
-/* По умолчанию применяем светлую тему */
-@include mat.all-component-themes($my-light-theme);
+  background-color: #121212;
+  color: rgba(255, 255, 255, 0.87);
 
-/* Когда у родительского элемента есть класс .dark, применяем темную тему Material */
-.dark {
-  @include mat.all-component-themes($my-dark-theme);
+  body {
+    background-color: #121212 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
 
-  /* Дополнительный фикс для фона контента Material */
+  /* Drawer / sidenav */
+  .mat-drawer-container,
   .mat-app-background {
-    background-color: #303030; /* Цвет фона для темной темы Material */
-    color: white;
+    background-color: #1e1e1e !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-drawer {
+    background-color: #242424 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-drawer-content {
+    background-color: #121212 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+
+  /* Toolbars */
+  .mat-toolbar {
+    background-color: #1f2937 !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .sidenav-header-toolbar {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+  }
+
+  /* Tables */
+  .mat-table {
+    background-color: #1e1e1e !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-header-row, .mat-row, .mat-footer-row {
+    background-color: #1e1e1e !important;
+  }
+  .mat-row:hover { background-color: #2a2a2a !important; }
+  .mat-header-cell, .mat-cell, .mat-footer-cell {
+    color: rgba(255, 255, 255, 0.87) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.12) !important;
+  }
+
+  /* Paginator */
+  .mat-paginator {
+    background-color: #1e1e1e !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-paginator-page-size-label,
+  .mat-paginator-range-label { color: rgba(255, 255, 255, 0.7) !important; }
+  .mat-paginator-icon { fill: rgba(255, 255, 255, 0.7) !important; }
+
+  /* Form fields */
+  .mat-form-field-label { color: rgba(255, 255, 255, 0.6) !important; }
+  .mat-input-element, .mat-select-value,
+  .mat-select-placeholder, .mat-select-arrow {
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-form-field-underline { background-color: rgba(255, 255, 255, 0.42) !important; }
+  .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Cards & Dialogs */
+  .mat-card {
+    background-color: #2d2d2d !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-dialog-container {
+    background-color: #2d2d2d !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+
+  /* Menus / panels */
+  .mat-menu-panel, .mat-select-panel, .mat-autocomplete-panel {
+    background-color: #2d2d2d !important;
+  }
+  .mat-option {
+    color: rgba(255, 255, 255, 0.87) !important;
+    &:hover:not(.mat-option-disabled), &.mat-active {
+      background-color: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+
+  /* Nav list */
+  .mat-list-base .mat-list-item,
+  .mat-nav-list .mat-list-item { color: rgba(255, 255, 255, 0.87) !important; }
+  .mat-list-item:hover,
+  .mat-nav-list .mat-list-item:hover { background-color: rgba(255, 255, 255, 0.06) !important; }
+
+  /* Misc */
+  .mat-divider { border-top-color: rgba(255, 255, 255, 0.12) !important; }
+  .mat-icon { color: rgba(255, 255, 255, 0.87) !important; }
+  .mat-button, .mat-stroked-button, .mat-icon-button {
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-sort-header-arrow { color: rgba(255, 255, 255, 0.87) !important; }
+  .mat-chip.mat-standard-chip {
+    background-color: #3d3d3d !important;
+    color: rgba(255, 255, 255, 0.87) !important;
+  }
+  .mat-elevation-z2, .mat-elevation-z4, .mat-elevation-z8 {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
   }
 }
 
-/* Глобальные настройки тела страницы */
+/* ── 7. Global base ─────────────────────────────────────────────── */
 body {
-  @apply antialiased text-slate-900 bg-white; /* Tailwind стили по умолчанию */
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #ffffff;
+  color: #1e293b;
 }
 
-/* Стили для темной темы через Tailwind для body */
-.dark body {
-  @apply bg-slate-900 text-slate-100;
+body,
+.mat-drawer-container,
+.mat-drawer-content,
+.mat-toolbar,
+.mat-table,
+.mat-card,
+.mat-dialog-container {
+  transition: background-color 0.25s ease, color 0.25s ease;
 }

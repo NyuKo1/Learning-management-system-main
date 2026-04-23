@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -24,7 +25,7 @@ import { TableData } from '@core/models/table-data.model';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent<T extends Base> implements OnInit {
+export class TableComponent<T extends Base> implements OnInit, AfterViewInit {
   @Input()
   title: string;
 
@@ -57,13 +58,18 @@ export class TableComponent<T extends Base> implements OnInit {
     this.setColumns(this.columnProps);
   }
 
+  /**
+   * Receives paginated data from the parent.
+   *
+   * The setter may be called BEFORE ngAfterViewInit (i.e. before @ViewChild
+   * MatPaginator is ready), so we cache the page and apply it once the view
+   * is initialised.
+   */
   @Input()
-  set data(data: Page<T>) {
-    if (!data) return;
-
-    this.dataSource.data = data.content;
-    this.paginator.length = data.totalElements;
-    this.paginator.pageIndex = data.number;
+  set data(page: Page<T>) {
+    if (!page) return;
+    this._pendingPage = page;
+    this.applyPage(page);
   }
 
   @Input()
@@ -102,6 +108,10 @@ export class TableComponent<T extends Base> implements OnInit {
   select: TableSelect;
   selectForm: FormControl = new FormControl(null, [SelectionRequiredValidator]);
 
+  /** Holds a page that arrived before the paginator was ready. */
+  private _pendingPage: Page<T> | null = null;
+  private _viewInitialized = false;
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -110,6 +120,30 @@ export class TableComponent<T extends Base> implements OnInit {
   ngOnInit() {
     this.selection.isSelected = this.isChecked.bind(this);
   }
+
+  ngAfterViewInit() {
+    this._viewInitialized = true;
+    // Flush any page that arrived before the paginator was ready.
+    if (this._pendingPage) {
+      this.applyPage(this._pendingPage);
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Private helpers
+  // ---------------------------------------------------------------
+
+  private applyPage(page: Page<T>): void {
+    this.dataSource.data = page.content;
+    if (this._viewInitialized && this.paginator) {
+      this.paginator.length = page.totalElements;
+      this.paginator.pageIndex = page.number;
+    }
+  }
+
+  // ---------------------------------------------------------------
+  // Column helpers
+  // ---------------------------------------------------------------
 
   setColumns(attributes: EntityAttribute[]) {
     if (!attributes) return;
@@ -149,7 +183,7 @@ export class TableComponent<T extends Base> implements OnInit {
   }
 
   getCellContent(column: EntityAttribute, element: T) {
-    if (column.options && column.options[element[column.key].id]) {
+    if (column.options && column.options[element[column.key]?.id]) {
       return column.options[element[column.key].id].display;
     }
 
@@ -160,31 +194,34 @@ export class TableComponent<T extends Base> implements OnInit {
     return element[column.key];
   }
 
+  // ---------------------------------------------------------------
+  // Actions
+  // ---------------------------------------------------------------
+
   makeSelection() {
     this.searchTerm = '';
     this.makeRequest();
   }
 
   makeSearch() {
-    this.paginator.pageIndex = 0;
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    }
     this.makeRequest();
   }
 
   makeRequest() {
     const request: PageRequest = {
       search: this.searchTerm,
-      page: this.paginator?.pageIndex ? this.paginator.pageIndex : 0,
-      size: this.paginator?.pageSize
-        ? this.paginator.pageSize
-        : this.defaultPageSize,
+      page: this.paginator?.pageIndex ?? 0,
+      size: this.paginator?.pageSize ?? this.defaultPageSize,
     };
+
     if (this.sort?.direction) {
       request.sort = `${this.sort.active},${this.sort.direction}`;
     }
 
-    const data: TableData = {
-      request,
-    };
+    const data: TableData = { request };
 
     if (this.selectForm.value) {
       data['select'] = this.selectForm.value.id;

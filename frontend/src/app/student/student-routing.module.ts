@@ -7,6 +7,7 @@ import { ExamTermComponent } from './pages/exam-term/exam-term.component';
 import { ExamRealizationComponent } from './pages/exam-realization/exam-realization.component';
 import { InfoComponent } from './pages/info/info.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
+import { CoursesComponent } from './pages/courses/courses.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,10 @@ const routes: Routes = [
       {
         path: 'my-thesis',
         component: ThesisComponent,
+      },
+      {
+        path: 'courses',
+        component: CoursesComponent,
       },
     ],
   },

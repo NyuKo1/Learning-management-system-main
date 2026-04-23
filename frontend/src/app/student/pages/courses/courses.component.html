@@ -1,0 +1,210 @@
+<!-- Page header -->
+<div class="courses-page">
+
+  <!-- Header section -->
+  <div class="courses-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <mat-icon class="title-icon">school</mat-icon>
+        Course Marketplace
+      </h1>
+      <p class="page-subtitle">
+        Expand your knowledge — purchase access to expert-led courses and advance your career
+      </p>
+
+      <!-- Enrolled count badge -->
+      <div *ngIf="enrolledCourses.length > 0" class="enrolled-badge">
+        <mat-icon>check_circle</mat-icon>
+        You are enrolled in {{ enrolledCourses.length }} course{{ enrolledCourses.length > 1 ? 's' : '' }}
+      </div>
+    </div>
+
+    <!-- Search bar -->
+    <div class="search-bar-wrapper">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="Search courses, topics, instructors…"
+        [(ngModel)]="searchQuery"
+      />
+      <button
+        *ngIf="searchQuery"
+        class="clear-btn"
+        mat-icon-button
+        (click)="searchQuery = ''"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters row -->
+  <div class="filters-section">
+    <!-- Category filter -->
+    <div class="filter-group">
+      <span class="filter-label">Category</span>
+      <div class="filter-chips">
+        <button
+          *ngFor="let cat of categories"
+          class="chip-btn"
+          [class.active]="selectedCategory === cat"
+          (click)="selectCategory(cat)"
+        >{{ cat }}</button>
+      </div>
+    </div>
+
+    <!-- Level filter -->
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <div class="filter-chips">
+        <button
+          *ngFor="let lvl of levels"
+          class="chip-btn"
+          [class.active]="selectedLevel === lvl"
+          (click)="selectLevel(lvl)"
+        >{{ lvl }}</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results count -->
+  <div class="results-count">
+    <span>{{ filteredCourses.length }} course{{ filteredCourses.length !== 1 ? 's' : '' }} found</span>
+  </div>
+
+  <!-- Success notification -->
+  <div *ngIf="purchaseSuccess" class="success-toast">
+    <mat-icon>celebration</mat-icon>
+    Access granted! The course is now in your library.
+  </div>
+
+  <!-- Courses grid -->
+  <div class="courses-grid" *ngIf="filteredCourses.length > 0; else noResults">
+    <div
+      *ngFor="let course of filteredCourses"
+      class="course-card"
+      [class.is-enrolled]="course.enrolled"
+    >
+      <!-- Card color accent bar -->
+      <div class="card-accent" [style.background-color]="course.color"></div>
+
+      <!-- Card body -->
+      <div class="card-body">
+        <!-- Icon + Category row -->
+        <div class="card-top-row">
+          <div class="course-icon-wrapper" [style.background-color]="course.color + '22'">
+            <mat-icon [style.color]="course.color">{{ course.icon }}</mat-icon>
+          </div>
+          <div class="card-badges">
+            <span
+              class="level-badge"
+              [style.background-color]="getLevelColor(course.level) + '22'"
+              [style.color]="getLevelColor(course.level)"
+            >{{ course.level }}</span>
+            <span *ngIf="course.enrolled" class="enrolled-chip">
+              <mat-icon style="font-size:14px;height:14px;width:14px">check</mat-icon> Enrolled
+            </span>
+          </div>
+        </div>
+
+        <!-- Category text -->
+        <p class="course-category">{{ course.category }}</p>
+
+        <!-- Title -->
+        <h3 class="course-title">{{ course.title }}</h3>
+
+        <!-- Description -->
+        <p class="course-description">{{ course.description }}</p>
+
+        <!-- Tags -->
+        <div class="tags-row">
+          <span *ngFor="let tag of course.tags" class="tag">{{ tag }}</span>
+        </div>
+
+        <!-- Instructor -->
+        <div class="instructor-row">
+          <mat-icon class="instructor-icon">person</mat-icon>
+          <span class="instructor-name">{{ course.instructor }}</span>
+        </div>
+
+        <!-- Stats row -->
+        <div class="stats-row">
+          <div class="stat">
+            <mat-icon class="stat-icon">schedule</mat-icon>
+            <span>{{ course.duration }}</span>
+          </div>
+          <div class="stat">
+            <mat-icon class="stat-icon">play_circle</mat-icon>
+            <span>{{ course.lessons }} lessons</span>
+          </div>
+          <div class="stat">
+            <mat-icon class="stat-icon">group</mat-icon>
+            <span>{{ formatStudents(course.students) }}</span>
+          </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="rating-row">
+          <mat-icon
+            *ngFor="let star of renderStars(course.rating)"
+            class="star-icon"
+            [class.star-filled]="star === 'star'"
+            [class.star-half]="star === 'star_half'"
+          >{{ star }}</mat-icon>
+          <span class="rating-value">{{ course.rating }}</span>
+        </div>
+
+        <!-- Divider -->
+        <div class="card-divider"></div>
+
+        <!-- Price + CTA -->
+        <div class="card-footer">
+          <div class="price-block">
+            <span class="price-current">{{ formatPrice(course.price) }}</span>
+            <span *ngIf="course.originalPrice" class="price-original">
+              {{ formatPrice(course.originalPrice) }}
+            </span>
+            <span *ngIf="course.originalPrice" class="discount-badge">
+              -{{ getDiscount(course.price, course.originalPrice!) }}%
+            </span>
+          </div>
+
+          <button
+            class="buy-btn"
+            [class.enrolled-btn]="course.enrolled"
+            [class.loading-btn]="purchaseInProgress === course.id"
+            [disabled]="course.enrolled || purchaseInProgress !== null"
+            (click)="purchaseCourse(course, $event)"
+          >
+            <ng-container *ngIf="purchaseInProgress === course.id">
+              <span class="spinner"></span>
+              Processing…
+            </ng-container>
+            <ng-container *ngIf="purchaseInProgress !== course.id && !course.enrolled">
+              <mat-icon class="btn-icon">shopping_cart</mat-icon>
+              Buy Access
+            </ng-container>
+            <ng-container *ngIf="course.enrolled">
+              <mat-icon class="btn-icon">check_circle</mat-icon>
+              Enrolled
+            </ng-container>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <ng-template #noResults>
+    <div class="empty-state">
+      <mat-icon class="empty-icon">search_off</mat-icon>
+      <h3>No courses found</h3>
+      <p>Try adjusting your search or filters</p>
+      <button class="reset-btn" mat-stroked-button (click)="searchQuery = ''; selectedCategory = 'All'; selectedLevel = 'All'">
+        Reset filters
+      </button>
+    </div>
+  </ng-template>
+
+</div>

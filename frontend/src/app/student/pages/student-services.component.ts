@@ -9,6 +9,11 @@ import { SidenavItem } from '@core/models/sidenav-item.model';
 export class StudentServicesComponent implements OnInit {
   items: (SidenavItem | '-')[] = [
     {
+      text: '🛒 Course Marketplace',
+      link: '/student-services/courses',
+    },
+    '-',
+    {
       text: 'My subjects',
       link: '/student-services/my-subjects',
     },
