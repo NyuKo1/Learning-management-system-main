@@ -13,9 +13,9 @@
       </p>
 
       <!-- Enrolled count badge -->
-      <div *ngIf="enrolledCourses.length > 0" class="enrolled-badge">
+      <div *ngIf="enrolledCount > 0" class="enrolled-badge">
         <mat-icon>check_circle</mat-icon>
-        You are enrolled in {{ enrolledCourses.length }} course{{ enrolledCourses.length > 1 ? 's' : '' }}
+        You are enrolled in {{ enrolledCount }} course{{ enrolledCount > 1 ? 's' : '' }}
       </div>
     </div>
 
@@ -41,7 +41,6 @@
 
   <!-- Filters row -->
   <div class="filters-section">
-    <!-- Category filter -->
     <div class="filter-group">
       <span class="filter-label">Category</span>
       <div class="filter-chips">
@@ -54,7 +53,6 @@
       </div>
     </div>
 
-    <!-- Level filter -->
     <div class="filter-group">
       <span class="filter-label">Level</span>
       <div class="filter-chips">
@@ -63,13 +61,25 @@
           class="chip-btn"
           [class.active]="selectedLevel === lvl"
           (click)="selectLevel(lvl)"
-        >{{ lvl }}</button>
+        >{{ getLevelLabel(lvl) }}</button>
       </div>
     </div>
   </div>
 
+  <!-- Loading state -->
+  <div *ngIf="loading" class="loading-state">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading courses…</p>
+  </div>
+
+  <!-- Error state -->
+  <div *ngIf="error" class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <p>Unable to load courses. Please try again later.</p>
+  </div>
+
   <!-- Results count -->
-  <div class="results-count">
+  <div *ngIf="!loading && !error" class="results-count">
     <span>{{ filteredCourses.length }} course{{ filteredCourses.length !== 1 ? 's' : '' }} found</span>
   </div>
 
@@ -79,12 +89,22 @@
     Access granted! The course is now in your library.
   </div>
 
+  <!-- Empty state -->
+  <div *ngIf="!loading && !error && filteredCourses.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">search_off</mat-icon>
+    <h3>No courses found</h3>
+    <p>Try adjusting your search or filters</p>
+    <button class="reset-btn" mat-stroked-button (click)="searchQuery = ''; selectedCategory = 'All'; selectedLevel = 'All'">
+      Reset filters
+    </button>
+  </div>
+
   <!-- Courses grid -->
-  <div class="courses-grid" *ngIf="filteredCourses.length > 0; else noResults">
+  <div class="courses-grid" *ngIf="!loading && !error && filteredCourses.length > 0">
     <div
       *ngFor="let course of filteredCourses"
       class="course-card"
-      [class.is-enrolled]="course.enrolled"
+      [class.is-enrolled]="isPurchased(course.id!)"
     >
       <!-- Card color accent bar -->
       <div class="card-accent" [style.background-color]="course.color"></div>
@@ -101,8 +121,8 @@
               class="level-badge"
               [style.background-color]="getLevelColor(course.level) + '22'"
               [style.color]="getLevelColor(course.level)"
-            >{{ course.level }}</span>
-            <span *ngIf="course.enrolled" class="enrolled-chip">
+            >{{ getLevelLabel(course.level) }}</span>
+            <span *ngIf="isPurchased(course.id!)" class="enrolled-chip">
               <mat-icon style="font-size:14px;height:14px;width:14px">check</mat-icon> Enrolled
             </span>
           </div>
@@ -119,7 +139,7 @@
 
         <!-- Tags -->
         <div class="tags-row">
-          <span *ngFor="let tag of course.tags" class="tag">{{ tag }}</span>
+          <span *ngFor="let tag of getTags(course.tags)" class="tag">{{ tag }}</span>
         </div>
 
         <!-- Instructor -->
@@ -140,7 +160,7 @@
           </div>
           <div class="stat">
             <mat-icon class="stat-icon">group</mat-icon>
-            <span>{{ formatStudents(course.students) }}</span>
+            <span>{{ formatStudents(course.studentsCount) }}</span>
           </div>
         </div>
 
@@ -172,20 +192,15 @@
 
           <button
             class="buy-btn"
-            [class.enrolled-btn]="course.enrolled"
-            [class.loading-btn]="purchaseInProgress === course.id"
-            [disabled]="course.enrolled || purchaseInProgress !== null"
+            [class.enrolled-btn]="isPurchased(course.id!)"
+            [disabled]="isPurchased(course.id!) || purchaseInProgress !== null"
             (click)="purchaseCourse(course, $event)"
           >
-            <ng-container *ngIf="purchaseInProgress === course.id">
-              <span class="spinner"></span>
-              Processing…
-            </ng-container>
-            <ng-container *ngIf="purchaseInProgress !== course.id && !course.enrolled">
+            <ng-container *ngIf="!isPurchased(course.id!)">
               <mat-icon class="btn-icon">shopping_cart</mat-icon>
               Buy Access
             </ng-container>
-            <ng-container *ngIf="course.enrolled">
+            <ng-container *ngIf="isPurchased(course.id!)">
               <mat-icon class="btn-icon">check_circle</mat-icon>
               Enrolled
             </ng-container>
@@ -195,16 +210,5 @@
     </div>
   </div>
 
-  <!-- Empty state -->
-  <ng-template #noResults>
-    <div class="empty-state">
-      <mat-icon class="empty-icon">search_off</mat-icon>
-      <h3>No courses found</h3>
-      <p>Try adjusting your search or filters</p>
-      <button class="reset-btn" mat-stroked-button (click)="searchQuery = ''; selectedCategory = 'All'; selectedLevel = 'All'">
-        Reset filters
-      </button>
-    </div>
-  </ng-template>
 
 </div>

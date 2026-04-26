@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://database-crm:3306/lms-crm?createDatabaseIfNotExist=true
+
+eureka:
+  instance:
+    hostname: host.docker.internal
+  client:
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka

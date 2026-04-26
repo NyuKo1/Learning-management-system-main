@@ -1,0 +1,159 @@
+$r: 14px;
+$t: .2s ease;
+
+.catalog-page { max-width: 1280px; margin: 0 auto; padding: 0 4px 48px }
+
+/* ── Header ── */
+.catalog-header {
+  background: linear-gradient(135deg, #059669, #0284c7);
+  border-radius: $r; padding: 36px 40px 28px; margin-bottom: 24px;
+}
+.header-inner { margin-bottom: 20px }
+.catalog-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 28px; font-weight: 700; color: #fff; margin: 0 0 8px;
+  .title-icon { font-size: 30px; width: 30px; height: 30px; color: #a7f3d0 }
+}
+.catalog-subtitle { font-size: 14px; color: rgba(255,255,255,.8); margin: 0 0 16px; line-height: 1.6 }
+.header-cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap }
+.cta-badge {
+  background: rgba(255,255,255,.15); color: #fff;
+  padding: 5px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+}
+
+.search-wrapper {
+  display: flex; align-items: center;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 10px; padding: 0 16px;
+  &:focus-within { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.5) }
+}
+.s-icon { color: rgba(255,255,255,.6); font-size: 20px; width: 20px; height: 20px; margin-right: 10px; flex-shrink: 0 }
+.s-input {
+  flex: 1; background: transparent; border: none; outline: none;
+  color: #fff; font-size: 14px; padding: 13px 0; font-family: inherit;
+  &::placeholder { color: rgba(255,255,255,.5) }
+}
+.s-clear { color: rgba(255,255,255,.6) }
+
+/* ── Filters ── */
+.filters-bar {
+  display: flex; flex-wrap: wrap; gap: 20px;
+  background: #f8fafc; border: 1px solid #e2e8f0;
+  border-radius: $r; padding: 16px 20px; margin-bottom: 20px;
+}
+.filter-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap }
+.filter-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: #64748b; white-space: nowrap }
+.chips { display: flex; flex-wrap: wrap; gap: 6px }
+.chip {
+  padding: 5px 14px; border-radius: 20px; border: 1.5px solid #e2e8f0;
+  background: transparent; color: #475569; font-size: 13px; cursor: pointer;
+  transition: all $t; font-family: inherit;
+  &:hover { border-color: #059669; color: #059669 }
+  &.active { background: #059669; border-color: #059669; color: #fff }
+}
+
+/* ── States ── */
+.loading-state, .error-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 20px; gap: 12px; color: #64748b;
+  mat-icon { font-size: 48px; width: 48px; height: 48px; color: #94a3b8 }
+}
+.error-state mat-icon { color: #f87171 }
+
+/* ── Grid ── */
+.courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 22px }
+.course-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: $r;
+  overflow: hidden; display: flex; flex-direction: column;
+  transition: box-shadow $t, transform $t;
+  &:hover { box-shadow: 0 12px 40px rgba(0,0,0,.12); transform: translateY(-3px) }
+}
+.card-accent { height: 4px; flex-shrink: 0 }
+.card-body { padding: 20px; display: flex; flex-direction: column; flex: 1 }
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px }
+.icon-wrap {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  mat-icon { font-size: 22px; width: 22px; height: 22px }
+}
+.level-badge { padding: 3px 10px; border-radius: 10px; font-size: 11px; font-weight: 600 }
+.category-text { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .8px; color: #94a3b8; margin: 0 0 6px }
+.course-title { font-size: 16px; font-weight: 700; color: #1e293b; margin: 0 0 10px; line-height: 1.4 }
+.course-desc {
+  font-size: 13px; color: #64748b; line-height: 1.6; margin: 0 0 14px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+.tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px }
+.tag { background: #f1f5f9; color: #475569; padding: 3px 10px; border-radius: 8px; font-size: 11px }
+.instructor-row { display: flex; align-items: center; gap: 6px; margin-bottom: 12px }
+.instr-icon { font-size: 16px; width: 16px; height: 16px; color: #94a3b8 !important }
+.instr-name { font-size: 13px; color: #475569; font-weight: 500 }
+.stats-row { display: flex; gap: 16px; margin-bottom: 10px }
+.stat { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #64748b;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; color: #94a3b8 !important }
+}
+.rating-row { display: flex; align-items: center; gap: 2px; margin-bottom: 14px }
+.star { font-size: 16px; width: 16px; height: 16px; color: #d1d5db !important;
+  &.filled { color: #fbbf24 !important }
+  &.half { color: #fbbf24 !important }
+}
+.rating-val { font-size: 13px; font-weight: 600; color: #1e293b; margin-left: 4px }
+.card-divider { height: 1px; background: #e2e8f0; margin: 0 0 16px }
+.card-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto }
+.price-block { display: flex; align-items: center; gap: 8px; flex-wrap: wrap }
+.price-now { font-size: 22px; font-weight: 800; color: #1e293b }
+.price-old { font-size: 14px; color: #94a3b8; text-decoration: line-through }
+.discount { background: rgba(239,68,68,.1); color: #dc2626; padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 700 }
+
+.buy-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, #059669, #0284c7);
+  color: #fff; border: none; border-radius: 10px; padding: 10px 18px;
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all $t;
+  white-space: nowrap; font-family: inherit;
+  &:hover { opacity: .9; box-shadow: 0 4px 16px rgba(5,150,105,.35) }
+  mat-icon { font-size: 16px; width: 16px; height: 16px; color: white !important }
+}
+
+/* ── Empty ── */
+.empty-state {
+  text-align: center; padding: 60px 20px; color: #64748b;
+  mat-icon { font-size: 56px; width: 56px; height: 56px; color: #cbd5e1; margin-bottom: 12px }
+  h3 { font-size: 18px; font-weight: 600; margin: 0 0 6px; color: #1e293b }
+  p { font-size: 14px; margin: 0 0 20px }
+  button { color: #059669; border-color: #059669 }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .catalog-header { padding: 24px 20px 20px }
+  .catalog-title { font-size: 22px }
+  .filters-bar { flex-direction: column; gap: 12px }
+  .courses-grid { grid-template-columns: 1fr }
+  .card-footer { flex-direction: column; align-items: flex-start }
+  .buy-btn { width: 100%; justify-content: center }
+}
+
+/* ── Dark ── */
+:host-context(html.dark) {
+  .catalog-header { background: linear-gradient(135deg, #064e3b, #0c4a6e); border: 1px solid rgba(5,150,105,.2) }
+  .filters-bar { background: #1e293b; border-color: rgba(255,255,255,.08) }
+  .filter-label { color: #94a3b8 }
+  .chip { border-color: rgba(255,255,255,.12); color: #94a3b8;
+    &:hover { border-color: #34d399; color: #34d399 }
+    &.active { background: #059669; border-color: #059669; color: #fff }
+  }
+  .course-card { background: #1e293b; border-color: rgba(255,255,255,.08) }
+  .icon-wrap { background-color: rgba(255,255,255,.1) !important }
+  .category-text { color: #64748b }
+  .course-title { color: #f1f5f9 }
+  .course-desc { color: #94a3b8 }
+  .tag { background: rgba(255,255,255,.06); color: #94a3b8 }
+  .instr-name { color: #94a3b8 }
+  .stat { color: #94a3b8 }
+  .rating-val { color: #f1f5f9 }
+  .card-divider { background: rgba(255,255,255,.08) }
+  .price-now { color: #f1f5f9 }
+  .price-old { color: #64748b }
+  .empty-state { color: #94a3b8; h3 { color: #f1f5f9 } }
+}

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 
@@ -13,6 +14,8 @@ import { SubjectNotificationTabComponent } from './pages/subject/subject-notific
 import { SubjectTermTabComponent } from './pages/subject/subject-term-tab/subject-term-tab.component';
 import { ExamTabComponent } from './pages/subject/exam-tab/exam-tab.component';
 import { ExamTermTabComponent } from './pages/subject/exam-term-tab/exam-term-tab.component';
+import { CoursesPublicComponent } from './pages/courses/courses.component';
+import { PaymentComponent } from './pages/payment/payment.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { ExamTermTabComponent } from './pages/subject/exam-term-tab/exam-term-ta
     SubjectTermTabComponent,
     ExamTabComponent,
     ExamTermTabComponent,
+    CoursesPublicComponent,
+    PaymentComponent,
   ],
-  imports: [SharedModule, HomeRoutingModule],
+  imports: [SharedModule, HomeRoutingModule, FormsModule, ReactiveFormsModule],
 })
 export class HomeModule {}

@@ -1,23 +1,27 @@
-# If you encounter problems while building images for services depending on databases, separately startup databases before running this.
+# Production stack — all services with health-checked startup ordering.
+# If databases fail to build images, bring up databases first:
+#   docker-compose -f docker-compose.prod.yml up -d database-auth database-faculty database-subject database-exam database-crm
 
 version: '3'
 
 services:
+  # ── Databases ────────────────────────────────────────────────────────
   database-auth:
     image: mysql:8.0.30-debian
     ports:
       - 3307:3306
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 30s
       timeout: 10s
     volumes:
       - auth-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-auth
+    restart: on-failure
 
   database-faculty:
     image: mysql:8.0.30-debian
@@ -25,15 +29,16 @@ services:
       - 3308:3306
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 30s
       timeout: 10s
     volumes:
       - faculty-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-faculty
+    restart: on-failure
 
   database-subject:
     image: mysql:8.0.30-debian
@@ -41,32 +46,52 @@ services:
       - 3309:3306
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 30s
       timeout: 10s
     volumes:
       - subject-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-subject
+    restart: on-failure
 
   database-exam:
     image: mysql:8.0.30-debian
     ports:
       - 3310:3306
-    volumes:
-      - exam-data:/var/lib/mysql
     healthcheck:
       test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 30s
       timeout: 10s
+    volumes:
+      - exam-data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-exam
+    restart: on-failure
 
+  database-crm:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3311:3306
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
+      interval: 20s
+      retries: 8
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - crm-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-crm
+    restart: on-failure
+
+  # ── Spring Cloud Infrastructure ───────────────────────────────────────
   backend-config-server:
     build:
       context: ./backend/config-server
@@ -75,12 +100,13 @@ services:
       - 8888:8888
     healthcheck:
       test: wget --spider --quiet 'http://localhost:8888/actuator/health/' || exit 1
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 40s
       timeout: 10s
     environment:
       SPRING_PROFILES_ACTIVE: prod, native
+    restart: on-failure
 
   backend-discovery-server:
     build:
@@ -90,15 +116,16 @@ services:
       - 8761:8761
     healthcheck:
       test: wget --spider --quiet 'http://localhost:8761/actuator/health/' || exit 1
-      interval: 25s
-      retries: 5
-      start_period: 20s
+      interval: 20s
+      retries: 8
+      start_period: 40s
       timeout: 10s
     depends_on:
       backend-config-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
   backend-api-gateway:
     build:
@@ -106,12 +133,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
+    healthcheck:
+      test: wget --spider --quiet 'http://localhost:8080/actuator/health/' || exit 1
+      interval: 20s
+      retries: 8
+      start_period: 60s
+      timeout: 10s
     depends_on:
       backend-discovery-server:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
+  # ── Microservices ─────────────────────────────────────────────────────
   backend-auth-service:
     build:
       context: ./backend/auth-service
@@ -125,6 +160,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
   backend-faculty-service:
     build:
@@ -139,6 +175,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
   backend-subject-service:
     build:
@@ -153,6 +190,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
   backend-exam-service:
     build:
@@ -167,18 +205,40 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
 
+  backend-crm-service:
+    build:
+      context: ./backend/crm-service
+      dockerfile: Dockerfile
+    ports:
+      - 8085:8085
+    depends_on:
+      backend-discovery-server:
+        condition: service_healthy
+      database-crm:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    restart: on-failure
+
+  # ── Frontend ──────────────────────────────────────────────────────────
   frontend-app:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
       - 80:80
+    depends_on:
+      backend-api-gateway:
+        condition: service_healthy
     environment:
       PRODUCTION: true
+    restart: on-failure
 
 volumes:
   auth-data:
   faculty-data:
   subject-data:
   exam-data:
+  crm-data:

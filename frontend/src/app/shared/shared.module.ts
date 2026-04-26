@@ -20,6 +20,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
@@ -68,6 +69,7 @@ import { DialogUploadComponent } from './components/dialog-upload/dialog-upload.
     MatListModule,
     MatCardModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
   ],
   exports: [
     CommonModule,
@@ -90,6 +92,7 @@ import { DialogUploadComponent } from './components/dialog-upload/dialog-upload.
     MatListModule,
     MatCardModule,
     MatTabsModule,
+    MatProgressSpinnerModule,
     NotFoundComponent,
     ToolbarComponent,
     FooterComponent,

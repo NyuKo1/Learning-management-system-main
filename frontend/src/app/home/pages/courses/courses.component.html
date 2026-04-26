@@ -1,0 +1,139 @@
+<div class="catalog-page">
+
+  <!-- Header -->
+  <div class="catalog-header">
+    <div class="header-inner">
+      <h1 class="catalog-title">
+        <mat-icon class="title-icon">store</mat-icon>
+        Course Catalog
+      </h1>
+      <p class="catalog-subtitle">
+        Explore expert-led courses — browse freely, purchase anytime to unlock full access
+      </p>
+      <div class="header-cta" *ngIf="!loading">
+        <span class="cta-badge">{{ filteredCourses.length }} courses available</span>
+        <a mat-stroked-button routerLink="/auth/login" *ngIf="!(authService.loggedIn())">
+          <mat-icon>login</mat-icon> Sign in to purchase
+        </a>
+      </div>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrapper">
+      <mat-icon class="s-icon">search</mat-icon>
+      <input
+        class="s-input"
+        type="text"
+        placeholder="Search courses, instructors, topics…"
+        [(ngModel)]="searchQuery"
+      />
+      <button *ngIf="searchQuery" mat-icon-button class="s-clear" (click)="searchQuery = ''">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="filter-group">
+      <span class="filter-label">Category</span>
+      <div class="chips">
+        <button *ngFor="let cat of categories" class="chip"
+          [class.active]="selectedCategory === cat" (click)="selectedCategory = cat">
+          {{ cat }}
+        </button>
+      </div>
+    </div>
+    <div class="filter-group">
+      <span class="filter-label">Level</span>
+      <div class="chips">
+        <button *ngFor="let lvl of levels" class="chip"
+          [class.active]="selectedLevel === lvl" (click)="selectedLevel = lvl">
+          {{ getLevelLabel(lvl) }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-state">
+    <mat-spinner diameter="48"></mat-spinner>
+    <p>Loading courses…</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error-state">
+    <mat-icon>error_outline</mat-icon>
+    <p>Unable to load courses. Please try again later.</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="courses-grid" *ngIf="!loading && !error && filteredCourses.length > 0">
+    <div *ngFor="let course of filteredCourses" class="course-card">
+      <div class="card-accent" [style.background-color]="course.color"></div>
+      <div class="card-body">
+
+        <div class="card-top">
+          <div class="icon-wrap" [style.background-color]="course.color + '22'">
+            <mat-icon [style.color]="course.color">{{ course.icon }}</mat-icon>
+          </div>
+          <span class="level-badge"
+            [style.background-color]="getLevelColor(course.level) + '22'"
+            [style.color]="getLevelColor(course.level)">
+            {{ getLevelLabel(course.level) }}
+          </span>
+        </div>
+
+        <p class="category-text">{{ course.category }}</p>
+        <h3 class="course-title">{{ course.title }}</h3>
+        <p class="course-desc">{{ course.description }}</p>
+
+        <div class="tags-row">
+          <span *ngFor="let tag of getTags(course.tags)" class="tag">{{ tag }}</span>
+        </div>
+
+        <div class="instructor-row">
+          <mat-icon class="instr-icon">person</mat-icon>
+          <span class="instr-name">{{ course.instructor }}</span>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat"><mat-icon>schedule</mat-icon><span>{{ course.duration }}</span></div>
+          <div class="stat"><mat-icon>play_circle</mat-icon><span>{{ course.lessons }} lessons</span></div>
+          <div class="stat"><mat-icon>group</mat-icon><span>{{ formatStudents(course.studentsCount) }}</span></div>
+        </div>
+
+        <div class="rating-row">
+          <mat-icon *ngFor="let s of renderStars(course.rating)" class="star"
+            [class.filled]="s === 'star'" [class.half]="s === 'star_half'">{{ s }}</mat-icon>
+          <span class="rating-val">{{ course.rating }}</span>
+        </div>
+
+        <div class="card-divider"></div>
+
+        <div class="card-footer">
+          <div class="price-block">
+            <span class="price-now">{{ formatPrice(course.price) }}</span>
+            <span *ngIf="course.originalPrice" class="price-old">{{ formatPrice(course.originalPrice) }}</span>
+            <span *ngIf="course.originalPrice" class="discount">
+              -{{ getDiscount(course.price, course.originalPrice!) }}%
+            </span>
+          </div>
+          <button class="buy-btn" (click)="buyCourse(course, $event)">
+            <mat-icon>shopping_cart</mat-icon>
+            Buy Access
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div *ngIf="!loading && !error && filteredCourses.length === 0" class="empty-state">
+    <mat-icon>search_off</mat-icon>
+    <h3>No courses found</h3>
+    <p>Try adjusting your search or filters</p>
+    <button mat-stroked-button (click)="reset()">Reset filters</button>
+  </div>
+
+</div>

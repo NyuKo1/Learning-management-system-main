@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
 
 import { StudentRoutingModule } from './student-routing.module';
@@ -12,6 +12,7 @@ import { InfoComponent } from './pages/info/info.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { DialogRegisterComponent } from './pages/exam-term/dialog-register/dialog-register.component';
 import { CoursesComponent } from './pages/courses/courses.component';
+import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CoursesComponent } from './pages/courses/courses.component';
     ThesisComponent,
     DialogRegisterComponent,
     CoursesComponent,
+    MyCoursesComponent,
   ],
-  imports: [SharedModule, StudentRoutingModule, FormsModule],
+  imports: [SharedModule, StudentRoutingModule, FormsModule, ReactiveFormsModule],
 })
 export class StudentModule {}

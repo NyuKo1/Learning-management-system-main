@@ -132,6 +132,14 @@ $t: .22s ease;
 }
 .reset-btn { color: #6366f1; border-color: #6366f1 }
 
+/* ── Loading / Error ─────────────────────────────────────────────── */
+.loading-state, .error-state {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 20px; gap: 12px; color: #64748b;
+  mat-icon { font-size: 48px; width: 48px; height: 48px; color: #94a3b8 }
+}
+.error-state mat-icon { color: #f87171 }
+
 /* ── Responsive ──────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .courses-header { padding: 24px 20px 20px }

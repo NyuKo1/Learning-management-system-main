@@ -5,13 +5,12 @@ import { AuthService } from '@core/services/auth.service';
 import { CrmService } from '@core/services/crm.service';
 
 @Component({
-  selector: 'app-courses',
+  selector: 'app-courses-public',
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss'],
 })
-export class CoursesComponent implements OnInit {
-  allCourses: CourseCatalog[] = [];
-  purchasedCourseIds = new Set<number>();
+export class CoursesPublicComponent implements OnInit {
+  courses: CourseCatalog[] = [];
   loading = true;
   error = false;
 
@@ -19,28 +18,20 @@ export class CoursesComponent implements OnInit {
   selectedCategory = 'All';
   selectedLevel = 'All';
 
-  purchaseInProgress: number | null = null;
-  purchaseSuccess: number | null = null;
-
   categories = ['All', 'Programming', 'Mathematics', 'Science', 'Business', 'Design', 'Languages'];
   levels = ['All', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
   constructor(
     private crmService: CrmService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadCourses();
-  }
-
-  private loadCourses(): void {
     this.crmService.getAvailableCourses().subscribe({
       next: (courses) => {
-        this.allCourses = courses;
+        this.courses = courses;
         this.loading = false;
-        this.checkPurchased();
       },
       error: () => {
         this.error = true;
@@ -49,27 +40,14 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  private checkPurchased(): void {
-    if (!this.authService.loggedIn()) return;
-    const username = this.authService.getUsername();
-    this.crmService.getMyPurchases(username).subscribe({
-      next: (payments) => {
-        this.purchasedCourseIds = new Set(payments.map(p => p.courseId));
-      },
-    });
-  }
-
-  isPurchased(courseId: number): boolean {
-    return this.purchasedCourseIds.has(courseId);
-  }
-
   get filteredCourses(): CourseCatalog[] {
-    return this.allCourses.filter(c => {
+    return this.courses.filter(c => {
       const q = this.searchQuery.toLowerCase();
       const matchSearch =
         !q ||
         c.title.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
+        c.instructor.toLowerCase().includes(q) ||
         c.tags.toLowerCase().includes(q);
       const matchCat = this.selectedCategory === 'All' || c.category === this.selectedCategory;
       const matchLvl = this.selectedLevel === 'All' || c.level === this.selectedLevel;
@@ -77,25 +55,26 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  get enrolledCount(): number {
-    return this.allCourses.filter(c => this.isPurchased(c.id!)).length;
+  getTags(tags: string): string[] {
+    return this.crmService.getTagsArray(tags);
   }
 
-  selectCategory(cat: string): void { this.selectedCategory = cat; }
-  selectLevel(level: string): void { this.selectedLevel = level; }
-
   getLevelLabel(level: string): string {
-    const map: Record<string, string> = { BEGINNER: 'Beginner', INTERMEDIATE: 'Intermediate', ADVANCED: 'Advanced' };
+    const map: Record<string, string> = {
+      BEGINNER: 'Beginner',
+      INTERMEDIATE: 'Intermediate',
+      ADVANCED: 'Advanced',
+    };
     return map[level] || level;
   }
 
   getLevelColor(level: string): string {
-    const map: Record<string, string> = { BEGINNER: '#10b981', INTERMEDIATE: '#f59e0b', ADVANCED: '#ef4444' };
+    const map: Record<string, string> = {
+      BEGINNER: '#10b981',
+      INTERMEDIATE: '#f59e0b',
+      ADVANCED: '#ef4444',
+    };
     return map[level] || '#6b7280';
-  }
-
-  getTags(tags: string): string[] {
-    return this.crmService.getTagsArray(tags);
   }
 
   formatStudents(count: number): string {
@@ -119,11 +98,25 @@ export class CoursesComponent implements OnInit {
     });
   }
 
-  purchaseCourse(course: CourseCatalog, event: Event): void {
+  buyCourse(course: CourseCatalog, event: Event): void {
     event.stopPropagation();
-    if (this.isPurchased(course.id!) || this.purchaseInProgress !== null) return;
+    if (!this.authService.loggedIn()) {
+      this.authService.redirectUrl = `/payment?courseId=${course.id}&price=${course.price}`;
+      this.router.navigate(['/auth/login']);
+      return;
+    }
     this.router.navigate(['/payment'], {
-      queryParams: { courseId: course.id, title: course.title, price: course.price },
+      queryParams: {
+        courseId: course.id,
+        title: course.title,
+        price: course.price,
+      },
     });
+  }
+
+  reset(): void {
+    this.searchQuery = '';
+    this.selectedCategory = 'All';
+    this.selectedLevel = 'All';
   }
 }

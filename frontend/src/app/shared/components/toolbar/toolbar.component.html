@@ -12,9 +12,18 @@
     <div class="flex flex-wrap justify-center items-center w-full gap-2">
       <a mat-button routerLink="/about" class="md:text-lg">About</a>
       <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
+      <a mat-button routerLink="/courses" class="md:text-lg">Courses</a>
       <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle dark mode" class="ml-4">
           <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
+      <a
+        *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
+        mat-button
+        routerLink="/student-services/my-courses"
+        class="md:text-lg"
+      >
+        My Courses
+      </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
         mat-button

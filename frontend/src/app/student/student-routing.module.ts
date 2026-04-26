@@ -8,6 +8,7 @@ import { ExamRealizationComponent } from './pages/exam-realization/exam-realizat
 import { InfoComponent } from './pages/info/info.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { CoursesComponent } from './pages/courses/courses.component';
+import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
 
 const routes: Routes = [
   {
@@ -46,6 +47,10 @@ const routes: Routes = [
       {
         path: 'courses',
         component: CoursesComponent,
+      },
+      {
+        path: 'my-courses',
+        component: MyCoursesComponent,
       },
     ],
   },

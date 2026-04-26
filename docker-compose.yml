@@ -33,7 +33,7 @@ services:
 
   database-exam-dev:
     image: mysql:8.0.30-debian
-    ports: 
+    ports:
       - 3310:3306
     volumes:
       - exam-data-dev:/var/lib/mysql
@@ -41,8 +41,19 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-exam
 
+  database-crm-dev:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3311:3306
+    volumes:
+      - crm-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-crm
+
 volumes:
   auth-data-dev:
   faculty-data-dev:
   subject-data-dev:
   exam-data-dev:
+  crm-data-dev:

@@ -12,6 +12,10 @@ export class StudentServicesComponent implements OnInit {
       text: '🛒 Course Marketplace',
       link: '/student-services/courses',
     },
+    {
+      text: '📚 My Courses',
+      link: '/student-services/my-courses',
+    },
     '-',
     {
       text: 'My subjects',
