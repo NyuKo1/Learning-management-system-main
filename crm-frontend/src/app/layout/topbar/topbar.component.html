@@ -1,0 +1,35 @@
+<header class="topbar">
+  <div class="topbar-left">
+    <button mat-icon-button (click)="toggleSidenav.emit()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <div class="topbar-right">
+    <a *ngIf="hasLms" [href]="lmsUrl"
+       class="lms-switch-btn" matTooltip="Перейти в LMS">
+      <mat-icon>school</mat-icon>
+      <span>LMS</span>
+    </a>
+
+    <button mat-icon-button matTooltip="Уведомления">
+      <mat-icon>notifications_none</mat-icon>
+    </button>
+
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-btn">
+      <div class="user-avatar">{{ username.charAt(0).toUpperCase() }}</div>
+      <span class="user-name">{{ username }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item disabled>
+        <mat-icon>person</mat-icon> Профиль
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon> Выйти
+      </button>
+    </mat-menu>
+  </div>
+</header>

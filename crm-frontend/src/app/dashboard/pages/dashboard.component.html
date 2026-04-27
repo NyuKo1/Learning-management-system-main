@@ -1,0 +1,75 @@
+<div class="dashboard-page">
+  <div class="page-header">
+    <div>
+      <h1>Дашборд</h1>
+      <p>Добро пожаловать, {{ username }}!</p>
+    </div>
+    <a *ngIf="hasLms" [href]="lmsUrl" class="lms-banner">
+      <mat-icon>school</mat-icon>
+      <div>
+        <span class="lms-banner-title">LMS активен</span>
+        <span class="lms-banner-sub">Открыть модуль обучения</span>
+      </div>
+      <mat-icon class="arrow">arrow_forward</mat-icon>
+    </a>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!loading && stats">
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div *ngFor="let card of statCards" class="stat-card" [class]="'stat-' + card.color">
+        <div class="stat-icon" [class]="'icon-' + card.color">
+          <mat-icon>{{ card.icon }}</mat-icon>
+        </div>
+        <div class="stat-body">
+          <div class="stat-value">{{ getStatValue(card.key) }}</div>
+          <div class="stat-label">{{ card.label }}</div>
+          <div *ngIf="card.changeKey" class="stat-change up">
+            +{{ getStatValue(card.changeKey) }} {{ card.changeLabel }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="section-title">Быстрые действия</div>
+    <div class="quick-actions">
+      <a routerLink="/leads" class="quick-action blue">
+        <mat-icon>person_add</mat-icon>
+        <span>Добавить лид</span>
+      </a>
+      <a routerLink="/clients" class="quick-action green">
+        <mat-icon>group</mat-icon>
+        <span>Клиенты</span>
+      </a>
+      <a routerLink="/payments" class="quick-action purple">
+        <mat-icon>payments</mat-icon>
+        <span>Платежи</span>
+      </a>
+      <a routerLink="/courses" class="quick-action orange">
+        <mat-icon>school</mat-icon>
+        <span>Курсы</span>
+      </a>
+    </div>
+
+    <!-- Funnel -->
+    <div class="section-title">Воронка продаж</div>
+    <div class="card funnel-card">
+      <div class="funnel-stages">
+        <div class="funnel-stage" *ngFor="let stage of funnelStages">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" [style.width]="stage.pct + '%'" [style.background]="stage.color"></div>
+          </div>
+          <div class="funnel-info">
+            <span class="funnel-label">{{ stage.label }}</span>
+            <span class="funnel-count">{{ stage.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

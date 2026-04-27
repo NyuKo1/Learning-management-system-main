@@ -1,0 +1,89 @@
+<div class="leads-page">
+  <div class="page-header">
+    <div>
+      <h1>Лиды</h1>
+      <p>Управление потенциальными клиентами</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon> Добавить лид
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar card">
+    <mat-form-field appearance="outline" class="filter-select">
+      <mat-label>Статус</mat-label>
+      <mat-select [(ngModel)]="filterStatus" (ngModelChange)="applyFilter()">
+        <mat-option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <span class="leads-count">{{ filteredLeads.length }} лидов</span>
+  </div>
+
+  <div *ngIf="loading" class="loading-center">
+    <mat-spinner diameter="36"></mat-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="card table-card">
+    <table class="data-table" *ngIf="filteredLeads.length; else emptyTpl">
+      <thead>
+        <tr>
+          <th>Имя</th>
+          <th>Телефон</th>
+          <th>Источник</th>
+          <th>Статус</th>
+          <th>Курс</th>
+          <th>Дата</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let lead of filteredLeads">
+          <td>
+            <div class="lead-name">{{ lead.fullName }}</div>
+            <div class="lead-email" *ngIf="lead.email">{{ lead.email }}</div>
+          </td>
+          <td>{{ lead.phone }}</td>
+          <td>
+            <span class="source-chip">{{ sourceLabels[lead.source] }}</span>
+          </td>
+          <td>
+            <span class="badge" [class]="getStatusClass(lead.status)">
+              {{ statusLabels[lead.status] }}
+            </span>
+          </td>
+          <td class="course-cell">{{ lead.interestedCourseTitle || '—' }}</td>
+          <td class="date-cell">{{ lead.createdAt | date:'dd.MM.yyyy' }}</td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="updateStatus(lead, 'CONTACTED')">
+                <mat-icon>phone</mat-icon> Отметить: Контакт
+              </button>
+              <button mat-menu-item (click)="updateStatus(lead, 'WON')">
+                <mat-icon>check_circle</mat-icon> Стал клиентом
+              </button>
+              <button mat-menu-item (click)="updateStatus(lead, 'LOST')">
+                <mat-icon>cancel</mat-icon> Отказ
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item class="delete-btn" (click)="deleteLead(lead.id)">
+                <mat-icon>delete</mat-icon> Удалить
+              </button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <ng-template #emptyTpl>
+      <div class="empty-state">
+        <div class="empty-icon">👥</div>
+        <h3>Лидов пока нет</h3>
+        <p>Добавьте первый лид, нажав «Добавить лид»</p>
+      </div>
+    </ng-template>
+  </div>
+</div>

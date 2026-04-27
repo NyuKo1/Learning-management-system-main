@@ -1,0 +1,83 @@
+<div class="login-page">
+  <div class="login-left">
+    <div class="brand">
+      <div class="brand-logo">SEC</div>
+      <h1 class="brand-name">SmartEduControl</h1>
+      <p class="brand-tagline">CRM — Управление клиентами и продажами</p>
+    </div>
+    <div class="features">
+      <div class="feature-item">
+        <span class="feature-icon">👥</span>
+        <div>
+          <h3>Воронка лидов</h3>
+          <p>Отслеживайте путь от первого контакта до продажи</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">💳</span>
+        <div>
+          <h3>Платежи</h3>
+          <p>Принимайте оплату и отслеживайте финансы</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">📊</span>
+        <div>
+          <h3>Аналитика</h3>
+          <p>Сквозная отчётность по продажам и клиентам</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <span class="feature-icon">🔗</span>
+        <div>
+          <h3>Связь с LMS</h3>
+          <p>Автоматическая синхронизация с модулем обучения</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-card">
+      <h2>Войти в систему</h2>
+      <p class="login-sub">Введите ваши учётные данные для входа в SEC CRM</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="login-form">
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Имя пользователя</mat-label>
+          <input matInput formControlName="username" placeholder="username" autocomplete="username" />
+          <mat-icon matPrefix>person</mat-icon>
+          <mat-error *ngIf="form.get('username')?.hasError('required')">Обязательное поле</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-full">
+          <mat-label>Пароль</mat-label>
+          <input matInput formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            autocomplete="current-password" />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+            <mat-icon>{{ hidePassword ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.hasError('required')">Обязательное поле</mat-error>
+        </mat-form-field>
+
+        <div class="error-msg" *ngIf="error">
+          <mat-icon>error_outline</mat-icon> {{ error }}
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" class="submit-btn" [disabled]="loading">
+          <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+          <span *ngIf="!loading">Войти</span>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <a [href]="lmsUrl" class="switch-link">
+          Перейти в LMS →
+        </a>
+        <a [href]="landingUrl" class="switch-link">О системе SEC</a>
+      </div>
+    </div>
+  </div>
+</div>

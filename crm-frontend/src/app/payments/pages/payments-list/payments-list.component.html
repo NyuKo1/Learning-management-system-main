@@ -1,0 +1,61 @@
+<div class="payments-page">
+  <div class="page-header">
+    <div>
+      <h1>Платежи</h1>
+      <p>История транзакций и финансовая аналитика</p>
+    </div>
+  </div>
+
+  <div class="summary-cards">
+    <div class="sum-card">
+      <div class="sum-icon green"><mat-icon>payments</mat-icon></div>
+      <div>
+        <div class="sum-val">₸{{ totalRevenue.toLocaleString('ru') }}</div>
+        <div class="sum-lbl">Общий доход</div>
+      </div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon blue"><mat-icon>receipt_long</mat-icon></div>
+      <div>
+        <div class="sum-val">{{ payments.length }}</div>
+        <div class="sum-lbl">Транзакций</div>
+      </div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-icon green"><mat-icon>check_circle</mat-icon></div>
+      <div>
+        <div class="sum-val">{{ successCount }}</div>
+        <div class="sum-lbl">Успешных</div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
+
+  <div *ngIf="!loading" class="card table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Клиент</th>
+          <th>Курс</th>
+          <th>Сумма</th>
+          <th>Способ</th>
+          <th>Статус</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of payments">
+          <td class="id-cell">#{{ p.id }}</td>
+          <td>{{ p.clientName }}</td>
+          <td class="course-cell">{{ p.courseTitle }}</td>
+          <td class="amount-cell">{{ p.currency }}{{ p.amount.toLocaleString('ru') }}</td>
+          <td class="method-cell">{{ p.method }}</td>
+          <td><span class="badge" [class]="getStatusClass(p.status)">{{ statusLabels[p.status] }}</span></td>
+          <td class="date-cell">{{ p.createdAt | date:'dd.MM.yyyy HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

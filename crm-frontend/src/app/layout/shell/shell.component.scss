@@ -1,0 +1,29 @@
+.shell-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background: #f0f4f8;
+}
+
+.shell-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  transition: margin-left .3s;
+
+  &.sidenav-open {
+    margin-left: 240px;
+  }
+}
+
+.shell-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .shell-main.sidenav-open {
+    margin-left: 0;
+  }
+}

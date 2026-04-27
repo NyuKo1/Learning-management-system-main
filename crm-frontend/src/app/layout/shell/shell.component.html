@@ -1,0 +1,9 @@
+<div class="shell-wrapper">
+  <crm-sidenav [open]="sidenavOpen"></crm-sidenav>
+  <div class="shell-main" [class.sidenav-open]="sidenavOpen">
+    <crm-topbar (toggleSidenav)="toggleSidenav()"></crm-topbar>
+    <main class="shell-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

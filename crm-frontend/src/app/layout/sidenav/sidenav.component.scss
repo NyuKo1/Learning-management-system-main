@@ -1,0 +1,120 @@
+.sidenav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 240px;
+  background: #0f172a;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: width .3s;
+  overflow: hidden;
+
+  &.closed {
+    width: 64px;
+
+    .sidenav-brand { padding: 16px 12px; justify-content: center; }
+    .nav-item { justify-content: center; padding: 12px; }
+  }
+}
+
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.brand-logo {
+  background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+  color: white;
+  font-weight: 900;
+  font-size: 12px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.brand-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,.35);
+  margin-top: 2px;
+}
+
+.sidenav-nav {
+  flex: 1;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: rgba(255,255,255,.5);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all .2s;
+  cursor: pointer;
+  white-space: nowrap;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  &:hover {
+    background: rgba(255,255,255,.06);
+    color: white;
+  }
+
+  &.active {
+    background: rgba(14,165,233,.15);
+    color: #38bdf8;
+
+    mat-icon { color: #38bdf8; }
+  }
+}
+
+.sidenav-footer {
+  padding: 12px 8px;
+  border-top: 1px solid rgba(255,255,255,.06);
+}
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.25);
+  padding: 4px 12px 8px;
+}
+
+.lms-link {
+  color: rgba(14,165,233,.7);
+
+  &:hover { color: #38bdf8; background: rgba(14,165,233,.1); }
+}

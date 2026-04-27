@@ -1,0 +1,30 @@
+<div class="courses-page">
+  <div class="page-header">
+    <div>
+      <h1>Курсы</h1>
+      <p>Каталог курсов, доступных для продажи</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
+
+  <div *ngIf="!loading" class="courses-grid">
+    <div *ngFor="let course of courses" class="course-card card" [class.unavailable]="!course.isAvailable">
+      <div class="course-header">
+        <div class="course-category">{{ course.category }}</div>
+        <span class="badge" [class]="course.isAvailable ? 'badge-active' : 'badge-lost'">
+          {{ course.isAvailable ? 'Доступен' : 'Закрыт' }}
+        </span>
+      </div>
+      <h3 class="course-title">{{ course.title }}</h3>
+      <p class="course-desc">{{ course.description }}</p>
+      <div class="course-meta">
+        <span><mat-icon>schedule</mat-icon> {{ course.duration }} ч</span>
+        <span><mat-icon>people</mat-icon> {{ course.enrolledCount }} студентов</span>
+      </div>
+      <div class="course-footer">
+        <div class="course-price">{{ course.currency }}{{ course.price.toLocaleString('ru') }}</div>
+      </div>
+    </div>
+  </div>
+</div>

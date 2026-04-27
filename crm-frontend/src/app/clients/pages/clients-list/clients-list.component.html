@@ -1,0 +1,56 @@
+<div class="clients-page">
+  <div class="page-header">
+    <div>
+      <h1>Клиенты</h1>
+      <p>База клиентов и история покупок</p>
+    </div>
+  </div>
+
+  <div class="filters-bar card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Поиск клиента</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [(ngModel)]="search" (ngModelChange)="applySearch()" placeholder="Имя или email..." />
+    </mat-form-field>
+    <span class="count">{{ filtered.length }} клиентов</span>
+  </div>
+
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
+
+  <div *ngIf="!loading" class="clients-grid">
+    <div *ngFor="let client of filtered" class="client-card card">
+      <div class="client-header">
+        <div class="avatar">{{ client.fullName.charAt(0) }}</div>
+        <div class="client-info">
+          <div class="client-name">{{ client.fullName }}</div>
+          <div class="client-email">{{ client.email }}</div>
+        </div>
+        <div *ngIf="client.hasLmsAccount" class="lms-badge"
+             matTooltip="Открыть в LMS" (click)="goToLms(client.lmsUserId!)">
+          <mat-icon>school</mat-icon>
+        </div>
+      </div>
+      <div class="client-stats">
+        <div class="cstat">
+          <span class="cstat-val">{{ client.totalPurchases }}</span>
+          <span class="cstat-lbl">Покупок</span>
+        </div>
+        <div class="cstat">
+          <span class="cstat-val">₸{{ client.totalSpent.toLocaleString('ru') }}</span>
+          <span class="cstat-lbl">Потрачено</span>
+        </div>
+        <div class="cstat">
+          <span class="badge" [class]="client.hasLmsAccount ? 'badge-active' : 'badge-pending'">
+            {{ client.hasLmsAccount ? 'В LMS' : 'Только CRM' }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="!filtered.length" class="empty-state" style="grid-column: 1/-1">
+      <div class="empty-icon">👥</div>
+      <h3>Клиентов не найдено</h3>
+      <p>Лиды становятся клиентами после статуса «WON»</p>
+    </div>
+  </div>
+</div>

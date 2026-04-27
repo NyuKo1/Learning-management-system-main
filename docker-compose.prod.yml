@@ -1,8 +1,7 @@
-# Production stack — all services with health-checked startup ordering.
-# If databases fail to build images, bring up databases first:
+# SEC Production stack — full SmartEduControl ecosystem.
+# Startup order: databases → config-server → discovery-server → microservices → frontends
+# Quick start (databases only):
 #   docker-compose -f docker-compose.prod.yml up -d database-auth database-faculty database-subject database-exam database-crm
-
-version: '3'
 
 services:
   # ── Databases ────────────────────────────────────────────────────────
@@ -222,18 +221,35 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     restart: on-failure
 
-  # ── Frontend ──────────────────────────────────────────────────────────
-  frontend-app:
+  # ── Frontends ─────────────────────────────────────────────────────────
+  frontend-landing:
+    build:
+      context: ./sec-landing
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    restart: on-failure
+
+  frontend-lms:
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - 80:80
+      - 4200:80
     depends_on:
       backend-api-gateway:
         condition: service_healthy
-    environment:
-      PRODUCTION: true
+    restart: on-failure
+
+  frontend-crm:
+    build:
+      context: ./crm-frontend
+      dockerfile: Dockerfile
+    ports:
+      - 4201:80
+    depends_on:
+      backend-api-gateway:
+        condition: service_healthy
     restart: on-failure
 
 volumes:

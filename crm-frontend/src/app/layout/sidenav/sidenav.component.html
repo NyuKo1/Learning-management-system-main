@@ -1,0 +1,32 @@
+<aside class="sidenav" [class.closed]="!open">
+  <div class="sidenav-brand">
+    <div class="brand-logo">SEC</div>
+    <div class="brand-info" *ngIf="open">
+      <span class="brand-name">CRM</span>
+      <span class="brand-sub">SmartEduControl</span>
+    </div>
+  </div>
+
+  <nav class="sidenav-nav">
+    <a
+      *ngFor="let item of navItems"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      class="nav-item"
+      [matTooltip]="!open ? item.label : ''"
+      matTooltipPosition="right">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span *ngIf="open">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="sidenav-footer">
+    <div class="section-label" *ngIf="open">Интеграция</div>
+    <a [href]="lmsUrl" class="nav-item lms-link"
+       [matTooltip]="!open ? 'Перейти в LMS' : ''"
+       matTooltipPosition="right">
+      <mat-icon>open_in_new</mat-icon>
+      <span *ngIf="open">Перейти в LMS</span>
+    </a>
+  </div>
+</aside>

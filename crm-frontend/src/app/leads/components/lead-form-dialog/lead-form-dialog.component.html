@@ -1,0 +1,38 @@
+<h2 mat-dialog-title>Новый лид</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Полное имя *</mat-label>
+      <input matInput formControlName="fullName" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Телефон *</mat-label>
+      <input matInput formControlName="phone" placeholder="+7 700 000 0000" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Источник</mat-label>
+      <mat-select formControlName="source">
+        <mat-option *ngFor="let s of sourceOptions" [value]="s.value">{{ s.label }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Заметки</mat-label>
+      <textarea matInput formControlName="notes" rows="3"></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Отмена</button>
+  <button mat-raised-button color="primary" (click)="submit()" [disabled]="form.invalid || loading">
+    {{ loading ? 'Сохранение...' : 'Сохранить' }}
+  </button>
+</mat-dialog-actions>
+
+<style>
+  .dialog-form { display: flex; flex-direction: column; gap: 4px; min-width: 440px; }
+  .full-width { width: 100%; }
+</style>

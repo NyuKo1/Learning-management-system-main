@@ -1,0 +1,42 @@
+.payments-page { max-width: 1200px; }
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.sum-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.sum-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.green { background: #f0fdf4; mat-icon { color: #16a34a; } }
+  &.blue  { background: #eff6ff; mat-icon { color: #3b82f6; } }
+}
+
+.sum-val { font-size: 24px; font-weight: 800; color: #1e293b; }
+.sum-lbl { font-size: 13px; color: #64748b; }
+
+.loading-center { display: flex; justify-content: center; padding: 60px; }
+.table-card { overflow: hidden; }
+
+.id-cell { color: #94a3b8; font-size: 13px; }
+.course-cell { max-width: 200px; font-size: 13px; color: #64748b; }
+.amount-cell { font-weight: 700; color: #1e293b; }
+.method-cell { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
+.date-cell { font-size: 12px; color: #94a3b8; white-space: nowrap; }
