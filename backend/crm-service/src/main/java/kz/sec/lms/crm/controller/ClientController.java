@@ -23,7 +23,7 @@ public class ClientController extends BaseController<Client, ClientDTO, Long> {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ClientDTO>> getAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }

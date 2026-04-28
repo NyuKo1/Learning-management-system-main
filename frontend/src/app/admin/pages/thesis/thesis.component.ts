@@ -16,63 +16,22 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./thesis.component.scss'],
 })
 export class ThesisComponent extends BaseComponent<Thesis> implements OnInit {
-  title: string = 'Итоговые проекты';
-  name: string = 'итоговый проект';
+  title: string = 'Theses';
+  name: string = 'thesis';
   attributes: EntityAttribute[] = [
+    { key: 'id', name: 'ID', type: 'id' },
+    { key: 'name', name: 'Title', type: 'text', required: true },
+    { key: 'description', name: 'Description', type: 'lob' },
+    { key: 'url', name: 'URL / Link', type: 'text', required: true },
+    { key: 'applicationDate', name: 'Application Date', type: 'date', required: true },
+    { key: 'defenseDate', name: 'Defense Date', type: 'date' },
     {
-      key: 'id',
-      name: 'ID',
-      type: 'id',
-    },
-    {
-      key: 'name',
-      name: 'Название',
-      type: 'string',
-      required: true,
-    },
-    {
-      key: 'description',
-      name: 'Описание',
-      type: 'lob',
-    },
-    {
-      key: 'url',
-      name: 'Ссылка',
-      type: 'string',
-      required: true,
-    },
-    {
-      key: 'applicationDate',
-      name: 'Дата подачи',
-      type: 'date',
-      required: true,
-    },
-    {
-      key: 'defenseDate',
-      name: 'Дата защиты',
-      type: 'date',
-    },
-    {
-      key: 'grade',
-      name: 'Оценка',
-      type: 'number',
+      key: 'grade', name: 'Grade', type: 'number',
       validators: [Validators.min(6), Validators.max(10)],
-      errorMessage: 'Оценка должна быть от 6 до 10',
+      errorMessage: 'Grade must be between 6 and 10',
     },
-    {
-      key: 'student',
-      name: 'Учащийся',
-      type: 'select',
-      required: true,
-      display: getStudentDisplay,
-    },
-    {
-      key: 'mentor',
-      name: 'Руководитель проекта',
-      type: 'select',
-      required: true,
-      display: getTeacherDisplay,
-    },
+    { key: 'student', name: 'Student', type: 'select', required: true, display: getStudentDisplay },
+    { key: 'mentor', name: 'Mentor / Supervisor', type: 'select', required: true, display: getTeacherDisplay },
   ];
 
   constructor(

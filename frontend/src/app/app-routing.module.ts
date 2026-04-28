@@ -45,6 +45,16 @@ const routes: Routes = [
     },
   },
   {
+    path: 'payment',
+    loadChildren: () =>
+      import('./payment/payment.module').then((m) => m.PaymentModule),
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: ['ROLE_STUDENT', 'ROLE_TEACHER'],
+      validationMethod: 'any',
+    },
+  },
+  {
     path: '**',
     component: NotFoundComponent,
   },

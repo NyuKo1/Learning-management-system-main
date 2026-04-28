@@ -8,7 +8,9 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -24,7 +26,6 @@ public class Payment extends BaseEntity<Long> {
 
     private String email;
 
-    // last 4 digits of card (null for CASH/TRANSFER)
     @Column(length = 4)
     private String cardLastFour;
 
@@ -38,11 +39,17 @@ public class Payment extends BaseEntity<Long> {
 
     private String userId;
 
-    // CRM-specific fields
     private Long clientId;
 
-    // CARD, CASH, TRANSFER, ONLINE
     private String method;
 
     private String courseTitle;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

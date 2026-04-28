@@ -53,6 +53,73 @@ export class CrmService {
     return this.http.get<string[]>(`${this.coursesUrl}/categories`);
   }
 
+  // Admin CRUD — uses /all endpoint that returns List<CourseDTO>
+  getAllCourses(): Observable<CourseCatalog[]> {
+    return this.http.get<CourseCatalog[]>(`${this.coursesUrl}/all`);
+  }
+
+  createCourse(course: Partial<CourseCatalog>): Observable<CourseCatalog> {
+    return this.http.post<CourseCatalog>(this.coursesUrl, course);
+  }
+
+  updateCourse(id: number, course: Partial<CourseCatalog>): Observable<CourseCatalog> {
+    return this.http.put<CourseCatalog>(`${this.coursesUrl}/${id}`, course);
+  }
+
+  deleteCourse(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.coursesUrl}/${id}`);
+  }
+
+  syncFromSubjects(): Observable<number> {
+    return this.http.post<number>(`${this.coursesUrl}/sync-from-subjects`, {});
+  }
+
+  createCourseFromSubject(subject: { id?: number; name: string; syllabus?: string; ects?: number }): Observable<CourseCatalog> {
+    const colors = ['#3b82f6', '#8b5cf6', '#10b981', '#6366f1', '#0ea5e9', '#f59e0b', '#ec4899'];
+    const icons  = ['book', 'school', 'science', 'functions', 'code', 'bar_chart', 'palette'];
+    const idx = subject.id ? subject.id % colors.length : 0;
+    const course: Partial<CourseCatalog> = {
+      title: subject.name,
+      description: subject.syllabus || subject.name,
+      instructor: 'Faculty Staff',
+      category: 'Academic',
+      level: 'INTERMEDIATE',
+      duration: subject.ects ? `${subject.ects * 10}h` : '30h',
+      lessons: subject.ects ? subject.ects * 5 : 20,
+      price: 49,
+      originalPrice: 89,
+      rating: 0,
+      studentsCount: 0,
+      tags: subject.name,
+      color: colors[idx],
+      icon: icons[idx],
+      available: true,
+      subjectId: subject.id,
+    };
+    return this.http.post<CourseCatalog>(this.coursesUrl, course);
+  }
+
+  createCourseFromStudyProgram(program: { id?: number; name: string; description?: string }): Observable<CourseCatalog> {
+    const course: Partial<CourseCatalog> = {
+      title: program.name,
+      description: program.description || `Academic study program: ${program.name}`,
+      instructor: 'Faculty Staff',
+      category: 'Academic Program',
+      level: 'BEGINNER',
+      duration: '1 year',
+      lessons: 0,
+      price: 0,
+      rating: 0,
+      studentsCount: 0,
+      tags: program.name,
+      color: '#6366f1',
+      icon: 'school',
+      available: false,
+      studyProgramId: program.id,
+    };
+    return this.http.post<CourseCatalog>(this.coursesUrl, course);
+  }
+
   getTagsArray(tags: string): string[] {
     return tags ? tags.split(',').map(t => t.trim()).filter(t => t.length > 0) : [];
   }

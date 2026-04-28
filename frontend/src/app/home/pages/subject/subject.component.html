@@ -3,7 +3,7 @@
   <h1 class="text-2xl sm:text-3xl">{{ subject.name }}</h1>
   <p>{{ subject.syllabus }}</p>
   <p>
-    <span class="font-bold">Программа обучения</span>:
+    <span class="font-bold">Study Program</span>:
     <a
       routerLink
       [routerLink]="['/study-programs', subject.studyProgram.id]"
@@ -13,46 +13,46 @@
     </a>
   </p>
   <p>
-    <span class="font-bold">Преподаватель</span>:
+    <span class="font-bold">Instructor</span>:
     {{ getTeacherDisplay(subject.professor) }}
   </p>
   <p>
-    <span class="font-bold">Ассистент</span>:
+    <span class="font-bold">Assistant</span>:
     {{ getTeacherDisplay(subject.assistant) }}
   </p>
   <p>
-    <span class="font-bold">Модуль</span>:
+    <span class="font-bold">Module</span>:
     {{ subject.semester }}
   </p>
   <p>
-    <span class="font-bold">Кредиты</span>:
+    <span class="font-bold">Credits</span>:
     {{ subject.ects }}
   </p>
 
   <mat-tab-group mat-stretch-tabs>
-    <mat-tab label="Материалы">
+    <mat-tab label="Materials">
       <app-subject-material-tab
         [subjectMaterials]="subjectMaterials"
       ></app-subject-material-tab>
     </mat-tab>
 
-    <mat-tab label="Объявления">
+    <mat-tab label="Announcements">
       <app-subject-notification-tab
         [subjectNotifications]="subjectNotifications"
       ></app-subject-notification-tab
     ></mat-tab>
 
-    <mat-tab label="Занятия">
+    <mat-tab label="Classes">
       <app-subject-term-tab
         [subjectTerms]="subjectTerms"
       ></app-subject-term-tab>
     </mat-tab>
 
-    <mat-tab label="Аттестации">
+    <mat-tab label="Exams">
       <app-exam-tab [exams]="exams"></app-exam-tab>
     </mat-tab>
 
-    <mat-tab label="Расписание аттестаций">
+    <mat-tab label="Exam Schedule">
       <app-exam-term-tab [examTerms]="examTerms"></app-exam-term-tab>
     </mat-tab>
   </mat-tab-group>

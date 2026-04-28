@@ -29,6 +29,7 @@ const METHOD_COLORS: Record<string, string> = {
 })
 export class AnalyticsComponent implements OnInit {
   loading = true;
+  loadError = false;
 
   months: MonthStat[] = [];
   funnel: FunnelRow[] = [];
@@ -43,14 +44,18 @@ export class AnalyticsComponent implements OnInit {
   constructor(private api: CrmApiService) {}
 
   ngOnInit(): void {
+    this.loadError = false;
     forkJoin({
       analytics: this.api.getDashboardAnalytics().pipe(catchError(() => of(null))),
       stats:     this.api.getDashboardStats().pipe(catchError(() => of(null)))
     }).subscribe(({ analytics, stats }) => {
+      if (!analytics && !stats) {
+        this.loadError = true;
+        this.loading = false;
+        return;
+      }
       if (analytics) {
         this.buildFromAnalytics(analytics);
-      } else {
-        this.loadFallback();
       }
       if (stats) {
         this.totalRevenue    = Number(stats.totalRevenue) || 0;
@@ -91,40 +96,6 @@ export class AnalyticsComponent implements OnInit {
       sales: c.sales,
       revenue: Number(c.revenue) || 0
     }));
-  }
-
-  private loadFallback(): void {
-    this.months = [
-      { month: 'Ноя', revenue: 320000, leads: 38 },
-      { month: 'Дек', revenue: 410000, leads: 45 },
-      { month: 'Янв', revenue: 290000, leads: 31 },
-      { month: 'Фев', revenue: 560000, leads: 62 },
-      { month: 'Мар', revenue: 740000, leads: 74 },
-      { month: 'Апр', revenue: 840000, leads: 89 },
-    ];
-    this.funnel = [
-      { label: 'Новые лиды',   count: 284, pct: 100, color: '#3b82f6' },
-      { label: 'Контакт',      count: 198, pct: 70,  color: '#0ea5e9' },
-      { label: 'Квалификация', count: 132, pct: 46,  color: '#7c3aed' },
-      { label: 'Предложение',  count: 87,  pct: 31,  color: '#f59e0b' },
-      { label: 'Клиент (WON)', count: 147, pct: 52,  color: '#16a34a' },
-    ];
-    this.paymentMethods = [
-      { label: 'Банковская карта', pct: 54, color: '#3b82f6' },
-      { label: 'Перевод',         pct: 28, color: '#7c3aed' },
-      { label: 'Наличные',        pct: 11, color: '#f59e0b' },
-      { label: 'Онлайн-оплата',  pct: 7,  color: '#16a34a' },
-    ];
-    this.topCourses = [
-      { title: 'Python для начинающих',     sales: 47, revenue: 705000 },
-      { title: 'Веб-разработка Full Stack', sales: 34, revenue: 850000 },
-      { title: 'UI/UX Design',              sales: 28, revenue: 560000 },
-      { title: 'Data Science & ML',         sales: 22, revenue: 660000 },
-    ];
-    this.totalRevenue = 3160000;
-    this.totalLeads   = 339;
-    this.totalClients = 147;
-    this.conversionRate = 43;
   }
 
   get maxRevenue(): number {

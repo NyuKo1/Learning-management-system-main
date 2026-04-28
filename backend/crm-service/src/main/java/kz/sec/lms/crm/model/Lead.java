@@ -9,8 +9,12 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "crm_lead")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -35,4 +39,12 @@ public class Lead extends BaseEntity<Long> {
 
     private Long interestedCourseId;
     private String interestedCourseTitle;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

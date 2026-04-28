@@ -78,6 +78,10 @@ public class SubjectService extends ExtendedService<Subject, SubjectDTO, Long> {
         return subjects.isEmpty() ? subjects : this.mapMissingValues(subjects);
     }
 
+    public java.util.Optional<Subject> findEntityById(Long id) {
+        return repository.findById(id);
+    }
+
     @Transactional
     public SubjectDTO updateSyllabus(Long id, String syllabus) {
         Subject subject =

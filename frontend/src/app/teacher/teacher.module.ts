@@ -12,6 +12,10 @@ import { ExamComponent } from './pages/exam/exam.component';
 import { ExamRealizationComponent } from './pages/exam-realization/exam-realization.component';
 import { StudentComponent } from './pages/student/student.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
+import { TeacherCoursesComponent } from './pages/courses/courses.component';
+import { TeacherMyCoursesComponent } from './pages/my-courses/my-courses.component';
+import { TeacherCoursePlayerComponent } from './pages/course-player/course-player.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,10 @@ import { ThesisComponent } from './pages/thesis/thesis.component';
     ExamRealizationComponent,
     StudentComponent,
     ThesisComponent,
+    TeacherCoursesComponent,
+    TeacherMyCoursesComponent,
+    TeacherCoursePlayerComponent,
   ],
-  imports: [SharedModule, TeacherRoutingModule],
+  imports: [SharedModule, TeacherRoutingModule, FormsModule],
 })
 export class TeacherModule {}

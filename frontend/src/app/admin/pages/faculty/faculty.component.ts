@@ -15,46 +15,15 @@ import { TeacherService } from '@core/services/teacher.service';
   styleUrls: ['./faculty.component.scss'],
 })
 export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
-  title: string = 'Направления';
-  name: string = 'направление';
+  title: string = 'Faculties';
+  name: string = 'faculty';
   attributes: EntityAttribute[] = [
-    {
-      key: 'id',
-      name: 'ID',
-      type: 'id',
-    },
-    {
-      key: 'name',
-      name: 'Название',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'description',
-      name: 'Описание',
-      type: 'lob',
-      required: true,
-    },
-    {
-      key: 'email',
-      name: 'Email',
-      type: 'email',
-      required: true,
-    },
-    {
-      key: 'dean',
-      name: 'Руководитель',
-      type: 'select',
-      required: true,
-      display: getTeacherDisplay,
-    },
-    {
-      key: 'address',
-      name: 'Адрес (необязательно)',
-      type: 'select',
-      required: false,
-      display: getAddressDisplay,
-    },
+    { key: 'id', name: 'ID', type: 'id' },
+    { key: 'name', name: 'Name', type: 'text', required: true },
+    { key: 'description', name: 'Description', type: 'lob', required: true },
+    { key: 'email', name: 'Email', type: 'email', required: true },
+    { key: 'dean', name: 'Dean', type: 'select', required: true, display: getTeacherDisplay },
+    { key: 'address', name: 'Address', type: 'select', required: false, display: getAddressDisplay },
   ];
 
   constructor(

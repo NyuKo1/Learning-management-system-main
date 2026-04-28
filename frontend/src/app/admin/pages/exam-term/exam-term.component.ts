@@ -19,42 +19,14 @@ export class ExamTermComponent
   extends BaseComponent<ExamTerm>
   implements OnInit
 {
-  title: string = 'Расписание аттестаций';
-  name: string = 'слот расписания';
+  title: string = 'Exam Schedule';
+  name: string = 'exam slot';
   attributes: EntityAttribute[] = [
-    {
-      key: 'id',
-      name: 'ID',
-      type: 'id',
-    },
-    {
-      key: 'startTime',
-      name: 'Начало',
-      type: 'datetime-local',
-      required: true,
-      display: formatDateTime,
-    },
-    {
-      key: 'endTime',
-      name: 'Окончание',
-      type: 'datetime-local',
-      required: true,
-      display: formatDateTime,
-    },
-    {
-      key: 'exam',
-      name: 'Аттестация',
-      type: 'select',
-      required: true,
-      display: getExamDisplay,
-    },
-    {
-      key: 'examPeriod',
-      name: 'Период аттестации',
-      type: 'select',
-      required: true,
-      display: getExamPeriodDisplay,
-    },
+    { key: 'id', name: 'ID', type: 'id' },
+    { key: 'startTime', name: 'Start Time', type: 'datetime-local', required: true, display: formatDateTime },
+    { key: 'endTime', name: 'End Time', type: 'datetime-local', required: true, display: formatDateTime },
+    { key: 'exam', name: 'Exam', type: 'select', required: true, display: getExamDisplay },
+    { key: 'examPeriod', name: 'Exam Period', type: 'select', required: true, display: getExamPeriodDisplay },
   ];
 
   constructor(

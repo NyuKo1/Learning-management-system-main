@@ -4,7 +4,7 @@
   <div class="player-topbar">
     <a class="back-link" routerLink="/student-services/my-courses">
       <mat-icon>arrow_back</mat-icon>
-      Мои курсы
+      My Courses
     </a>
     <div class="course-title-bar">
       <div class="course-icon-sm" [style.background-color]="course.color + '22'">
@@ -13,7 +13,7 @@
       <span class="course-name-bar">{{ course.title }}</span>
     </div>
     <div class="progress-info">
-      <span>{{ lessons.length }} уроков</span>
+      <span>{{ lessons.length }} lessons</span>
     </div>
   </div>
 
@@ -23,7 +23,7 @@
     <aside class="lesson-sidebar">
       <div class="sidebar-header">
         <mat-icon>list</mat-icon>
-        <span>Содержание курса</span>
+        <span>Course Content</span>
       </div>
       <div class="lesson-list">
         <div
@@ -41,7 +41,7 @@
           <mat-icon class="lesson-active-icon" *ngIf="activeLesson?.id === lesson.id">play_circle</mat-icon>
         </div>
         <div *ngIf="lessons.length === 0" class="no-lessons">
-          Уроки скоро появятся
+          Lessons coming soon
         </div>
       </div>
     </aside>
@@ -56,7 +56,7 @@
         </div>
         <div class="video-placeholder" *ngIf="!activeLesson.videoUrl">
           <mat-icon>play_circle_outline</mat-icon>
-          <p>Видео этого урока скоро будет добавлено</p>
+          <p>Video for this lesson will be available soon</p>
         </div>
 
         <!-- Lesson header -->
@@ -77,7 +77,7 @@
       <ng-template #noLesson>
         <div class="no-lesson-selected">
           <mat-icon>school</mat-icon>
-          <p>Выберите урок из списка слева, чтобы начать обучение</p>
+          <p>Select a lesson from the list on the left to start learning</p>
         </div>
       </ng-template>
     </main>
@@ -88,12 +88,12 @@
 <!-- Loading -->
 <div *ngIf="loading" class="player-loading">
   <mat-spinner diameter="48"></mat-spinner>
-  <p>Загружаем курс…</p>
+  <p>Loading course…</p>
 </div>
 
 <!-- Error -->
 <div *ngIf="error" class="player-error">
   <mat-icon>error_outline</mat-icon>
-  <p>Не удалось загрузить курс. Попробуйте позже.</p>
-  <a mat-flat-button color="primary" routerLink="/student-services/my-courses">Вернуться</a>
+  <p>Failed to load course. Please try again later.</p>
+  <a mat-flat-button color="primary" routerLink="/student-services/my-courses">Go Back</a>
 </div>

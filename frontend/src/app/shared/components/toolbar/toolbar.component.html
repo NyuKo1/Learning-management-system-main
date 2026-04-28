@@ -10,9 +10,9 @@
     </mat-toolbar-row>
   <mat-toolbar-row>
     <div class="flex flex-wrap justify-center items-center w-full gap-2">
-      <a mat-button routerLink="/about" class="md:text-lg">О системе</a>
-      <a mat-button routerLink="/faculties" class="md:text-lg">Направления</a>
-      <a mat-button routerLink="/courses" class="md:text-lg">Курсы</a>
+      <a mat-button routerLink="/about" class="md:text-lg">About</a>
+      <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
+      <a mat-button routerLink="/courses" class="md:text-lg">Courses</a>
       <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle dark mode" class="ml-4">
           <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
@@ -22,7 +22,7 @@
         routerLink="/student-services/my-courses"
         class="md:text-lg"
       >
-        Мои курсы
+        My Courses
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
@@ -30,7 +30,7 @@
         routerLink="/student-services"
         class="md:text-lg"
       >
-        Учебный портал
+        Student Portal
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_TEACHER'], 'any')"
@@ -38,14 +38,22 @@
         routerLink="/teacher-services"
         class="md:text-lg"
       >
-        Портал преподавателя
+        Teacher Portal
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_ADMIN'], 'any')"
         mat-button
         routerLink="/admin-panel"
         class="md:text-lg"
-        >Панель администратора</a
+        >Admin Panel</a
+      >
+      <a
+        *ngIf="authService.validateRoles(['ROLE_ADMIN', 'ROLE_TEACHER'], 'any')"
+        mat-button
+        [href]="crmUrl"
+        target="_blank"
+        class="md:text-lg crm-link"
+        >CRM →</a
       >
       <a
         *ngIf="!authService.loggedIn()"
@@ -53,7 +61,7 @@
         mat-button
         class="md:text-lg"
       >
-        Войти
+        Log In
       </a>
       <a
         *ngIf="authService.loggedIn()"
@@ -61,7 +69,7 @@
         mat-button
         class="md:text-lg"
       >
-        Выйти
+        Log Out
       </a>
     </div>
   </mat-toolbar-row>

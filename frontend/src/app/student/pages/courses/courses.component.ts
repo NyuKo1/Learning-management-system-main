@@ -18,14 +18,14 @@ export class CoursesComponent implements OnInit {
   error = false;
 
   searchQuery = '';
-  selectedCategory = 'Все';
-  selectedLevel = 'Все';
+  selectedCategory = 'All';
+  selectedLevel = 'All';
 
   purchaseInProgress: number | null = null;
   purchaseSuccess: number | null = null;
 
-  categories: string[] = ['Все'];
-  levels = ['Все', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+  categories: string[] = ['All'];
+  levels = ['All', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
   constructor(
     private crmService: CrmService,
@@ -43,7 +43,7 @@ export class CoursesComponent implements OnInit {
       categories: this.crmService.getCategories().pipe(catchError(() => of([]))),
     }).subscribe(({ courses, categories }) => {
       this.allCourses = courses;
-      this.categories = ['Все', ...categories];
+      this.categories = ['All', ...categories];
       this.loading = false;
       if (this.authService.loggedIn()) this.checkPurchased();
     });
@@ -70,8 +70,8 @@ export class CoursesComponent implements OnInit {
         c.title.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
         (c.tags || '').toLowerCase().includes(q);
-      const matchCat = this.selectedCategory === 'Все' || c.category === this.selectedCategory;
-      const matchLvl = this.selectedLevel === 'Все' || c.level === this.selectedLevel;
+      const matchCat = this.selectedCategory === 'All' || c.category === this.selectedCategory;
+      const matchLvl = this.selectedLevel === 'All' || c.level === this.selectedLevel;
       return matchSearch && matchCat && matchLvl;
     });
   }
@@ -85,10 +85,10 @@ export class CoursesComponent implements OnInit {
 
   getLevelLabel(level: string): string {
     const map: Record<string, string> = {
-      'Все': 'Все уровни',
-      BEGINNER: 'Начинающий',
-      INTERMEDIATE: 'Средний',
-      ADVANCED: 'Продвинутый',
+      All: 'All Levels',
+      BEGINNER: 'Beginner',
+      INTERMEDIATE: 'Intermediate',
+      ADVANCED: 'Advanced',
     };
     return map[level] || level;
   }

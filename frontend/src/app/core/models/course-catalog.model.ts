@@ -16,4 +16,6 @@ export interface CourseCatalog {
   icon: string;
   available?: boolean;
   purchased?: boolean;
+  subjectId?: number;
+  studyProgramId?: number;
 }

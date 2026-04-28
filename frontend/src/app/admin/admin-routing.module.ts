@@ -15,6 +15,7 @@ import { StudyProgramComponent } from './pages/study-program/study-program.compo
 import { SubjectComponent } from './pages/subject/subject.component';
 import { TeacherComponent } from './pages/teacher/teacher.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
+import { CourseCatalogComponent } from './pages/course-catalog/course-catalog.component';
 
 const routes: Routes = [
   {
@@ -77,6 +78,10 @@ const routes: Routes = [
       {
         path: 'addresses',
         component: AddressComponent,
+      },
+      {
+        path: 'course-catalog',
+        component: CourseCatalogComponent,
       },
     ],
   },

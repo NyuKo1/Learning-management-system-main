@@ -1,6 +1,7 @@
 package kz.sec.lms.subject.controller;
 
 import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.subject.dto.EnrollmentRequest;
 import kz.sec.lms.subject.dto.SubjectEnrollmentDTO;
 import kz.sec.lms.subject.model.SubjectEnrollment;
 import kz.sec.lms.subject.service.SubjectEnrollmentService;
@@ -62,6 +63,13 @@ public class SubjectEnrollmentController
     @GetMapping("/student/{id}/total-ects")
     public ResponseEntity<List<Integer>> getTotalECTSByStudentId(@PathVariable List<Long> id) {
         return new ResponseEntity<>(this.service.findTotalECTSByStudentId(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/enroll")
+    public ResponseEntity<SubjectEnrollmentDTO> enroll(@RequestBody EnrollmentRequest request) {
+        return new ResponseEntity<>(
+                this.service.enroll(request.getStudentId(), request.getSubjectId()),
+                HttpStatus.CREATED);
     }
 
     @PatchMapping("/{id}/grade")

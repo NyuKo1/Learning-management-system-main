@@ -5,15 +5,15 @@
     <div class="header-inner">
       <h1 class="catalog-title">
         <mat-icon class="title-icon">school</mat-icon>
-        Каталог курсов
+        Course Catalog
       </h1>
       <p class="catalog-subtitle">
-        Обучайтесь у лучших экспертов — просматривайте курсы бесплатно, купите доступ чтобы начать
+        Learn from the best experts — browse courses for free, purchase access to get started
       </p>
       <div class="header-cta" *ngIf="!loading">
-        <span class="cta-badge">{{ filteredCourses.length }} курсов доступно</span>
+        <span class="cta-badge">{{ filteredCourses.length }} courses available</span>
         <a mat-stroked-button routerLink="/auth/login" *ngIf="!(authService.loggedIn())">
-          <mat-icon>login</mat-icon> Войти для покупки
+          <mat-icon>login</mat-icon> Log In to Purchase
         </a>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <input
         class="s-input"
         type="text"
-        placeholder="Поиск по курсам, инструкторам, темам…"
+        placeholder="Search courses, instructors, topics…"
         [(ngModel)]="searchQuery"
       />
       <button *ngIf="searchQuery" mat-icon-button class="s-clear" (click)="searchQuery = ''">
@@ -36,7 +36,7 @@
   <!-- Filters -->
   <div class="filters-bar">
     <div class="filter-group">
-      <span class="filter-label">Категория</span>
+      <span class="filter-label">Category</span>
       <div class="chips">
         <button *ngFor="let cat of categories" class="chip"
           [class.active]="selectedCategory === cat" (click)="selectedCategory = cat">
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="filter-group">
-      <span class="filter-label">Уровень</span>
+      <span class="filter-label">Level</span>
       <div class="chips">
         <button *ngFor="let lvl of levels" class="chip"
           [class.active]="selectedLevel === lvl" (click)="selectedLevel = lvl">
@@ -58,13 +58,13 @@
   <!-- Loading -->
   <div *ngIf="loading" class="loading-state">
     <mat-spinner diameter="48"></mat-spinner>
-    <p>Загружаем курсы…</p>
+    <p>Loading courses…</p>
   </div>
 
   <!-- Error -->
   <div *ngIf="error && !loading" class="error-state">
     <mat-icon>error_outline</mat-icon>
-    <p>Не удалось загрузить курсы. Попробуйте позже.</p>
+    <p>Failed to load courses. Please try again later.</p>
   </div>
 
   <!-- Grid -->
@@ -99,7 +99,7 @@
 
         <div class="stats-row">
           <div class="stat"><mat-icon>schedule</mat-icon><span>{{ course.duration }}</span></div>
-          <div class="stat"><mat-icon>play_circle</mat-icon><span>{{ course.lessons }} уроков</span></div>
+          <div class="stat"><mat-icon>play_circle</mat-icon><span>{{ course.lessons }} lessons</span></div>
           <div class="stat"><mat-icon>group</mat-icon><span>{{ formatStudents(course.studentsCount) }}</span></div>
         </div>
 
@@ -121,7 +121,7 @@
           </div>
           <button class="buy-btn" (click)="buyCourse(course, $event)">
             <mat-icon>shopping_cart</mat-icon>
-            Купить доступ
+            Get Access
           </button>
         </div>
       </div>
@@ -131,9 +131,9 @@
   <!-- Empty -->
   <div *ngIf="!loading && !error && filteredCourses.length === 0" class="empty-state">
     <mat-icon>search_off</mat-icon>
-    <h3>Курсы не найдены</h3>
-    <p>Попробуйте изменить поисковый запрос или фильтры</p>
-    <button mat-stroked-button (click)="reset()">Сбросить фильтры</button>
+    <h3>No courses found</h3>
+    <p>Try changing your search query or filters</p>
+    <button mat-stroked-button (click)="reset()">Reset Filters</button>
   </div>
 
 </div>

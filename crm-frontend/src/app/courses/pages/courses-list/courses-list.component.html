@@ -8,22 +8,46 @@
 
   <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
 
-  <div *ngIf="!loading" class="courses-grid">
-    <div *ngFor="let course of courses" class="course-card card" [class.unavailable]="!course.isAvailable">
+  <div *ngIf="!loading && loadError" class="api-error-state">
+    <mat-icon>cloud_off</mat-icon>
+    <h3>Курсы недоступны</h3>
+    <p>Не удалось загрузить каталог курсов. Проверьте соединение с сервером.</p>
+    <button mat-raised-button color="primary" (click)="ngOnInit()">Повторить</button>
+  </div>
+
+  <div *ngIf="!loading && !loadError && !courses.length" class="api-error-state">
+    <mat-icon>school</mat-icon>
+    <h3>Нет доступных курсов</h3>
+    <p>Добавьте курсы в LMS и сделайте их видимыми</p>
+  </div>
+
+  <div *ngIf="!loading && !loadError" class="courses-grid">
+    <div *ngFor="let course of courses" class="course-card card" [class.unavailable]="!course.available">
       <div class="course-header">
         <div class="course-category">{{ course.category }}</div>
-        <span class="badge" [class]="course.isAvailable ? 'badge-active' : 'badge-lost'">
-          {{ course.isAvailable ? 'Доступен' : 'Закрыт' }}
+        <span class="badge" [class]="course.available ? 'badge-active' : 'badge-lost'">
+          {{ course.available ? 'Доступен' : 'Закрыт' }}
         </span>
+      </div>
+      <div class="course-icon-row" *ngIf="course.color && course.icon">
+        <div class="course-icon-badge" [style.background]="course.color">
+          <mat-icon style="color:#fff;font-size:18px;width:18px;height:18px">{{ course.icon }}</mat-icon>
+        </div>
+        <span class="course-level-chip">{{ course.level }}</span>
       </div>
       <h3 class="course-title">{{ course.title }}</h3>
       <p class="course-desc">{{ course.description }}</p>
       <div class="course-meta">
-        <span><mat-icon>schedule</mat-icon> {{ course.duration }} ч</span>
-        <span><mat-icon>people</mat-icon> {{ course.enrolledCount }} студентов</span>
+        <span><mat-icon>schedule</mat-icon> {{ course.duration }}</span>
+        <span><mat-icon>menu_book</mat-icon> {{ course.lessons }} уроков</span>
+        <span><mat-icon>people</mat-icon> {{ course.studentsCount }} студентов</span>
       </div>
       <div class="course-footer">
-        <div class="course-price">{{ course.currency }}{{ course.price.toLocaleString('ru') }}</div>
+        <div class="course-price">₸{{ course.price.toLocaleString('ru') }}</div>
+        <div class="course-rating" *ngIf="course.rating > 0">
+          <mat-icon style="color:#f59e0b;font-size:14px;width:14px;height:14px">star</mat-icon>
+          {{ course.rating.toFixed(1) }}
+        </div>
       </div>
     </div>
   </div>

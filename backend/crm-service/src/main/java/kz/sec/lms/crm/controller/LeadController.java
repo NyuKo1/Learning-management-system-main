@@ -22,7 +22,7 @@ public class LeadController extends BaseController<Lead, LeadDTO, Long> {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<LeadDTO>> getAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }

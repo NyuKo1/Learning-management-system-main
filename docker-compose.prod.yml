@@ -217,6 +217,8 @@ services:
         condition: service_healthy
       database-crm:
         condition: service_healthy
+      backend-subject-service:
+        condition: service_started
     environment:
       SPRING_PROFILES_ACTIVE: prod
     restart: on-failure

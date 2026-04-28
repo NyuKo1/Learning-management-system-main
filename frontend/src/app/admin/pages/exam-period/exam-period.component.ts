@@ -16,51 +16,16 @@ export class ExamPeriodComponent
   extends BaseComponent<ExamPeriod>
   implements OnInit
 {
-  title: string = 'Периоды аттестации';
-  name: string = 'период аттестации';
+  title: string = 'Exam Periods';
+  name: string = 'exam period';
   attributes: EntityAttribute[] = [
-    {
-      key: 'id',
-      name: 'ID',
-      type: 'id',
-    },
-    {
-      key: 'name',
-      name: 'Название',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'registrationStartDate',
-      name: 'Начало записи',
-      type: 'date',
-      required: true,
-    },
-    {
-      key: 'registrationEndDate',
-      name: 'Окончание записи',
-      type: 'date',
-      required: true,
-    },
-    {
-      key: 'examStartDate',
-      name: 'Начало аттестации',
-      type: 'date',
-      required: true,
-    },
-    {
-      key: 'examEndDate',
-      name: 'Окончание аттестации',
-      type: 'date',
-      required: true,
-    },
-    {
-      key: 'faculty',
-      name: 'Направление',
-      type: 'select',
-      required: true,
-      display: getFacultyDisplay,
-    },
+    { key: 'id', name: 'ID', type: 'id' },
+    { key: 'name', name: 'Name', type: 'text', required: true },
+    { key: 'registrationStartDate', name: 'Registration Start', type: 'date', required: true },
+    { key: 'registrationEndDate', name: 'Registration End', type: 'date', required: true },
+    { key: 'examStartDate', name: 'Exam Start', type: 'date', required: true },
+    { key: 'examEndDate', name: 'Exam End', type: 'date', required: true },
+    { key: 'faculty', name: 'Faculty', type: 'select', required: true, display: getFacultyDisplay },
   ];
 
   constructor(

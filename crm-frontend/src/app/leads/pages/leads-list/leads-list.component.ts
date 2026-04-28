@@ -14,6 +14,7 @@ export class LeadsListComponent implements OnInit {
   leads: Lead[] = [];
   filteredLeads: Lead[] = [];
   loading = true;
+  loadError = false;
   filterStatus = '';
   search = '';
 
@@ -44,6 +45,7 @@ export class LeadsListComponent implements OnInit {
 
   loadLeads(): void {
     this.loading = true;
+    this.loadError = false;
     this.api.getLeads().subscribe({
       next: data => {
         this.leads = data;
@@ -51,8 +53,9 @@ export class LeadsListComponent implements OnInit {
         this.loading = false;
       },
       error: () => {
-        this.leads = this.mockLeads();
-        this.applyFilter();
+        this.loadError = true;
+        this.leads = [];
+        this.filteredLeads = [];
         this.loading = false;
       }
     });
@@ -131,16 +134,5 @@ export class LeadsListComponent implements OnInit {
       PROPOSAL: 'badge-pending', WON: 'badge-active', LOST: 'badge-lost'
     };
     return map[status];
-  }
-
-  private mockLeads(): Lead[] {
-    return [
-      { id: 1, fullName: 'Арман Сейтказы',    phone: '+7 701 123 4567', email: 'arman@mail.ru',     status: 'NEW',       source: 'WEBSITE',   interestedCourseTitle: 'Python для начинающих', createdAt: '2024-04-25T10:00:00', updatedAt: '2024-04-25T10:00:00' },
-      { id: 2, fullName: 'Айгерим Нурланова',  phone: '+7 702 234 5678', email: 'aigul@gmail.com',   status: 'CONTACTED', source: 'SOCIAL',    interestedCourseTitle: 'Веб-разработка',         createdAt: '2024-04-24T14:30:00', updatedAt: '2024-04-25T09:00:00' },
-      { id: 3, fullName: 'Даниар Жаксыбеков',  phone: '+7 705 345 6789',                             status: 'QUALIFIED',  source: 'REFERRAL',  interestedCourseTitle: 'UI/UX Design',           createdAt: '2024-04-22T11:00:00', updatedAt: '2024-04-23T10:00:00' },
-      { id: 4, fullName: 'Сания Бейсова',       phone: '+7 708 456 7890',                             status: 'PROPOSAL',  source: 'AD',        interestedCourseTitle: 'Data Science',           createdAt: '2024-04-20T09:00:00', updatedAt: '2024-04-22T12:00:00' },
-      { id: 5, fullName: 'Гульназ Ахметова',    phone: '+7 707 567 8901',                             status: 'WON',       source: 'REFERRAL',  interestedCourseTitle: 'Python для начинающих', createdAt: '2024-04-18T09:00:00', updatedAt: '2024-04-22T12:00:00' },
-      { id: 6, fullName: 'Нурлан Сейткали',     phone: '+7 771 678 9012',                             status: 'LOST',      source: 'COLD_CALL',                                                  createdAt: '2024-04-15T08:00:00', updatedAt: '2024-04-16T12:00:00' }
-    ];
   }
 }

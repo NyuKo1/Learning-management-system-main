@@ -243,6 +243,30 @@ public class SubjectEnrollmentService
     }
 
     @Transactional
+    public SubjectEnrollmentDTO enroll(Long studentId, Long subjectId) {
+        // Avoid duplicate enrollment
+        boolean alreadyEnrolled = repository.findByStudentIdAndDeletedFalse(studentId)
+                .stream()
+                .anyMatch(e -> e.getSubject().getId().equals(subjectId));
+        if (alreadyEnrolled) {
+            return mapper.toDTO(
+                    repository.findByStudentIdAndDeletedFalse(studentId).stream()
+                            .filter(e -> e.getSubject().getId().equals(subjectId))
+                            .findFirst()
+                            .orElseThrow());
+        }
+
+        kz.sec.lms.subject.model.Subject subject =
+                subjectService.findEntityById(subjectId)
+                        .orElseThrow(() -> new ca.utoronto.lms.shared.exception.NotFoundException("Subject not found"));
+
+        SubjectEnrollment enrollment = new SubjectEnrollment();
+        enrollment.setStudentId(studentId);
+        enrollment.setSubject(subject);
+        return mapper.toDTO(repository.save(enrollment));
+    }
+
+    @Transactional
     public SubjectEnrollmentDTO updateGrade(Long id, SubjectEnrollmentDTO subjectEnrollmentDTO) {
         SubjectEnrollment subjectEnrollment =
                 repository

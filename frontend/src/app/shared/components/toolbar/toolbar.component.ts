@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
+import { environment } from 'environments/environment';
 
 @Component({
   selector: 'app-toolbar',
@@ -7,9 +8,10 @@ import { AuthService } from '@core/services/auth.service';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
-  isDarkMode: boolean = false; // Состояние темы
+  isDarkMode: boolean = false;
+  crmUrl = environment.crmUrl;
 
-  constructor(public authService: AuthService) {} //
+  constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     // Проверка сохраненной темы при загрузке

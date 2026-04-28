@@ -7,7 +7,15 @@
   </div>
 
   <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
-  <ng-container *ngIf="!loading">
+
+  <div *ngIf="!loading && loadError" class="api-error-state">
+    <mat-icon>cloud_off</mat-icon>
+    <h3>Нет данных</h3>
+    <p>Не удалось загрузить аналитику. Убедитесь, что бэкенд запущен.</p>
+    <button mat-raised-button color="primary" (click)="ngOnInit()">Повторить</button>
+  </div>
+
+  <ng-container *ngIf="!loading && !loadError">
 
   <!-- KPI Cards -->
   <div class="kpi-grid">

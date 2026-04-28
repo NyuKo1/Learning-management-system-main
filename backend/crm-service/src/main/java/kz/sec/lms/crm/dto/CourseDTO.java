@@ -58,4 +58,10 @@ public class CourseDTO extends BaseDTO<Long> {
     private String icon;
 
     private Boolean available;
+
+    // Link to LMS Subject
+    private Long subjectId;
+
+    // Link to LMS Study Program
+    private Long studyProgramId;
 }

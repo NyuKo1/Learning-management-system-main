@@ -31,6 +31,12 @@
     <mat-spinner diameter="36"></mat-spinner>
   </div>
 
+  <div *ngIf="!loading && loadError" class="api-error-banner">
+    <mat-icon>cloud_off</mat-icon>
+    <span>Не удалось загрузить лиды. Проверьте соединение с сервером.</span>
+    <button mat-stroked-button (click)="loadLeads()">Повторить</button>
+  </div>
+
   <div *ngIf="!loading" class="card table-card">
     <table class="data-table" *ngIf="filteredLeads.length; else emptyTpl">
       <thead>

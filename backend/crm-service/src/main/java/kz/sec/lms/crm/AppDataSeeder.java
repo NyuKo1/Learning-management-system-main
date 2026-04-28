@@ -1,9 +1,11 @@
 package kz.sec.lms.crm;
 
+import kz.sec.lms.crm.client.SubjectFeignClient;
 import kz.sec.lms.crm.dto.ClientDTO;
 import kz.sec.lms.crm.dto.CourseLessonDTO;
 import kz.sec.lms.crm.dto.CourseDTO;
 import kz.sec.lms.crm.dto.LeadDTO;
+import kz.sec.lms.crm.dto.SubjectSimpleDTO;
 import kz.sec.lms.crm.repository.ClientRepository;
 import kz.sec.lms.crm.repository.CourseLessonRepository;
 import kz.sec.lms.crm.repository.CourseRepository;
@@ -13,6 +15,7 @@ import kz.sec.lms.crm.service.CourseLessonService;
 import kz.sec.lms.crm.service.CourseService;
 import kz.sec.lms.crm.service.LeadService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -21,6 +24,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AppDataSeeder implements ApplicationRunner {
@@ -33,11 +37,12 @@ public class AppDataSeeder implements ApplicationRunner {
     private final ClientRepository clientRepository;
     private final CourseLessonService lessonService;
     private final CourseLessonRepository lessonRepository;
+    private final SubjectFeignClient subjectFeignClient;
 
     @Override
     public void run(ApplicationArguments args) {
         if (courseRepository.count() == 0) {
-            seedCourses();
+            seedCoursesFromSubjectsOrStatic();
         }
         if (leadRepository.count() == 0) {
             seedLeads();
@@ -50,7 +55,45 @@ public class AppDataSeeder implements ApplicationRunner {
         }
     }
 
-    private void seedCourses() {
+    // Try to seed courses from subject-service; fall back to static data if unavailable/empty
+    private void seedCoursesFromSubjectsOrStatic() {
+        try {
+            List<SubjectSimpleDTO> subjects = subjectFeignClient.getAllSubjects();
+            if (subjects != null && !subjects.isEmpty()) {
+                log.info("Seeding {} CRM courses from subject-service", subjects.size());
+                String[] colors = {"#3b82f6", "#8b5cf6", "#10b981", "#6366f1", "#0ea5e9", "#f59e0b", "#ec4899", "#8b5cf6"};
+                String[] icons = {"book", "school", "science", "functions", "code", "bar_chart", "palette", "psychology"};
+                int i = 0;
+                for (SubjectSimpleDTO subject : subjects) {
+                    CourseDTO dto = new CourseDTO();
+                    dto.setTitle(subject.getName());
+                    dto.setDescription(subject.getSyllabus() != null ? subject.getSyllabus() : subject.getName());
+                    dto.setInstructor("TBD");
+                    dto.setCategory("Education");
+                    dto.setLevel("INTERMEDIATE");
+                    dto.setDuration((subject.getEcts() != null ? subject.getEcts() * 10 : 30) + "h");
+                    dto.setLessons(subject.getEcts() != null ? subject.getEcts() * 5 : 20);
+                    dto.setPrice(new BigDecimal("49.00"));
+                    dto.setOriginalPrice(new BigDecimal("89.00"));
+                    dto.setRating(0.0);
+                    dto.setStudentsCount(0);
+                    dto.setTags(subject.getName());
+                    dto.setColor(colors[i % colors.length]);
+                    dto.setIcon(icons[i % icons.length]);
+                    dto.setAvailable(true);
+                    dto.setSubjectId(subject.getId());
+                    courseService.save(dto);
+                    i++;
+                }
+                return;
+            }
+        } catch (Exception e) {
+            log.warn("Could not fetch subjects from subject-service ({}), using static course data", e.getMessage());
+        }
+        seedStaticCourses();
+    }
+
+    private void seedStaticCourses() {
         List<CourseDTO> courses = Arrays.asList(
             buildCourse(
                 "Python for Beginners: Complete Course",
@@ -148,27 +191,27 @@ public class AppDataSeeder implements ApplicationRunner {
             buildLesson(1L, "Введение в Python и установка окружения",
                 "Знакомство с языком Python, его применениями и экосистемой. Установка Python и VS Code.",
                 null,
-                "## Что такое Python?\n\nPython — высокоуровневый язык программирования общего назначения, созданный Гвидо ван Россумом в 1991 году.\n\n### Почему Python?\n- Простой синтаксис, похожий на псевдокод\n- Огромная экосистема библиотек\n- Применяется в web, data science, AI, автоматизации\n\n### Установка\n1. Скачайте Python с [python.org](https://python.org)\n2. Установите VS Code\n3. Установите расширение Python для VS Code\n\n```python\nprint(\"Hello, World!\")\n```\n\nПоздравляем, вы написали первую программу!",
+                "## Что такое Python?\n\nPython — высокоуровневый язык программирования общего назначения.\n\n### Почему Python?\n- Простой синтаксис\n- Огромная экосистема библиотек\n- Применяется в web, data science, AI\n\n```python\nprint(\"Hello, World!\")\n```",
                 1, "15:20"),
             buildLesson(1L, "Переменные, типы данных и операторы",
-                "Изучаем базовые типы: int, float, str, bool. Арифметические и логические операторы.",
+                "Изучаем базовые типы: int, float, str, bool.",
                 null,
-                "## Переменные в Python\n\n```python\nname = \"Айгерим\"\nage = 22\ngpa = 4.7\nis_student = True\n\nprint(f\"{name} — {age} лет, GPA: {gpa}\")\n```\n\n### Типы данных\n| Тип | Пример | Описание |\n|-----|--------|----------|\n| int | `42` | Целое число |\n| float | `3.14` | Дробное число |\n| str | `\"hello\"` | Строка |\n| bool | `True` | Логическое значение |\n\n### Операторы\n```python\n# Арифметика\nresult = 10 + 3   # 13\nresult = 10 ** 2  # 100 (степень)\nresult = 10 % 3   # 1 (остаток)\n```",
+                "## Переменные в Python\n\n```python\nname = \"Студент\"\nage = 22\ngpa = 4.7\n\nprint(f\"{name} — {age} лет, GPA: {gpa}\")\n```",
                 2, "22:45"),
             buildLesson(1L, "Условия и циклы",
-                "Управляющие конструкции: if/elif/else, for и while циклы.",
+                "Управляющие конструкции: if/elif/else, for и while.",
                 null,
-                "## Условные операторы\n\n```python\nscore = 85\n\nif score >= 90:\n    grade = 'A'\nelif score >= 75:\n    grade = 'B'\nelif score >= 60:\n    grade = 'C'\nelse:\n    grade = 'F'\n\nprint(f\"Оценка: {grade}\")\n```\n\n## Циклы\n\n```python\n# for по списку\nfruits = [\"яблоко\", \"банан\", \"апельсин\"]\nfor fruit in fruits:\n    print(fruit)\n\n# while\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\n# range\nfor i in range(1, 11):\n    print(i * i)\n```",
+                "## Условные операторы\n\n```python\nscore = 85\nif score >= 90:\n    grade = 'A'\nelif score >= 75:\n    grade = 'B'\nelse:\n    grade = 'F'\n```",
                 3, "28:10"),
             buildLesson(1L, "Функции и работа с модулями",
-                "Определение функций, аргументы, возвращаемые значения, стандартная библиотека.",
+                "Определение функций, аргументы, возвращаемые значения.",
                 null,
-                "## Функции\n\n```python\ndef greet(name, greeting=\"Привет\"):\n    return f\"{greeting}, {name}!\"\n\nprint(greet(\"Данияр\"))\nprint(greet(\"Мадина\", \"Здравствуй\"))\n\n# Lambda функции\nsquare = lambda x: x ** 2\nprint(square(7))  # 49\n```\n\n## Стандартная библиотека\n\n```python\nimport math\nimport random\n\nprint(math.sqrt(144))     # 12.0\nprint(math.pi)            # 3.14159...\nprint(random.randint(1, 100))  # случайное число\n```",
+                "## Функции\n\n```python\ndef greet(name, greeting=\"Привет\"):\n    return f\"{greeting}, {name}!\"\n\nprint(greet(\"Студент\"))\n```",
                 4, "31:55"),
             buildLesson(1L, "Списки, словари и множества",
-                "Коллекции данных: list, dict, set. Методы, comprehension, итерация.",
+                "Коллекции данных: list, dict, set.",
                 null,
-                "## Список (list)\n\n```python\nstudents = [\"Айгерим\", \"Данияр\", \"Мадина\"]\nstudents.append(\"Ерлан\")\nstudents.sort()\n\n# List comprehension\nsquares = [x**2 for x in range(10)]\neven = [x for x in range(20) if x % 2 == 0]\n```\n\n## Словарь (dict)\n\n```python\nstudent = {\n    \"name\": \"Назгуль\",\n    \"age\": 21,\n    \"courses\": [\"Python\", \"ML\"]\n}\n\nprint(student[\"name\"])\nstudent[\"gpa\"] = 4.5\n\nfor key, value in student.items():\n    print(f\"{key}: {value}\")\n```",
+                "## Список (list)\n\n```python\nstudents = [\"Айгерим\", \"Данияр\", \"Мадина\"]\nstudents.append(\"Ерлан\")\nsquares = [x**2 for x in range(10)]\n```",
                 5, "35:30")
         );
         pythonLessons.forEach(lessonService::save);
@@ -176,24 +219,24 @@ public class AppDataSeeder implements ApplicationRunner {
         // Full-Stack Web Dev (courseId=3)
         List<CourseLessonDTO> webLessons = Arrays.asList(
             buildLesson(3L, "Введение в современный веб-стек",
-                "Обзор Angular, Node.js, PostgreSQL. Архитектура полностековых приложений.",
+                "Обзор Angular, Node.js, PostgreSQL.",
                 null,
-                "## Современный Full-Stack\n\n### Что мы будем строить?\nВ этом курсе вы создадите три полноценных веб-приложения:\n1. **TaskBoard** — менеджер задач с авторизацией\n2. **ShopAPI** — REST API интернет-магазина\n3. **ChatApp** — real-time чат на WebSockets\n\n### Технологический стек\n| Слой | Технология | Роль |\n|------|-----------|------|\n| Frontend | Angular 16 | UI компоненты, маршрутизация |\n| Backend | Node.js + Express | REST API, бизнес-логика |\n| Database | PostgreSQL | Хранение данных |\n| Auth | JWT | Авторизация |\n\n### Установка окружения\n```bash\nnpm install -g @angular/cli\nnpm install -g nodemon\n```",
+                "## Modern Full-Stack\n\n| Слой | Технология |\n|------|----------|\n| Frontend | Angular 16 |\n| Backend | Node.js + Express |\n| Database | PostgreSQL |\n\n```bash\nnpm install -g @angular/cli\n```",
                 1, "18:00"),
             buildLesson(3L, "Angular: Компоненты и шаблоны",
-                "Создание компонентов, работа с шаблонами, data binding, директивы.",
+                "Создание компонентов, data binding, директивы.",
                 null,
-                "## Angular компоненты\n\n```typescript\n@Component({\n  selector: 'app-task-card',\n  template: `\n    <div class=\"card\" [class.done]=\"task.completed\">\n      <h3>{{ task.title }}</h3>\n      <p>{{ task.description }}</p>\n      <button (click)=\"toggleComplete()\">Готово</button>\n    </div>\n  `\n})\nexport class TaskCardComponent {\n  @Input() task: Task;\n  @Output() taskUpdated = new EventEmitter<Task>();\n\n  toggleComplete() {\n    this.task.completed = !this.task.completed;\n    this.taskUpdated.emit(this.task);\n  }\n}\n```\n\n## Data Binding\n- `{{ value }}` — интерполяция\n- `[property]=\"value\"` — property binding\n- `(event)=\"handler()\"` — event binding\n- `[(ngModel)]=\"value\"` — two-way binding",
+                "## Angular компоненты\n\n```typescript\n@Component({ selector: 'app-card' })\nexport class CardComponent {\n  @Input() title: string;\n}\n```",
                 2, "42:15"),
             buildLesson(3L, "Node.js: REST API с Express",
-                "Создание сервера, маршруты, middleware, валидация данных.",
+                "Создание сервера, маршруты, middleware.",
                 null,
-                "## Express сервер\n\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.use(express.json());\n\n// GET все задачи\napp.get('/api/tasks', async (req, res) => {\n  const tasks = await Task.findAll();\n  res.json(tasks);\n});\n\n// POST новая задача\napp.post('/api/tasks', async (req, res) => {\n  const { title, description } = req.body;\n  if (!title) return res.status(400).json({ error: 'Title required' });\n  \n  const task = await Task.create({ title, description });\n  res.status(201).json(task);\n});\n\napp.listen(3000, () => console.log('API running on :3000'));\n```",
+                "## Express сервер\n\n```javascript\nconst express = require('express');\nconst app = express();\n\napp.get('/api/tasks', async (req, res) => {\n  res.json({ tasks: [] });\n});\n\napp.listen(3000);\n```",
                 3, "38:40"),
             buildLesson(3L, "PostgreSQL и работа с базой данных",
-                "Проектирование схемы, SQL запросы, ORM Sequelize.",
+                "Проектирование схемы, SQL запросы.",
                 null,
-                "## PostgreSQL схема\n\n```sql\nCREATE TABLE users (\n  id SERIAL PRIMARY KEY,\n  email VARCHAR(255) UNIQUE NOT NULL,\n  password_hash VARCHAR(255) NOT NULL,\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\nCREATE TABLE tasks (\n  id SERIAL PRIMARY KEY,\n  title VARCHAR(500) NOT NULL,\n  description TEXT,\n  completed BOOLEAN DEFAULT FALSE,\n  user_id INTEGER REFERENCES users(id),\n  created_at TIMESTAMP DEFAULT NOW()\n);\n\n-- Выборка с JOIN\nSELECT t.*, u.email\nFROM tasks t\nJOIN users u ON t.user_id = u.id\nWHERE t.completed = FALSE\nORDER BY t.created_at DESC;\n```",
+                "## PostgreSQL схема\n\n```sql\nCREATE TABLE tasks (\n  id SERIAL PRIMARY KEY,\n  title VARCHAR(500) NOT NULL,\n  completed BOOLEAN DEFAULT FALSE\n);\n```",
                 4, "45:20")
         );
         webLessons.forEach(lessonService::save);
@@ -201,19 +244,19 @@ public class AppDataSeeder implements ApplicationRunner {
         // Advanced Python & ML (courseId=2)
         List<CourseLessonDTO> mlLessons = Arrays.asList(
             buildLesson(2L, "NumPy и работа с массивами",
-                "Многомерные массивы, векторизация, broadcasting, линейная алгебра.",
+                "Многомерные массивы, векторизация, broadcasting.",
                 null,
-                "## NumPy — фундамент Data Science\n\n```python\nimport numpy as np\n\n# Создание массивов\na = np.array([1, 2, 3, 4, 5])\nmatrix = np.zeros((3, 4))\nrandom = np.random.randn(100, 100)\n\n# Векторизация (без циклов!)\nresult = a * 2 + 1  # [3, 5, 7, 9, 11]\n\n# Матричные операции\nA = np.array([[1, 2], [3, 4]])\nB = np.array([[5, 6], [7, 8]])\nC = A @ B  # Матричное произведение\n\n# Статистика\nprint(np.mean(random))  # ~0\nprint(np.std(random))   # ~1\n```",
+                "## NumPy\n\n```python\nimport numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nresult = a * 2 + 1  # [3, 5, 7, 9, 11]\nA = np.array([[1, 2], [3, 4]])\nB = np.array([[5, 6], [7, 8]])\nC = A @ B\n```",
                 1, "40:00"),
             buildLesson(2L, "Pandas: анализ данных",
-                "DataFrame, Series, загрузка данных, агрегация, визуализация.",
+                "DataFrame, Series, загрузка данных, агрегация.",
                 null,
-                "## Pandas DataFrame\n\n```python\nimport pandas as pd\n\n# Загрузка данных\ndf = pd.read_csv('sales.csv')\n\n# Первичный анализ\nprint(df.shape)       # (строки, столбцы)\nprint(df.describe())  # статистика\nprint(df.isnull().sum())  # пропущенные значения\n\n# Фильтрация\nhigh_sales = df[df['revenue'] > 10000]\ndf_clean = df.dropna(subset=['email'])\n\n# Группировка\nby_category = df.groupby('category')['revenue'].agg(['sum', 'mean', 'count'])\n\n# Сохранение\ndf.to_csv('result.csv', index=False)\n```",
+                "## Pandas DataFrame\n\n```python\nimport pandas as pd\n\ndf = pd.read_csv('data.csv')\nprint(df.describe())\nby_cat = df.groupby('category')['revenue'].sum()\n```",
                 2, "52:30"),
             buildLesson(2L, "Машинное обучение с Scikit-learn",
-                "Классификация, регрессия, кластеризация. Оценка моделей, кросс-валидация.",
+                "Классификация, регрессия. Оценка моделей.",
                 null,
-                "## Первая ML модель\n\n```python\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score, classification_report\nimport pandas as pd\n\n# Данные\ndf = pd.read_csv('churn.csv')\nX = df.drop('churned', axis=1)\ny = df['churned']\n\n# Разбивка на train/test\nX_train, X_test, y_train, y_test = train_test_split(\n    X, y, test_size=0.2, random_state=42\n)\n\n# Обучение\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)\n\n# Оценка\npredictions = model.predict(X_test)\nprint(f\"Accuracy: {accuracy_score(y_test, predictions):.2%}\")\nprint(classification_report(y_test, predictions))\n```",
+                "## ML модель\n\n```python\nfrom sklearn.ensemble import RandomForestClassifier\nfrom sklearn.metrics import accuracy_score\n\nmodel = RandomForestClassifier(n_estimators=100)\nmodel.fit(X_train, y_train)\nprint(accuracy_score(y_test, model.predict(X_test)))\n```",
                 3, "58:15")
         );
         mlLessons.forEach(lessonService::save);

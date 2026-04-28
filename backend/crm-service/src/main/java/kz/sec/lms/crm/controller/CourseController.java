@@ -6,9 +6,7 @@ import kz.sec.lms.crm.service.CourseService;
 import ca.utoronto.lms.shared.controller.BaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +21,11 @@ public class CourseController extends BaseController<Course, CourseDTO, Long> {
         this.service = service;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<CourseDTO>> getAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/available")
     public ResponseEntity<List<CourseDTO>> getAvailable() {
         return new ResponseEntity<>(service.findAvailable(), HttpStatus.OK);
@@ -31,5 +34,22 @@ public class CourseController extends BaseController<Course, CourseDTO, Long> {
     @GetMapping("/categories")
     public ResponseEntity<List<String>> getCategories() {
         return new ResponseEntity<>(service.findCategories(), HttpStatus.OK);
+    }
+
+    @PostMapping("/sync-from-subjects")
+    public ResponseEntity<Integer> syncFromSubjects() {
+        return new ResponseEntity<>(service.syncFromSubjects(), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/link-subject/{subjectId}")
+    public ResponseEntity<CourseDTO> linkSubject(
+            @PathVariable Long id, @PathVariable Long subjectId) {
+        return new ResponseEntity<>(service.linkSubject(id, subjectId), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/link-study-program/{studyProgramId}")
+    public ResponseEntity<CourseDTO> linkStudyProgram(
+            @PathVariable Long id, @PathVariable Long studyProgramId) {
+        return new ResponseEntity<>(service.linkStudyProgram(id, studyProgramId), HttpStatus.OK);
     }
 }

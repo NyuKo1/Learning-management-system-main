@@ -1,6 +1,8 @@
 package kz.sec.lms.crm.service;
 
+import kz.sec.lms.crm.client.SubjectFeignClient;
 import kz.sec.lms.crm.dto.CourseDTO;
+import kz.sec.lms.crm.dto.EnrollmentRequest;
 import kz.sec.lms.crm.dto.PaymentDTO;
 import kz.sec.lms.crm.mapper.CourseMapper;
 import kz.sec.lms.crm.mapper.PaymentMapper;
@@ -8,6 +10,7 @@ import kz.sec.lms.crm.model.Payment;
 import kz.sec.lms.crm.repository.CourseRepository;
 import kz.sec.lms.crm.repository.PaymentRepository;
 import ca.utoronto.lms.shared.service.ExtendedService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static ca.utoronto.lms.shared.security.SecurityUtils.getStudentId;
+
+@Slf4j
 @Service
 public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
 
@@ -23,19 +29,22 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
     private final CourseService courseService;
+    private final SubjectFeignClient subjectFeignClient;
 
     public PaymentService(
             PaymentRepository repository,
             PaymentMapper mapper,
             CourseRepository courseRepository,
             CourseMapper courseMapper,
-            CourseService courseService) {
+            CourseService courseService,
+            SubjectFeignClient subjectFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
         this.courseRepository = courseRepository;
         this.courseMapper = courseMapper;
         this.courseService = courseService;
+        this.subjectFeignClient = subjectFeignClient;
     }
 
     @Override
@@ -64,7 +73,6 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
     @Override
     @Transactional
     public PaymentDTO save(PaymentDTO dto) {
-        // Handle card number
         if (dto.getCardNumber() != null && !dto.getCardNumber().isBlank()) {
             String cleaned = dto.getCardNumber().replaceAll("\\s", "");
             if (cleaned.length() >= 4) {
@@ -81,7 +89,6 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
         }
         dto.setUserId(getCurrentUsername());
 
-        // Denormalize course title from course
         if (dto.getCourseId() != null && (dto.getCourseTitle() == null || dto.getCourseTitle().isBlank())) {
             courseRepository.findById(dto.getCourseId())
                 .ifPresent(c -> dto.setCourseTitle(c.getTitle()));
@@ -95,10 +102,27 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
                 .ifPresent(course -> {
                     saved.setCourse(courseMapper.toDTO(course));
                     saved.setCourseTitle(course.getTitle());
+
+                    // Enroll student in LMS subject if course is linked
+                    if (course.getSubjectId() != null) {
+                        tryEnrollInSubject(course.getSubjectId());
+                    }
                 });
         }
 
         return saved;
+    }
+
+    private void tryEnrollInSubject(Long subjectId) {
+        try {
+            Long studentId = getStudentId();
+            if (studentId != null) {
+                subjectFeignClient.enroll(new EnrollmentRequest(studentId, subjectId));
+                log.info("Enrolled student {} in subject {}", studentId, subjectId);
+            }
+        } catch (Exception e) {
+            log.warn("Could not enroll student in subject {}: {}", subjectId, e.getMessage());
+        }
     }
 
     public List<PaymentDTO> findByUserId(String userId) {

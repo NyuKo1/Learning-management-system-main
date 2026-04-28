@@ -15,6 +15,7 @@ export class ClientsListComponent implements OnInit {
   clients: Client[] = [];
   filtered: Client[] = [];
   loading = true;
+  loadError = false;
   search = '';
   lmsUrl = environment.lmsUrl;
 
@@ -28,9 +29,10 @@ export class ClientsListComponent implements OnInit {
 
   load(): void {
     this.loading = true;
+    this.loadError = false;
     this.api.getClients().subscribe({
       next: data => { this.clients = data; this.applySearch(); this.loading = false; },
-      error: () => { this.clients = this.mock(); this.applySearch(); this.loading = false; }
+      error: () => { this.loadError = true; this.clients = []; this.filtered = []; this.loading = false; }
     });
   }
 
@@ -63,11 +65,4 @@ export class ClientsListComponent implements OnInit {
     });
   }
 
-  private mock(): Client[] {
-    return [
-      { id: 1, fullName: 'Арман Сейтказы',   phone: '+7 701 111 2222', email: 'arman@mail.ru',   totalPurchases: 3, totalSpent: 45000, hasLmsAccount: true,  lmsUserId: 12, createdAt: '2024-03-10' },
-      { id: 2, fullName: 'Айгерим Нурланова', phone: '+7 702 222 3333', email: 'aigul@gmail.com', totalPurchases: 1, totalSpent: 15000, hasLmsAccount: true,  lmsUserId: 15, createdAt: '2024-04-01' },
-      { id: 3, fullName: 'Гульназ Ахметова',  phone: '+7 707 333 4444', email: 'gulnaz@mail.ru',  totalPurchases: 2, totalSpent: 28000, hasLmsAccount: false, createdAt: '2024-04-15' }
-    ];
-  }
 }

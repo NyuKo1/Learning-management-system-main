@@ -17,11 +17,11 @@ export class CoursesPublicComponent implements OnInit {
   error = false;
 
   searchQuery = '';
-  selectedCategory = 'Все';
-  selectedLevel = 'Все';
+  selectedCategory = 'All';
+  selectedLevel = 'All';
 
-  categories: string[] = ['Все'];
-  levels = ['Все', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+  categories: string[] = ['All'];
+  levels = ['All', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
   constructor(
     private crmService: CrmService,
@@ -35,9 +35,8 @@ export class CoursesPublicComponent implements OnInit {
       categories: this.crmService.getCategories().pipe(catchError(() => of([]))),
     }).subscribe(({ courses, categories }) => {
       this.courses = courses;
-      this.categories = ['Все', ...categories];
+      this.categories = ['All', ...categories];
       this.loading = false;
-      if (!courses.length && !categories.length) this.error = true;
     });
   }
 
@@ -50,8 +49,8 @@ export class CoursesPublicComponent implements OnInit {
         c.description.toLowerCase().includes(q) ||
         c.instructor.toLowerCase().includes(q) ||
         (c.tags || '').toLowerCase().includes(q);
-      const matchCat = this.selectedCategory === 'Все' || c.category === this.selectedCategory;
-      const matchLvl = this.selectedLevel === 'Все' || c.level === this.selectedLevel;
+      const matchCat = this.selectedCategory === 'All' || c.category === this.selectedCategory;
+      const matchLvl = this.selectedLevel === 'All' || c.level === this.selectedLevel;
       return matchSearch && matchCat && matchLvl;
     });
   }
@@ -62,10 +61,10 @@ export class CoursesPublicComponent implements OnInit {
 
   getLevelLabel(level: string): string {
     const map: Record<string, string> = {
-      'Все': 'Все уровни',
-      BEGINNER: 'Начинающий',
-      INTERMEDIATE: 'Средний',
-      ADVANCED: 'Продвинутый',
+      All: 'All Levels',
+      BEGINNER: 'Beginner',
+      INTERMEDIATE: 'Intermediate',
+      ADVANCED: 'Advanced',
     };
     return map[level] || level;
   }
@@ -114,7 +113,7 @@ export class CoursesPublicComponent implements OnInit {
 
   reset(): void {
     this.searchQuery = '';
-    this.selectedCategory = 'Все';
-    this.selectedLevel = 'Все';
+    this.selectedCategory = 'All';
+    this.selectedLevel = 'All';
   }
 }

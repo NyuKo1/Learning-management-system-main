@@ -1,0 +1,122 @@
+<div class="payment-page">
+  <div class="payment-container">
+
+    <!-- Back -->
+    <button class="back-btn" mat-icon-button (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <!-- Success state -->
+    <div *ngIf="success" class="success-card">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Payment Successful!</h2>
+      <p>Course «{{ courseTitle }}» has been added to your library.</p>
+      <p class="redirect-text">Redirecting you to My Courses…</p>
+    </div>
+
+    <!-- Payment form -->
+    <div *ngIf="!success" class="payment-card">
+
+      <!-- Header -->
+      <div class="payment-header">
+        <mat-icon class="header-icon">credit_card</mat-icon>
+        <div>
+          <h1>Course Payment</h1>
+          <p class="course-name">{{ courseTitle }}</p>
+        </div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="order-summary">
+        <div class="summary-row">
+          <span>Course</span>
+          <span class="summary-value">{{ courseTitle }}</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total</span>
+          <span class="total-price">₸{{ price | number:'1.0-0' }}</span>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div *ngIf="errorMsg" class="error-banner">
+        <mat-icon>error_outline</mat-icon>
+        {{ errorMsg }}
+      </div>
+
+      <!-- Form -->
+      <form [formGroup]="form" (ngSubmit)="submit()" autocomplete="off">
+
+        <!-- Personal info -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>person</mat-icon> Billing Details
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="customerName" placeholder="John Smith" />
+            <mat-error *ngIf="form.get('customerName')?.hasError('required')">Full name is required</mat-error>
+            <mat-error *ngIf="form.get('customerName')?.hasError('minlength')">Minimum 3 characters</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="email@example.com" />
+            <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">Enter a valid email address</mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- Card info -->
+        <div class="form-section">
+          <h3 class="section-title">
+            <mat-icon>credit_card</mat-icon> Card Details
+          </h3>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Card Number</mat-label>
+            <input matInput formControlName="cardNumber" placeholder="0000 0000 0000 0000"
+              maxlength="19" (input)="formatCardNumber($event)" inputmode="numeric" />
+            <mat-icon matSuffix>credit_card</mat-icon>
+            <mat-error *ngIf="form.get('cardNumber')?.hasError('required')">Card number is required</mat-error>
+            <mat-error *ngIf="form.get('cardNumber')?.hasError('pattern')">Enter 16 card digits</mat-error>
+          </mat-form-field>
+
+          <div class="card-row">
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>Expiry Date</mat-label>
+              <input matInput formControlName="cardExpiry" placeholder="MM/YY"
+                maxlength="5" (input)="formatExpiry($event)" inputmode="numeric" />
+              <mat-error *ngIf="form.get('cardExpiry')?.invalid && form.get('cardExpiry')?.touched">
+                Format: MM/YY
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="half-width">
+              <mat-label>CVV</mat-label>
+              <input matInput formControlName="cardCvv" type="password"
+                placeholder="•••" maxlength="4" inputmode="numeric" />
+              <mat-error *ngIf="form.get('cardCvv')?.invalid && form.get('cardCvv')?.touched">
+                3–4 digits
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button mat-flat-button color="primary" type="submit"
+          class="pay-btn" [disabled]="submitting">
+          <mat-icon *ngIf="!submitting">lock</mat-icon>
+          <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+          <span>{{ submitting ? 'Processing…' : 'Pay ₸' + (price | number:'1.0-0') }}</span>
+        </button>
+
+        <p class="security-note">
+          <mat-icon>security</mat-icon>
+          Your data is secure. We do not store your full card number.
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

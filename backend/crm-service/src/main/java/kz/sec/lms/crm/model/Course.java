@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -63,4 +65,16 @@ public class Course extends BaseEntity<Long> {
 
     @Column(nullable = false, columnDefinition = "boolean default true")
     private Boolean available = true;
+
+    private Long subjectId;
+
+    private Long studyProgramId;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

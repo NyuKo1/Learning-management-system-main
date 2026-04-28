@@ -9,20 +9,39 @@ import kz.sec.lms.faculty.model.StudyProgram;
 import kz.sec.lms.faculty.model.Thesis;
 import ca.utoronto.lms.shared.dto.UserDTO;
 import ca.utoronto.lms.shared.mapper.BaseMapper;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public abstract class StudentMapper implements BaseMapper<Student, StudentDTO, Long> {
+
+    @PersistenceContext
+    protected EntityManager em;
+
     private SubjectFeignClient subjectFeignClient;
 
     @Autowired
     public void setSubjectFeignClient(SubjectFeignClient subjectFeignClient) {
         this.subjectFeignClient = subjectFeignClient;
+    }
+
+    @AfterMapping
+    protected void fixReferences(@MappingTarget Student student, StudentDTO dto) {
+        if (dto.getStudyProgram() != null && dto.getStudyProgram().getId() != null) {
+            student.setStudyProgram(em.getReference(StudyProgram.class, dto.getStudyProgram().getId()));
+        }
+        if (dto.getThesis() != null && dto.getThesis().getId() != null) {
+            student.setThesis(em.getReference(Thesis.class, dto.getThesis().getId()));
+        }
     }
 
     @Mapping(source = "userId", target = "user")

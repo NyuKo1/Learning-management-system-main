@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
   stats: DashboardStats | null = null;
   funnelStages: FunnelStage[] = [];
   loading = true;
+  loadError = false;
   username = this.auth.getUsername();
   hasLms = this.auth.hasLmsAccess();
   lmsUrl = environment.lmsUrl;
@@ -43,21 +44,25 @@ export class DashboardComponent implements OnInit {
       stats:     this.api.getDashboardStats().pipe(catchError(() => of(null))),
       analytics: this.api.getDashboardAnalytics().pipe(catchError(() => of(null)))
     }).subscribe(({ stats, analytics }) => {
-      this.stats = stats || this.mockStats();
+      if (!stats) {
+        this.loadError = true;
+        this.loading = false;
+        return;
+      }
+
+      this.stats = stats;
 
       if (analytics?.funnel) {
-        const counts = Object.values(analytics.funnel);
+        const counts = Object.values(analytics.funnel) as number[];
         const max = Math.max(...counts, 1);
         this.funnelStages = Object.entries(analytics.funnel)
           .filter(([k]) => k !== 'LOST')
           .map(([key, count]) => ({
             label: FUNNEL_META[key]?.label || key,
-            count,
-            pct: Math.round(count / max * 100),
+            count: count as number,
+            pct: Math.round((count as number) / max * 100),
             color: FUNNEL_META[key]?.color || '#64748b'
           }));
-      } else {
-        this.funnelStages = this.mockFunnel();
       }
 
       this.loading = false;
@@ -72,24 +77,5 @@ export class DashboardComponent implements OnInit {
     }
     if (key === 'conversionRate') return val + '%';
     return String(val);
-  }
-
-  private mockFunnel(): FunnelStage[] {
-    return [
-      { label: 'Новые лиды',   count: 284, pct: 100, color: '#3b82f6' },
-      { label: 'Контакт',      count: 198, pct: 70,  color: '#0ea5e9' },
-      { label: 'Квалификация', count: 132, pct: 46,  color: '#7c3aed' },
-      { label: 'Предложение',  count: 87,  pct: 31,  color: '#f59e0b' },
-      { label: 'Клиент (WON)', count: 147, pct: 52,  color: '#16a34a' },
-    ];
-  }
-
-  private mockStats(): DashboardStats {
-    return {
-      totalLeads: 284, newLeadsToday: 12,
-      totalClients: 147, newClientsThisMonth: 23,
-      totalRevenue: 4820000, revenueThisMonth: 840000,
-      conversionRate: 52, totalCourses: 18
-    };
   }
 }

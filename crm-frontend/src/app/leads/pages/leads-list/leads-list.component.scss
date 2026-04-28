@@ -39,3 +39,18 @@
 .delete-item { color: #dc2626 !important; }
 .phone-cell  { font-size: 13px; color: #64748b; white-space: nowrap; }
 .actions-cell { width: 48px; padding-right: 8px !important; }
+
+.api-error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #dc2626;
+  font-size: 14px;
+  margin-bottom: 16px;
+  mat-icon { font-size: 20px; flex-shrink: 0; }
+  span { flex: 1; }
+}

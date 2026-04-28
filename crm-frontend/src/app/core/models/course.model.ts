@@ -2,11 +2,19 @@ export interface CrmCourse {
   id: number;
   title: string;
   description: string;
-  price: number;
-  currency: string;
-  duration: number;
+  instructor: string;
   category: string;
-  enrolledCount: number;
-  isAvailable: boolean;
-  createdAt: string;
+  level: string;
+  duration: string;
+  lessons: number;
+  price: number;
+  originalPrice?: number;
+  rating: number;
+  studentsCount: number;
+  tags: string;
+  color: string;
+  icon: string;
+  available: boolean;
+  subjectId?: number;
+  studyProgramId?: number;
 }

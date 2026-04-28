@@ -17,6 +17,12 @@
 
   <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
 
+  <div *ngIf="!loading && loadError" class="api-error-banner">
+    <mat-icon>cloud_off</mat-icon>
+    <span>Не удалось загрузить клиентов. Проверьте соединение с сервером.</span>
+    <button mat-stroked-button (click)="load()">Повторить</button>
+  </div>
+
   <div *ngIf="!loading" class="clients-grid">
     <div *ngFor="let client of filtered" class="client-card card">
       <div class="client-header">

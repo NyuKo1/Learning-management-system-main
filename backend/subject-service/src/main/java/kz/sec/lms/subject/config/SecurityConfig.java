@@ -50,6 +50,9 @@ public class SecurityConfig {
                         "/subject-enrollments/subject/*",
                         "/subject-enrollments/subject/*/student-id/all").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)
                 .antMatchers(
+                        HttpMethod.POST,
+                        "/subject-enrollments/enroll").hasAnyAuthority(ROLE_STUDENT, ROLE_TEACHER, ROLE_ADMIN)
+                .antMatchers(
                         HttpMethod.PATCH,
                         "/subjects/*/syllabus",
                         "/subject-enrollments/*/grade").hasAnyAuthority(ROLE_TEACHER, ROLE_ADMIN)

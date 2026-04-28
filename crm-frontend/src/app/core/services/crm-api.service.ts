@@ -17,7 +17,7 @@ export class CrmApiService {
   getLeads(status?: string): Observable<Lead[]> {
     let params = new HttpParams();
     if (status) params = params.set('status', status);
-    return this.http.get<Lead[]>(`${this.base}/leads`, { params });
+    return this.http.get<Lead[]>(`${this.base}/leads/all`, { params });
   }
 
   createLead(req: LeadRequest): Observable<Lead> {
@@ -38,7 +38,7 @@ export class CrmApiService {
 
   // ── CLIENTS ────────────────────────────────────────────
   getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(`${this.base}/clients`);
+    return this.http.get<Client[]>(`${this.base}/clients/all`);
   }
 
   getClient(id: number): Observable<Client> {
@@ -51,7 +51,7 @@ export class CrmApiService {
 
   // ── PAYMENTS ───────────────────────────────────────────
   getPayments(): Observable<Payment[]> {
-    return this.http.get<Payment[]>(`${this.base}/payments`);
+    return this.http.get<Payment[]>(`${this.base}/payments/all`);
   }
 
   getPaymentsByClient(clientId: number): Observable<Payment[]> {

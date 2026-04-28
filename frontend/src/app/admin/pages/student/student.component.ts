@@ -21,79 +21,30 @@ export class StudentComponent
   extends BaseUserComponent<Student>
   implements OnInit
 {
-  title: string = 'Учащиеся';
-  name: string = 'учащийся';
+  title: string = 'Students';
+  name: string = 'student';
   attributes: EntityAttribute[] = [
+    { key: 'id', name: 'ID', type: 'id' },
+    { key: 'user', name: 'Username', type: 'text', required: true, display: getUserDisplay },
     {
-      key: 'id',
-      name: 'ID',
-      type: 'id',
-    },
-    {
-      key: 'user',
-      name: 'Логин',
-      type: 'text',
-      required: true,
-      display: getUserDisplay,
-    },
-    {
-      key: 'password',
-      name: 'Пароль',
-      type: 'password',
-      required: true,
+      key: 'password', name: 'Password', type: 'password', required: true,
       validators: [Validators.minLength(8)],
-      errorMessage: 'Пароль должен содержать не менее 8 символов',
+      errorMessage: 'Password must be at least 8 characters',
     },
+    { key: 'firstName', name: 'First Name', type: 'text', required: true },
+    { key: 'lastName', name: 'Last Name', type: 'text', required: true },
+    { key: 'index', name: 'Student ID / Index', type: 'text', required: true },
     {
-      key: 'firstName',
-      name: 'Имя',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'lastName',
-      name: 'Фамилия',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'index',
-      name: 'Номер учащегося',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'yearOfEnrollment',
-      name: 'Год зачисления',
-      type: 'number',
-      required: true,
+      key: 'yearOfEnrollment', name: 'Year of Enrollment', type: 'number', required: true,
       validators: [
         Validators.min(new Date().getFullYear() - 10),
         Validators.max(new Date().getFullYear()),
       ],
-      errorMessage: `Год зачисления должен быть от ${
-        new Date().getFullYear() - 10
-      } до ${new Date().getFullYear()}`,
+      errorMessage: `Enrollment year must be between ${new Date().getFullYear() - 10} and ${new Date().getFullYear()}`,
     },
-    {
-      key: 'studyProgram',
-      name: 'Программа обучения',
-      type: 'select',
-      required: true,
-      display: getStudyProgramDisplay,
-    },
-    {
-      key: 'averageGrade',
-      name: 'Средний балл',
-      type: 'skip',
-      sortable: false,
-    },
-    {
-      key: 'totalECTS',
-      name: 'Итого кредитов',
-      type: 'skip',
-      sortable: false,
-    },
+    { key: 'studyProgram', name: 'Study Program', type: 'select', required: true, display: getStudyProgramDisplay },
+    { key: 'averageGrade', name: 'Average Grade', type: 'skip', sortable: false },
+    { key: 'totalECTS', name: 'Total Credits', type: 'skip', sortable: false },
   ];
 
   constructor(

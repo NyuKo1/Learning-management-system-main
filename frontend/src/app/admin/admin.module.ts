@@ -16,10 +16,14 @@ import { StudyProgramComponent } from './pages/study-program/study-program.compo
 import { TeacherComponent } from './pages/teacher/teacher.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { SubjectComponent } from './pages/subject/subject.component';
+import { CourseCatalogComponent } from './pages/course-catalog/course-catalog.component';
+import { FormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
     AdminPanelComponent,
+    CourseCatalogComponent,
     AdministratorComponent,
     AddressComponent,
     CityComponent,
@@ -34,6 +38,6 @@ import { SubjectComponent } from './pages/subject/subject.component';
     ThesisComponent,
     SubjectComponent,
   ],
-  imports: [SharedModule, AdminRoutingModule],
+  imports: [SharedModule, AdminRoutingModule, FormsModule, MatSelectModule],
 })
 export class AdminModule {}

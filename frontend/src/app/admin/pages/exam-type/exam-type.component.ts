@@ -14,8 +14,8 @@ export class ExamTypeComponent
   extends BaseComponent<ExamType>
   implements OnInit
 {
-  title: string = 'Типы аттестаций';
-  name: string = 'тип аттестации';
+  title: string = 'Exam Types';
+  name: string = 'exam type';
   attributes: EntityAttribute[] = [
     {
       key: 'id',

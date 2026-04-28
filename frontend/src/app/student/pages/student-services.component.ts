@@ -8,41 +8,17 @@ import { SidenavItem } from '@core/models/sidenav-item.model';
 })
 export class StudentServicesComponent implements OnInit {
   items: (SidenavItem | '-')[] = [
-    {
-      text: '🛒 Каталог курсов',
-      link: '/student-services/courses',
-    },
-    {
-      text: '📚 Мои курсы',
-      link: '/student-services/my-courses',
-    },
+    { text: 'Course Catalog', link: '/student-services/courses' },
+    { text: 'My Courses', link: '/student-services/my-courses' },
     '-',
-    {
-      text: 'Мои дисциплины',
-      link: '/student-services/my-subjects',
-    },
-    {
-      text: 'Мои записи',
-      link: '/student-services/subject-enrollments',
-    },
+    { text: 'My Subjects', link: '/student-services/my-subjects' },
+    { text: 'My Enrollments', link: '/student-services/subject-enrollments' },
     '-',
-    {
-      text: 'Запись на аттестацию',
-      link: '/student-services/exam-terms-registration',
-    },
-    {
-      text: 'Результаты аттестаций',
-      link: '/student-services/exam-realizations',
-    },
+    { text: 'Register for Exam', link: '/student-services/exam-terms-registration' },
+    { text: 'Exam Results', link: '/student-services/exam-realizations' },
     '-',
-    {
-      text: 'Мой профиль',
-      link: '/student-services/my-info',
-    },
-    {
-      text: 'Итоговый проект',
-      link: '/student-services/my-thesis',
-    },
+    { text: 'My Profile', link: '/student-services/my-info' },
+    { text: 'My Thesis', link: '/student-services/my-thesis' },
   ];
 
   constructor() {}

@@ -10,6 +10,9 @@ import { ExamRealizationComponent } from './pages/exam-realization/exam-realizat
 import { StudentComponent } from './pages/student/student.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { SubjectEnrollmentComponent } from './pages/subject-enrollment/subject-enrollment.component';
+import { TeacherCoursesComponent } from './pages/courses/courses.component';
+import { TeacherMyCoursesComponent } from './pages/my-courses/my-courses.component';
+import { TeacherCoursePlayerComponent } from './pages/course-player/course-player.component';
 
 const routes: Routes = [
   {
@@ -20,6 +23,18 @@ const routes: Routes = [
         path: '',
         redirectTo: '/teacher-services/my-subjects',
         pathMatch: 'full',
+      },
+      {
+        path: 'courses',
+        component: TeacherCoursesComponent,
+      },
+      {
+        path: 'my-courses',
+        component: TeacherMyCoursesComponent,
+      },
+      {
+        path: 'course/:id',
+        component: TeacherCoursePlayerComponent,
       },
       {
         path: 'my-subjects',

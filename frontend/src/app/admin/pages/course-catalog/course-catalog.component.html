@@ -1,0 +1,194 @@
+<div class="catalog-page">
+  <div class="page-header">
+    <h1><mat-icon>store</mat-icon> CRM Course Catalog</h1>
+    <p>Courses are sourced from LMS subjects. Use "Sync" to pull new subjects as courses.</p>
+    <button mat-flat-button color="primary" (click)="syncFromLms()" [disabled]="syncing" style="margin-top:12px">
+      <mat-icon>sync</mat-icon> {{ syncing ? 'Syncing…' : 'Sync from LMS Subjects' }}
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-state"><mat-spinner diameter="40"></mat-spinner></div>
+  <div *ngIf="error" class="error-state">
+    <mat-icon>error_outline</mat-icon> Failed to load courses.
+    <button mat-stroked-button (click)="loadCourses()" style="margin-left:8px">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error">
+    <p class="count-label">Total courses: {{ courses.length }}</p>
+
+    <div class="courses-table-wrap">
+      <table mat-table [dataSource]="courses" class="mat-elevation-z2">
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Title</th>
+          <td mat-cell *matCellDef="let c">
+            <span class="course-dot" [style.background]="c.color"></span>
+            {{ c.title }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Category</th>
+          <td mat-cell *matCellDef="let c">{{ c.category }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="level">
+          <th mat-header-cell *matHeaderCellDef>Level</th>
+          <td mat-cell *matCellDef="let c">{{ getLevelLabel(c.level) }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let c">₸{{ c.price }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="students">
+          <th mat-header-cell *matHeaderCellDef>Students</th>
+          <td mat-cell *matCellDef="let c">{{ c.studentsCount }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="available">
+          <th mat-header-cell *matHeaderCellDef>Visible</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-icon-button (click)="toggleAvailable(c)" [title]="c.available ? 'Hide' : 'Show'">
+              <mat-icon [style.color]="c.available ? '#10b981' : '#94a3b8'">
+                {{ c.available ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-icon-button color="primary" (click)="startEdit(c)" title="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteCourse(c.id)" title="Delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="['title','category','level','price','students','available','actions']"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['title','category','level','price','students','available','actions'];"></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit panel -->
+  <div *ngIf="editing" class="edit-overlay">
+    <div class="edit-panel">
+      <h3>Edit Course</h3>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Title</mat-label>
+        <input matInput [(ngModel)]="editing!.title" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Description</mat-label>
+        <textarea matInput rows="3" [(ngModel)]="editing!.description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Instructor</mat-label>
+        <input matInput [(ngModel)]="editing!.instructor" />
+      </mat-form-field>
+
+      <div class="row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Category</mat-label>
+          <input matInput [(ngModel)]="editing!.category" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Level</mat-label>
+          <mat-select [(ngModel)]="editing!.level">
+            <mat-option value="BEGINNER">Beginner</mat-option>
+            <mat-option value="INTERMEDIATE">Intermediate</mat-option>
+            <mat-option value="ADVANCED">Advanced</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Price (₸)</mat-label>
+          <input matInput type="number" [(ngModel)]="editing!.price" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Original Price (₸)</mat-label>
+          <input matInput type="number" [(ngModel)]="editing!.originalPrice" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Duration</mat-label>
+        <input matInput [(ngModel)]="editing!.duration" placeholder="e.g. 6 weeks" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Tags (comma-separated)</mat-label>
+        <input matInput [(ngModel)]="editing!.tags" />
+      </mat-form-field>
+
+      <!-- Color picker -->
+      <div class="picker-label">Course Color</div>
+      <div class="color-grid">
+        <button *ngFor="let c of COLOR_PALETTE" type="button"
+                class="color-swatch" [style.background]="c"
+                [class.selected]="editing!.color === c"
+                (click)="editing!.color = c"
+                [title]="c"></button>
+      </div>
+
+      <!-- Icon picker -->
+      <div class="picker-label">Course Icon</div>
+      <div class="icon-grid">
+        <button *ngFor="let ic of ICON_OPTIONS" type="button"
+                class="icon-swatch" [class.selected]="editing!.icon === ic"
+                [style.color]="editing!.icon === ic ? editing!.color : '#64748b'"
+                (click)="editing!.icon = ic"
+                [title]="ic">
+          <mat-icon>{{ ic }}</mat-icon>
+        </button>
+      </div>
+
+      <!-- Preview -->
+      <div class="course-preview">
+        <div class="preview-badge" [style.background]="editing!.color">
+          <mat-icon style="color:#fff">{{ editing!.icon }}</mat-icon>
+        </div>
+        <span class="preview-title">{{ editing!.title }}</span>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-w">
+        <mat-label>Lessons</mat-label>
+        <input matInput type="number" [(ngModel)]="editing!.lessons" />
+      </mat-form-field>
+
+      <div class="row-2">
+        <mat-form-field appearance="outline">
+          <mat-label>Rating (0–5)</mat-label>
+          <input matInput type="number" step="0.1" min="0" max="5" [(ngModel)]="editing!.rating" />
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Students Count</mat-label>
+          <input matInput type="number" [(ngModel)]="editing!.studentsCount" />
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="saveError" class="save-error">{{ saveError }}</div>
+
+      <div class="edit-actions">
+        <button mat-stroked-button (click)="cancelEdit()">Cancel</button>
+        <button mat-flat-button color="primary" (click)="saveEdit()" [disabled]="saving">
+          {{ saving ? 'Saving…' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

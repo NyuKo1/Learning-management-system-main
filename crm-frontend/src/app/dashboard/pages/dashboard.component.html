@@ -18,6 +18,13 @@
     <mat-spinner diameter="40"></mat-spinner>
   </div>
 
+  <div *ngIf="!loading && loadError" class="api-error-state">
+    <mat-icon>cloud_off</mat-icon>
+    <h3>Нет соединения с сервером</h3>
+    <p>Не удалось загрузить статистику. Убедитесь, что бэкенд запущен.</p>
+    <button mat-raised-button color="primary" (click)="ngOnInit()">Повторить</button>
+  </div>
+
   <ng-container *ngIf="!loading && stats">
     <!-- Stats -->
     <div class="stats-grid">

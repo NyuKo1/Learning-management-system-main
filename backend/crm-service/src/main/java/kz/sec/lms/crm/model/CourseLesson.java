@@ -9,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.PrePersist;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -34,6 +36,13 @@ public class CourseLesson extends BaseEntity<Long> {
     @Column(nullable = false)
     private Integer orderIndex;
 
-    // e.g. "12:34"
     private String duration;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
