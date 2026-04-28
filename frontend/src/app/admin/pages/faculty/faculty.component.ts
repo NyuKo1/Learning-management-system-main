@@ -15,8 +15,8 @@ import { TeacherService } from '@core/services/teacher.service';
   styleUrls: ['./faculty.component.scss'],
 })
 export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
-  title: string = 'Faculties';
-  name: string = 'faculty';
+  title: string = 'Направления';
+  name: string = 'направление';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -25,13 +25,13 @@ export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'text',
       required: true,
     },
     {
       key: 'description',
-      name: 'Description',
+      name: 'Описание',
       type: 'lob',
       required: true,
     },
@@ -43,16 +43,16 @@ export class FacultyComponent extends BaseComponent<Faculty> implements OnInit {
     },
     {
       key: 'dean',
-      name: 'Dean',
+      name: 'Руководитель',
       type: 'select',
       required: true,
       display: getTeacherDisplay,
     },
     {
       key: 'address',
-      name: 'Address',
+      name: 'Адрес (необязательно)',
       type: 'select',
-      required: true,
+      required: false,
       display: getAddressDisplay,
     },
   ];

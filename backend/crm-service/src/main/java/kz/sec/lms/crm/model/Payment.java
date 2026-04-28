@@ -17,26 +17,32 @@ import java.math.BigDecimal;
 @Setter
 public class Payment extends BaseEntity<Long> {
 
-    @Column(nullable = false)
     private Long courseId;
 
     @Column(nullable = false)
     private String customerName;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false, length = 4)
+    // last 4 digits of card (null for CASH/TRANSFER)
+    @Column(length = 4)
     private String cardLastFour;
 
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false)
     private String currency;
 
     @Column(nullable = false)
     private String status;
 
     private String userId;
+
+    // CRM-specific fields
+    private Long clientId;
+
+    // CARD, CASH, TRANSFER, ONLINE
+    private String method;
+
+    private String courseTitle;
 }

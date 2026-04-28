@@ -1,0 +1,54 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <div class="dialog-icon">
+      <mat-icon>school</mat-icon>
+    </div>
+    <div>
+      <h2 class="dialog-title">Создать аккаунт в LMS</h2>
+      <p class="dialog-subtitle">Клиент: <strong>{{ client.fullName }}</strong></p>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="dialog-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email (логин в LMS)</mat-label>
+      <mat-icon matPrefix>email</mat-icon>
+      <input matInput type="email" formControlName="username" placeholder="student@example.com" />
+      <mat-error *ngIf="form.get('username')?.hasError('required')">Email обязателен</mat-error>
+      <mat-error *ngIf="form.get('username')?.hasError('email')">Введите корректный email</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Пароль</mat-label>
+      <mat-icon matPrefix>lock</mat-icon>
+      <input matInput [type]="showPassword ? 'text' : 'password'" formControlName="password" placeholder="Минимум 6 символов" />
+      <button mat-icon-button matSuffix type="button" (click)="showPassword = !showPassword">
+        <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="form.get('password')?.hasError('required')">Пароль обязателен</mat-error>
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')">Минимум 6 символов</mat-error>
+    </mat-form-field>
+
+    <div *ngIf="error" class="error-msg">
+      <mat-icon>error_outline</mat-icon>
+      {{ error }}
+    </div>
+
+    <div class="info-box">
+      <mat-icon>info</mat-icon>
+      <span>Студент получит доступ к LMS с ролью <strong>ROLE_STUDENT</strong>. Аккаунт будет активен сразу.</span>
+    </div>
+  </form>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button (click)="cancel()" [disabled]="loading">Отмена</button>
+    <button mat-flat-button color="primary" (click)="submit()"
+      [disabled]="form.invalid || loading">
+      <mat-icon *ngIf="!loading">person_add</mat-icon>
+      <mat-spinner *ngIf="loading" diameter="18" style="display:inline-block"></mat-spinner>
+      {{ loading ? 'Создаём…' : 'Создать аккаунт' }}
+    </button>
+  </div>
+</div>

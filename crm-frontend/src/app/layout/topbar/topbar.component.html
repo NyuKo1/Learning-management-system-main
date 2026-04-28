@@ -1,4 +1,4 @@
-<header class="topbar">
+<header class="topbar" [class.dark]="darkMode">
   <div class="topbar-left">
     <button mat-icon-button (click)="toggleSidenav.emit()">
       <mat-icon>menu</mat-icon>
@@ -11,6 +11,11 @@
       <mat-icon>school</mat-icon>
       <span>LMS</span>
     </a>
+
+    <button mat-icon-button (click)="toggleDark()"
+      [matTooltip]="darkMode ? 'Светлая тема' : 'Тёмная тема'">
+      <mat-icon>{{ darkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
 
     <button mat-icon-button matTooltip="Уведомления">
       <mat-icon>notifications_none</mat-icon>

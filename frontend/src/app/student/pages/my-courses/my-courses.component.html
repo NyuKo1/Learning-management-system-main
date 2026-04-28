@@ -104,9 +104,10 @@
             </div>
           </div>
 
-          <button class="access-btn" mat-flat-button>
+          <button class="access-btn" mat-flat-button
+            [routerLink]="['/student-services/course', p.courseId]">
             <mat-icon>play_arrow</mat-icon>
-            Continue Learning
+            Начать обучение
           </button>
         </div>
       </div>

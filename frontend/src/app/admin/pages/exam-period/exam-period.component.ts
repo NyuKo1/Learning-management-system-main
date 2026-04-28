@@ -16,8 +16,8 @@ export class ExamPeriodComponent
   extends BaseComponent<ExamPeriod>
   implements OnInit
 {
-  title: string = 'Exam periods';
-  name: string = 'exam period';
+  title: string = 'Периоды аттестации';
+  name: string = 'период аттестации';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -26,37 +26,37 @@ export class ExamPeriodComponent
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'text',
       required: true,
     },
     {
       key: 'registrationStartDate',
-      name: 'Registration start date',
+      name: 'Начало записи',
       type: 'date',
       required: true,
     },
     {
       key: 'registrationEndDate',
-      name: 'Registration end date',
+      name: 'Окончание записи',
       type: 'date',
       required: true,
     },
     {
       key: 'examStartDate',
-      name: 'Exam start date',
+      name: 'Начало аттестации',
       type: 'date',
       required: true,
     },
     {
       key: 'examEndDate',
-      name: 'Exam end date',
+      name: 'Окончание аттестации',
       type: 'date',
       required: true,
     },
     {
       key: 'faculty',
-      name: 'Faculty',
+      name: 'Направление',
       type: 'select',
       required: true,
       display: getFacultyDisplay,

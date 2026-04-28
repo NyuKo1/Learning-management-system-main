@@ -10,9 +10,9 @@
     </mat-toolbar-row>
   <mat-toolbar-row>
     <div class="flex flex-wrap justify-center items-center w-full gap-2">
-      <a mat-button routerLink="/about" class="md:text-lg">About</a>
-      <a mat-button routerLink="/faculties" class="md:text-lg">Faculties</a>
-      <a mat-button routerLink="/courses" class="md:text-lg">Courses</a>
+      <a mat-button routerLink="/about" class="md:text-lg">О системе</a>
+      <a mat-button routerLink="/faculties" class="md:text-lg">Направления</a>
+      <a mat-button routerLink="/courses" class="md:text-lg">Курсы</a>
       <button mat-icon-button (click)="toggleTheme()" aria-label="Toggle dark mode" class="ml-4">
           <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
@@ -22,7 +22,7 @@
         routerLink="/student-services/my-courses"
         class="md:text-lg"
       >
-        My Courses
+        Мои курсы
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_STUDENT'], 'any')"
@@ -30,7 +30,7 @@
         routerLink="/student-services"
         class="md:text-lg"
       >
-        Student services
+        Учебный портал
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_TEACHER'], 'any')"
@@ -38,14 +38,14 @@
         routerLink="/teacher-services"
         class="md:text-lg"
       >
-        Teacher services
+        Портал преподавателя
       </a>
       <a
         *ngIf="authService.validateRoles(['ROLE_ADMIN'], 'any')"
         mat-button
         routerLink="/admin-panel"
         class="md:text-lg"
-        >Admin panel</a
+        >Панель администратора</a
       >
       <a
         *ngIf="!authService.loggedIn()"
@@ -53,7 +53,7 @@
         mat-button
         class="md:text-lg"
       >
-        Login
+        Войти
       </a>
       <a
         *ngIf="authService.loggedIn()"
@@ -61,7 +61,7 @@
         mat-button
         class="md:text-lg"
       >
-        Logout
+        Выйти
       </a>
     </div>
   </mat-toolbar-row>

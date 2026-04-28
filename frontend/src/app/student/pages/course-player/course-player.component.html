@@ -1,0 +1,99 @@
+<div class="player-shell" *ngIf="!loading && !error && course">
+
+  <!-- Top bar -->
+  <div class="player-topbar">
+    <a class="back-link" routerLink="/student-services/my-courses">
+      <mat-icon>arrow_back</mat-icon>
+      Мои курсы
+    </a>
+    <div class="course-title-bar">
+      <div class="course-icon-sm" [style.background-color]="course.color + '22'">
+        <mat-icon [style.color]="course.color">{{ course.icon }}</mat-icon>
+      </div>
+      <span class="course-name-bar">{{ course.title }}</span>
+    </div>
+    <div class="progress-info">
+      <span>{{ lessons.length }} уроков</span>
+    </div>
+  </div>
+
+  <div class="player-body">
+
+    <!-- Sidebar: lesson list -->
+    <aside class="lesson-sidebar">
+      <div class="sidebar-header">
+        <mat-icon>list</mat-icon>
+        <span>Содержание курса</span>
+      </div>
+      <div class="lesson-list">
+        <div
+          *ngFor="let lesson of lessons; let i = index"
+          class="lesson-item"
+          [class.active]="activeLesson?.id === lesson.id"
+          (click)="selectLesson(lesson)">
+          <div class="lesson-num">{{ i + 1 }}</div>
+          <div class="lesson-info">
+            <div class="lesson-title">{{ lesson.title }}</div>
+            <div class="lesson-meta" *ngIf="lesson.duration">
+              <mat-icon>schedule</mat-icon>{{ lesson.duration }}
+            </div>
+          </div>
+          <mat-icon class="lesson-active-icon" *ngIf="activeLesson?.id === lesson.id">play_circle</mat-icon>
+        </div>
+        <div *ngIf="lessons.length === 0" class="no-lessons">
+          Уроки скоро появятся
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="lesson-main">
+      <ng-container *ngIf="activeLesson; else noLesson">
+
+        <!-- Video placeholder -->
+        <div class="video-area" *ngIf="activeLesson.videoUrl">
+          <iframe [src]="activeLesson.videoUrl" allowfullscreen class="video-frame"></iframe>
+        </div>
+        <div class="video-placeholder" *ngIf="!activeLesson.videoUrl">
+          <mat-icon>play_circle_outline</mat-icon>
+          <p>Видео этого урока скоро будет добавлено</p>
+        </div>
+
+        <!-- Lesson header -->
+        <div class="lesson-header">
+          <h1 class="lesson-heading">{{ activeLesson.title }}</h1>
+          <p class="lesson-desc" *ngIf="activeLesson.description">{{ activeLesson.description }}</p>
+          <div class="lesson-tags" *ngIf="activeLesson.duration">
+            <span class="meta-chip"><mat-icon>schedule</mat-icon>{{ activeLesson.duration }}</span>
+          </div>
+        </div>
+
+        <!-- Lesson content (markdown-like display) -->
+        <div class="lesson-content" *ngIf="activeLesson.content">
+          <div class="content-block" [innerHTML]="renderContent(activeLesson.content)"></div>
+        </div>
+
+      </ng-container>
+      <ng-template #noLesson>
+        <div class="no-lesson-selected">
+          <mat-icon>school</mat-icon>
+          <p>Выберите урок из списка слева, чтобы начать обучение</p>
+        </div>
+      </ng-template>
+    </main>
+
+  </div>
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="player-loading">
+  <mat-spinner diameter="48"></mat-spinner>
+  <p>Загружаем курс…</p>
+</div>
+
+<!-- Error -->
+<div *ngIf="error" class="player-error">
+  <mat-icon>error_outline</mat-icon>
+  <p>Не удалось загрузить курс. Попробуйте позже.</p>
+  <a mat-flat-button color="primary" routerLink="/student-services/my-courses">Вернуться</a>
+</div>

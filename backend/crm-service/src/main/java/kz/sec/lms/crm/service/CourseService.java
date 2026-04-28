@@ -30,6 +30,10 @@ public class CourseService extends ExtendedService<Course, CourseDTO, Long> {
         return mapper.toDTO(repository.findByAvailableTrueAndDeletedFalseOrderByTitleAsc());
     }
 
+    public List<String> findCategories() {
+        return repository.findDistinctCategories();
+    }
+
     public void incrementStudentsCount(Long courseId) {
         repository.findById(courseId).ifPresent(course -> {
             course.setStudentsCount(course.getStudentsCount() + 1);

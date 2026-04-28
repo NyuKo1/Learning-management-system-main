@@ -1,5 +1,6 @@
 package kz.sec.lms.crm.service;
 
+import kz.sec.lms.crm.dto.CourseDTO;
 import kz.sec.lms.crm.dto.PaymentDTO;
 import kz.sec.lms.crm.mapper.CourseMapper;
 import kz.sec.lms.crm.mapper.PaymentMapper;
@@ -39,36 +40,63 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
 
     @Override
     protected List<PaymentDTO> mapMissingValues(List<PaymentDTO> payments) {
-        payments.forEach(payment ->
-            courseRepository.findById(payment.getCourseId())
-                .ifPresent(course -> payment.setCourse(courseMapper.toDTO(course)))
-        );
+        payments.forEach(payment -> {
+            if (payment.getCourseId() != null) {
+                courseRepository.findById(payment.getCourseId())
+                    .ifPresent(course -> {
+                        payment.setCourse(courseMapper.toDTO(course));
+                        if (payment.getCourseTitle() == null) {
+                            payment.setCourseTitle(course.getTitle());
+                        }
+                    });
+            }
+        });
         return payments;
+    }
+
+    public List<PaymentDTO> findAll() {
+        List<PaymentDTO> payments = mapper.toDTO(
+            repository.findByDeletedFalseOrderByCreatedAtDesc()
+        );
+        return payments.isEmpty() ? payments : mapMissingValues(payments);
     }
 
     @Override
     @Transactional
     public PaymentDTO save(PaymentDTO dto) {
-        if (dto.getCardNumber() != null && dto.getCardNumber().replaceAll("\\s", "").length() >= 4) {
+        // Handle card number
+        if (dto.getCardNumber() != null && !dto.getCardNumber().isBlank()) {
             String cleaned = dto.getCardNumber().replaceAll("\\s", "");
-            dto.setCardLastFour(cleaned.substring(cleaned.length() - 4));
+            if (cleaned.length() >= 4) {
+                dto.setCardLastFour(cleaned.substring(cleaned.length() - 4));
+            }
         }
         dto.setCardNumber(null);
 
         if (dto.getCurrency() == null || dto.getCurrency().isBlank()) {
-            dto.setCurrency("USD");
+            dto.setCurrency("₸");
         }
-        dto.setStatus("COMPLETED");
+        if (dto.getStatus() == null || dto.getStatus().isBlank()) {
+            dto.setStatus("SUCCESS");
+        }
         dto.setUserId(getCurrentUsername());
+
+        // Denormalize course title from course
+        if (dto.getCourseId() != null && (dto.getCourseTitle() == null || dto.getCourseTitle().isBlank())) {
+            courseRepository.findById(dto.getCourseId())
+                .ifPresent(c -> dto.setCourseTitle(c.getTitle()));
+        }
 
         PaymentDTO saved = super.save(dto);
 
         if (saved.getCourseId() != null) {
             courseService.incrementStudentsCount(saved.getCourseId());
+            courseRepository.findById(saved.getCourseId())
+                .ifPresent(course -> {
+                    saved.setCourse(courseMapper.toDTO(course));
+                    saved.setCourseTitle(course.getTitle());
+                });
         }
-
-        courseRepository.findById(saved.getCourseId())
-            .ifPresent(course -> saved.setCourse(courseMapper.toDTO(course)));
 
         return saved;
     }

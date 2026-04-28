@@ -41,3 +41,5 @@ Thumbs.db
 # ── Claude ──────────────────────────────────────────────────────────────
 CLAUDE.md
 .claude/
+Docker.log
+SEC plan.md

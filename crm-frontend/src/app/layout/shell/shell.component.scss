@@ -2,6 +2,11 @@
   display: flex;
   min-height: 100vh;
   background: #f0f4f8;
+  transition: background .25s;
+}
+
+:host-context(html.dark) .shell-wrapper {
+  background: #0f172a;
 }
 
 .shell-main {

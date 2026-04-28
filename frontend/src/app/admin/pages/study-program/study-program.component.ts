@@ -19,8 +19,8 @@ export class StudyProgramComponent
   extends BaseComponent<StudyProgram>
   implements OnInit
 {
-  title: string = 'Study programs';
-  name: string = 'study program';
+  title: string = 'Программы обучения';
+  name: string = 'программа';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -29,34 +29,34 @@ export class StudyProgramComponent
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'text',
       required: true,
     },
     {
       key: 'description',
-      name: 'Description',
+      name: 'Описание',
       type: 'lob',
       required: true,
     },
     {
       key: 'acronym',
-      name: 'Acronym',
+      name: 'Аббревиатура',
       type: 'text',
       required: true,
       validators: [Validators.maxLength(5)],
-      errorMessage: 'Please enter acronym less than 5 characters',
+      errorMessage: 'Введите аббревиатуру не длиннее 5 символов',
     },
     {
       key: 'faculty',
-      name: 'Faculty',
+      name: 'Направление',
       type: 'select',
       required: true,
       display: getFacultyDisplay,
     },
     {
       key: 'manager',
-      name: 'Manager',
+      name: 'Координатор',
       type: 'select',
       required: true,
       display: getTeacherDisplay,

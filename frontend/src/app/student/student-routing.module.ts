@@ -9,6 +9,7 @@ import { InfoComponent } from './pages/info/info.component';
 import { ThesisComponent } from './pages/thesis/thesis.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
+import { CoursePlayerComponent } from './pages/course-player/course-player.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
       {
         path: 'my-courses',
         component: MyCoursesComponent,
+      },
+      {
+        path: 'course/:id',
+        component: CoursePlayerComponent,
       },
     ],
   },

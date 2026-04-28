@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { LeadsListComponent } from './pages/leads-list/leads-list.component';
 import { LeadFormDialogComponent } from './components/lead-form-dialog/lead-form-dialog.component';
@@ -26,7 +27,7 @@ import { LeadFormDialogComponent } from './components/lead-form-dialog/lead-form
     ReactiveFormsModule,
     RouterModule.forChild([{ path: '', component: LeadsListComponent }]),
     MatTableModule, MatButtonModule, MatIconModule, MatSelectModule,
-    MatInputModule, MatDialogModule, MatMenuModule, MatProgressSpinnerModule,
+    MatInputModule, MatFormFieldModule, MatDialogModule, MatMenuModule, MatProgressSpinnerModule,
     MatTooltipModule, MatChipsModule, MatSnackBarModule, MatDividerModule
   ]
 })

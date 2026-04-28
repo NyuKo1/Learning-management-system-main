@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CrmApiService } from '../../../core/services/crm-api.service';
 import { Client } from '../../../core/models/client.model';
+import { CreateLmsAccountDialogComponent } from '../../components/create-lms-account-dialog/create-lms-account-dialog.component';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -15,7 +18,11 @@ export class ClientsListComponent implements OnInit {
   search = '';
   lmsUrl = environment.lmsUrl;
 
-  constructor(private api: CrmApiService) {}
+  constructor(
+    private api: CrmApiService,
+    private dialog: MatDialog,
+    private snack: MatSnackBar
+  ) {}
 
   ngOnInit(): void { this.load(); }
 
@@ -36,6 +43,24 @@ export class ClientsListComponent implements OnInit {
 
   goToLms(lmsUserId: number): void {
     window.open(`${this.lmsUrl}/admin/students/${lmsUserId}`, '_blank');
+  }
+
+  openCreateLmsDialog(client: Client): void {
+    const ref = this.dialog.open(CreateLmsAccountDialogComponent, {
+      data: client,
+      width: '460px',
+      disableClose: true
+    });
+    ref.afterClosed().subscribe(result => {
+      if (!result?.success) return;
+      const target = this.clients.find(c => c.id === client.id);
+      if (target) {
+        target.hasLmsAccount = true;
+        target.lmsUserId = result.lmsUserId;
+      }
+      this.applySearch();
+      this.snack.open(`Аккаунт создан: ${result.username}`, 'OK', { duration: 4000 });
+    });
   }
 
   private mock(): Client[] {

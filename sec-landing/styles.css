@@ -830,3 +830,132 @@ body {
 .fade-up-delay-1 { animation-delay: .1s; opacity: 0; }
 .fade-up-delay-2 { animation-delay: .2s; opacity: 0; }
 .fade-up-delay-3 { animation-delay: .3s; opacity: 0; }
+
+/* ===== DARK TOGGLE BUTTON ===== */
+.dark-toggle {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: white;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.dark-toggle:hover { border-color: var(--lms); background: var(--light); }
+
+/* ===== DARK MODE ===== */
+body.dark {
+  --white: #0f172a;
+  --light: #1e293b;
+  --dark: #f1f5f9;
+  --dark2: #0f172a;
+  --dark3: #cbd5e1;
+  --gray: #94a3b8;
+  --border: #334155;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+body.dark .navbar {
+  background: rgba(15,23,42,.92);
+  border-bottom-color: #334155;
+}
+
+body.dark .logo-text { color: #f1f5f9; }
+
+body.dark .btn-outline {
+  background: #1e293b;
+  border-color: #334155;
+  color: #e2e8f0;
+}
+body.dark .btn-outline:hover { border-color: var(--lms); color: var(--lms-light); }
+
+body.dark .btn-ghost { color: #e2e8f0; }
+body.dark .btn-ghost:hover { background: #1e293b; }
+
+body.dark .dark-toggle {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark .burger span { background: #e2e8f0; }
+
+body.dark .hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1a1f35 100%);
+}
+
+body.dark .about { background: #1e293b; }
+body.dark .about-card {
+  background: #0f172a;
+  border-color: #334155;
+}
+body.dark .about-card h3 { color: #f1f5f9; }
+body.dark .about-card p { color: #94a3b8; }
+
+body.dark .module-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.dark .module-name { color: #f1f5f9; }
+body.dark .module-features li { color: #cbd5e1; border-bottom-color: #334155; }
+
+body.dark .benefits { background: #1e293b; }
+body.dark .benefit-item { background: #0f172a; }
+body.dark .benefit-item:hover { background: #162032; }
+body.dark .benefit-body h3 { color: #f1f5f9; }
+body.dark .benefit-body p { color: #94a3b8; }
+body.dark .benefits-grid { border-color: #334155; background: #334155; }
+
+body.dark .tech-logo {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.dark .tech-logo.angular { background: rgba(79,70,229,.15); }
+body.dark .tech-logo.spring { background: rgba(34,197,94,.1); }
+body.dark .tech-item { color: #94a3b8; }
+
+body.dark .price-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.dark .price-name { color: #f1f5f9; }
+body.dark .price-num { color: #f1f5f9; }
+body.dark .price-features li { color: #cbd5e1; border-bottom-color: #334155; }
+body.dark .price-features li.inactive { color: #475569; }
+body.dark .price-header { border-bottom-color: #334155; }
+body.dark .price-featured { border-color: var(--lms); }
+body.dark .btn-outline-dark {
+  border-color: #475569;
+  color: #e2e8f0;
+}
+body.dark .btn-outline-dark:hover { background: #e2e8f0; color: #0f172a; }
+
+body.dark .contacts { background: #1e293b; }
+body.dark .contacts-info h3 { color: #f1f5f9; }
+body.dark .contacts-info p { color: #94a3b8; }
+body.dark .contact-item { color: #cbd5e1; }
+body.dark .form-group label { color: #cbd5e1; }
+body.dark .form-group input,
+body.dark .form-group select,
+body.dark .form-group textarea {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+body.dark .form-group input:focus,
+body.dark .form-group select:focus,
+body.dark .form-group textarea:focus { border-color: var(--lms-light); }
+body.dark .form-group select option { background: #0f172a; }
+
+body.dark .mockup-content { background: #1e293b; }
+body.dark .dashboard-mockup {
+  background: #1e293b;
+  border-color: #334155;
+}
+body.dark .mockup-card-num { color: #f1f5f9; }
+body.dark .mockup-chart { background: #0f172a; }

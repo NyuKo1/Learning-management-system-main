@@ -13,6 +13,7 @@ import { ThesisComponent } from './pages/thesis/thesis.component';
 import { DialogRegisterComponent } from './pages/exam-term/dialog-register/dialog-register.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
+import { CoursePlayerComponent } from './pages/course-player/course-player.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MyCoursesComponent } from './pages/my-courses/my-courses.component';
     DialogRegisterComponent,
     CoursesComponent,
     MyCoursesComponent,
+    CoursePlayerComponent,
   ],
   imports: [SharedModule, StudentRoutingModule, FormsModule, ReactiveFormsModule],
 })

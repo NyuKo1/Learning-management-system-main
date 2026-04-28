@@ -24,12 +24,14 @@
         <div class="client-info">
           <div class="client-name">{{ client.fullName }}</div>
           <div class="client-email">{{ client.email }}</div>
+          <div class="client-phone">{{ client.phone }}</div>
         </div>
         <div *ngIf="client.hasLmsAccount" class="lms-badge"
-             matTooltip="Открыть в LMS" (click)="goToLms(client.lmsUserId!)">
+             matTooltip="Открыть профиль в LMS" (click)="goToLms(client.lmsUserId!)">
           <mat-icon>school</mat-icon>
         </div>
       </div>
+
       <div class="client-stats">
         <div class="cstat">
           <span class="cstat-val">{{ client.totalPurchases }}</span>
@@ -44,6 +46,22 @@
             {{ client.hasLmsAccount ? 'В LMS' : 'Только CRM' }}
           </span>
         </div>
+      </div>
+
+      <div class="client-actions">
+        <button *ngIf="!client.hasLmsAccount"
+                mat-stroked-button class="lms-create-btn"
+                (click)="openCreateLmsDialog(client)"
+                matTooltip="Создать аккаунт студента в LMS">
+          <mat-icon>person_add</mat-icon>
+          Создать аккаунт в LMS
+        </button>
+        <button *ngIf="client.hasLmsAccount"
+                mat-stroked-button class="lms-open-btn"
+                (click)="goToLms(client.lmsUserId!)">
+          <mat-icon>open_in_new</mat-icon>
+          Открыть в LMS
+        </button>
       </div>
     </div>
 

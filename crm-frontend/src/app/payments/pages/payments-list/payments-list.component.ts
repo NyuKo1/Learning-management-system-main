@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { CrmApiService } from '../../../core/services/crm-api.service';
-import { Payment, PAYMENT_STATUS_LABELS } from '../../../core/models/payment.model';
+import { Payment, PaymentMethod, PAYMENT_STATUS_LABELS, PAYMENT_METHOD_LABELS } from '../../../core/models/payment.model';
+import { CrmCourse } from '../../../core/models/course.model';
 
 @Component({
   selector: 'crm-payments-list',
@@ -9,39 +13,123 @@ import { Payment, PAYMENT_STATUS_LABELS } from '../../../core/models/payment.mod
 })
 export class PaymentsListComponent implements OnInit {
   payments: Payment[] = [];
+  courses: CrmCourse[] = [];
   loading = true;
   statusLabels = PAYMENT_STATUS_LABELS;
+  methodLabels = PAYMENT_METHOD_LABELS;
+  showForm = false;
+  processing = false;
+
+  form = {
+    customerName: '',
+    email: '',
+    courseId: null as number | null,
+    customCourseTitle: '',
+    amount: null as number | null,
+    method: 'CARD' as PaymentMethod,
+    cardNumber: ''
+  };
+
+  methods: PaymentMethod[] = ['CARD', 'CASH', 'TRANSFER', 'ONLINE'];
 
   get totalRevenue(): number {
-    return this.payments.filter(p => p.status === 'SUCCESS').reduce((s, p) => s + p.amount, 0);
+    return this.payments
+      .filter(p => p.status === 'SUCCESS' || p.status === 'COMPLETED')
+      .reduce((s, p) => s + p.amount, 0);
   }
 
   get successCount(): number {
-    return this.payments.filter(p => p.status === 'SUCCESS').length;
+    return this.payments.filter(p => p.status === 'SUCCESS' || p.status === 'COMPLETED').length;
   }
 
-  constructor(private api: CrmApiService) {}
+  get pendingCount(): number {
+    return this.payments.filter(p => p.status === 'PENDING').length;
+  }
+
+  constructor(private api: CrmApiService, private snack: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.api.getPayments().subscribe({
-      next: data => { this.payments = data; this.loading = false; },
-      error: () => { this.payments = this.mock(); this.loading = false; }
+    forkJoin({
+      payments: this.api.getPayments().pipe(catchError(() => of([]))),
+      courses: this.api.getCourses().pipe(catchError(() => of([])))
+    }).subscribe(({ payments, courses }) => {
+      this.payments = payments;
+      this.courses = courses;
+      this.loading = false;
     });
+  }
+
+  selectedCourseName(): string {
+    if (!this.form.courseId) return '';
+    return this.courses.find(c => c.id === this.form.courseId)?.title || '';
+  }
+
+  onCourseChange(): void {
+    const course = this.courses.find(c => c.id === this.form.courseId);
+    if (course && !this.form.amount) {
+      this.form.amount = course.price;
+    }
+  }
+
+  canSubmit(): boolean {
+    return !!(this.form.customerName.trim() &&
+              (this.form.courseId || this.form.customCourseTitle.trim()) &&
+              this.form.amount && this.form.amount > 0);
+  }
+
+  processPayment(): void {
+    if (!this.canSubmit()) return;
+    this.processing = true;
+
+    const courseTitle = this.form.courseId
+      ? this.courses.find(c => c.id === this.form.courseId)?.title || this.form.customCourseTitle
+      : this.form.customCourseTitle;
+
+    const req = {
+      customerName: this.form.customerName,
+      email: this.form.email || undefined,
+      courseId: this.form.courseId || undefined,
+      courseTitle,
+      amount: this.form.amount!,
+      currency: '₸',
+      method: this.form.method,
+      cardNumber: this.form.method === 'CARD' && this.form.cardNumber ? this.form.cardNumber : undefined
+    };
+
+    this.api.createPayment(req).subscribe({
+      next: (payment) => {
+        payment.courseTitle = payment.courseTitle || courseTitle;
+        this.payments = [payment, ...this.payments];
+        this.processing = false;
+        this.showForm = false;
+        this.resetForm();
+        this.snack.open('✓ Платёж записан', 'Закрыть', { duration: 3000 });
+      },
+      error: () => {
+        this.processing = false;
+        this.snack.open('Ошибка при записи платежа', 'Закрыть', { duration: 3000 });
+      }
+    });
+  }
+
+  private resetForm(): void {
+    this.form = { customerName: '', email: '', courseId: null, customCourseTitle: '', amount: null, method: 'CARD', cardNumber: '' };
+  }
+
+  getEffectiveCourseTitle(p: Payment): string {
+    return p.courseTitle || p.course?.title || '—';
   }
 
   getStatusClass(status: string): string {
     const map: Record<string, string> = {
-      SUCCESS: 'badge-success', PENDING: 'badge-pending', FAILED: 'badge-failed', REFUNDED: 'badge-pending'
+      SUCCESS: 'badge-success', COMPLETED: 'badge-success',
+      PENDING: 'badge-pending', FAILED: 'badge-failed', REFUNDED: 'badge-pending'
     };
     return map[status] || 'badge-pending';
   }
 
-  private mock(): Payment[] {
-    return [
-      { id: 1, clientId: 1, clientName: 'Арман Сейтказы',   courseId: 1, courseTitle: 'Python для начинающих', amount: 15000, currency: '₸', status: 'SUCCESS',  method: 'CARD',     createdAt: '2024-04-25T10:00:00' },
-      { id: 2, clientId: 2, clientName: 'Айгерим Нурланова', courseId: 2, courseTitle: 'Веб-разработка',        amount: 25000, currency: '₸', status: 'SUCCESS',  method: 'TRANSFER', createdAt: '2024-04-24T14:00:00' },
-      { id: 3, clientId: 3, clientName: 'Гульназ Ахметова',  courseId: 3, courseTitle: 'UI/UX Design',          amount: 20000, currency: '₸', status: 'PENDING',  method: 'CARD',     createdAt: '2024-04-26T09:00:00' },
-      { id: 4, clientId: 1, clientName: 'Арман Сейтказы',   courseId: 4, courseTitle: 'Data Science',          amount: 30000, currency: '₸', status: 'FAILED',   method: 'CARD',     createdAt: '2024-04-23T16:00:00' }
-    ];
+  getMethodIcon(method?: string): string {
+    const icons: Record<string, string> = { CARD: 'credit_card', CASH: 'payments', TRANSFER: 'swap_horiz', ONLINE: 'language' };
+    return icons[method || ''] || 'payment';
   }
 }

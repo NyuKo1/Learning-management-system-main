@@ -16,13 +16,11 @@ import java.math.BigDecimal;
 @Setter
 public class PaymentDTO extends BaseDTO<Long> {
 
-    @NotNull
     private Long courseId;
 
     @NotBlank
     private String customerName;
 
-    @NotBlank
     private String email;
 
     private String cardNumber;
@@ -39,4 +37,9 @@ public class PaymentDTO extends BaseDTO<Long> {
     private String userId;
 
     private CourseDTO course;
+
+    // CRM-specific
+    private Long clientId;
+    private String method;
+    private String courseTitle;
 }

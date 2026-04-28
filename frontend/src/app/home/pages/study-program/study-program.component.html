@@ -7,7 +7,7 @@
     {{ studyProgram.acronym }}
   </p>
   <p>
-    <span class="font-bold">Faculty</span>:
+    <span class="font-bold">Направление</span>:
     <a
       routerLink
       [routerLink]="['/faculties', studyProgram.faculty.id]"
@@ -17,13 +17,13 @@
     </a>
   </p>
   <p>
-    <span class="font-bold">Manager</span>:
+    <span class="font-bold">Координатор</span>:
     {{ getTeacherDisplay(studyProgram.manager) }}
   </p>
   <hr />
 
   <!-- Subjects -->
-  <h2 class="text-xl sm:text-2xl">Subjects</h2>
+  <h2 class="text-xl sm:text-2xl">Дисциплины</h2>
   <mat-card
     *ngFor="let subject of subjects"
     (click)="viewSubject(subject)"
@@ -33,9 +33,9 @@
       <mat-card-title class="text-blue-500 hover:text-blue-700">
         {{ subject.name }}
       </mat-card-title>
-      <mat-card-subtitle> Semester: {{ subject.semester }} </mat-card-subtitle>
+      <mat-card-subtitle> Модуль: {{ subject.semester }} </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>{{ subject.syllabus }}</mat-card-content>
   </mat-card>
-  <p *ngIf="!subjects">No subjects are found!</p>
+  <p *ngIf="!subjects">Дисциплины не найдены</p>
 </app-container>

@@ -19,8 +19,8 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./exam.component.scss'],
 })
 export class ExamComponent extends BaseComponent<Exam> implements OnInit {
-  title: string = 'Exams';
-  name: string = 'exam';
+  title: string = 'Аттестации';
+  name: string = 'аттестация';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -29,35 +29,35 @@ export class ExamComponent extends BaseComponent<Exam> implements OnInit {
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'text',
       required: true,
     },
     {
       key: 'description',
-      name: 'Description',
+      name: 'Описание',
       type: 'lob',
       required: true,
     },
     {
       key: 'minimumScore',
-      name: 'Minimum score',
+      name: 'Минимальный балл',
       type: 'number',
       required: true,
       validators: [Validators.min(0), Validators.max(90)],
-      errorMessage: 'Minimum score must be between 0 and 90',
+      errorMessage: 'Минимальный балл должен быть от 0 до 90',
     },
     {
       key: 'maximumScore',
-      name: 'Maximum score',
+      name: 'Максимальный балл',
       type: 'number',
       required: true,
       validators: [Validators.min(1), Validators.max(90)],
-      errorMessage: 'Maximum score must be between 1 and 90',
+      errorMessage: 'Максимальный балл должен быть от 1 до 90',
     },
     {
       key: 'examType',
-      name: 'Exam type',
+      name: 'Тип аттестации',
       type: 'select',
       required: true,
       display: getExamTypeDisplay,

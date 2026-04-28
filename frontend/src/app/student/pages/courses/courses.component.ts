@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CourseCatalog } from '@core/models/course-catalog.model';
 import { AuthService } from '@core/services/auth.service';
 import { CrmService } from '@core/services/crm.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-courses',
@@ -16,14 +18,14 @@ export class CoursesComponent implements OnInit {
   error = false;
 
   searchQuery = '';
-  selectedCategory = 'All';
-  selectedLevel = 'All';
+  selectedCategory = 'Все';
+  selectedLevel = 'Все';
 
   purchaseInProgress: number | null = null;
   purchaseSuccess: number | null = null;
 
-  categories = ['All', 'Programming', 'Mathematics', 'Science', 'Business', 'Design', 'Languages'];
-  levels = ['All', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
+  categories: string[] = ['Все'];
+  levels = ['Все', 'BEGINNER', 'INTERMEDIATE', 'ADVANCED'];
 
   constructor(
     private crmService: CrmService,
@@ -36,21 +38,18 @@ export class CoursesComponent implements OnInit {
   }
 
   private loadCourses(): void {
-    this.crmService.getAvailableCourses().subscribe({
-      next: (courses) => {
-        this.allCourses = courses;
-        this.loading = false;
-        this.checkPurchased();
-      },
-      error: () => {
-        this.error = true;
-        this.loading = false;
-      },
+    forkJoin({
+      courses: this.crmService.getAvailableCourses().pipe(catchError(() => of([]))),
+      categories: this.crmService.getCategories().pipe(catchError(() => of([]))),
+    }).subscribe(({ courses, categories }) => {
+      this.allCourses = courses;
+      this.categories = ['Все', ...categories];
+      this.loading = false;
+      if (this.authService.loggedIn()) this.checkPurchased();
     });
   }
 
   private checkPurchased(): void {
-    if (!this.authService.loggedIn()) return;
     const username = this.authService.getUsername();
     this.crmService.getMyPurchases(username).subscribe({
       next: (payments) => {
@@ -70,9 +69,9 @@ export class CoursesComponent implements OnInit {
         !q ||
         c.title.toLowerCase().includes(q) ||
         c.description.toLowerCase().includes(q) ||
-        c.tags.toLowerCase().includes(q);
-      const matchCat = this.selectedCategory === 'All' || c.category === this.selectedCategory;
-      const matchLvl = this.selectedLevel === 'All' || c.level === this.selectedLevel;
+        (c.tags || '').toLowerCase().includes(q);
+      const matchCat = this.selectedCategory === 'Все' || c.category === this.selectedCategory;
+      const matchLvl = this.selectedLevel === 'Все' || c.level === this.selectedLevel;
       return matchSearch && matchCat && matchLvl;
     });
   }
@@ -85,7 +84,12 @@ export class CoursesComponent implements OnInit {
   selectLevel(level: string): void { this.selectedLevel = level; }
 
   getLevelLabel(level: string): string {
-    const map: Record<string, string> = { BEGINNER: 'Beginner', INTERMEDIATE: 'Intermediate', ADVANCED: 'Advanced' };
+    const map: Record<string, string> = {
+      'Все': 'Все уровни',
+      BEGINNER: 'Начинающий',
+      INTERMEDIATE: 'Средний',
+      ADVANCED: 'Продвинутый',
+    };
     return map[level] || level;
   }
 
@@ -103,7 +107,7 @@ export class CoursesComponent implements OnInit {
   }
 
   formatPrice(price: number): string {
-    return '$' + Number(price).toFixed(0);
+    return '₸' + Number(price).toFixed(0);
   }
 
   getDiscount(price: number, original: number): number {

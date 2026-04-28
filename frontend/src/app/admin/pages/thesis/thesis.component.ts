@@ -16,8 +16,8 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./thesis.component.scss'],
 })
 export class ThesisComponent extends BaseComponent<Thesis> implements OnInit {
-  title: string = 'Theses';
-  name: string = 'thesis';
+  title: string = 'Итоговые проекты';
+  name: string = 'итоговый проект';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -26,49 +26,49 @@ export class ThesisComponent extends BaseComponent<Thesis> implements OnInit {
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'string',
       required: true,
     },
     {
       key: 'description',
-      name: 'Description',
+      name: 'Описание',
       type: 'lob',
     },
     {
       key: 'url',
-      name: 'URL',
+      name: 'Ссылка',
       type: 'string',
       required: true,
     },
     {
       key: 'applicationDate',
-      name: 'Application date',
+      name: 'Дата подачи',
       type: 'date',
       required: true,
     },
     {
       key: 'defenseDate',
-      name: 'Defense date',
+      name: 'Дата защиты',
       type: 'date',
     },
     {
       key: 'grade',
-      name: 'Grade',
+      name: 'Оценка',
       type: 'number',
       validators: [Validators.min(6), Validators.max(10)],
-      errorMessage: 'Grade must be between 6 and 10',
+      errorMessage: 'Оценка должна быть от 6 до 10',
     },
     {
       key: 'student',
-      name: 'Student',
+      name: 'Учащийся',
       type: 'select',
       required: true,
       display: getStudentDisplay,
     },
     {
       key: 'mentor',
-      name: 'Mentor',
+      name: 'Руководитель проекта',
       type: 'select',
       required: true,
       display: getTeacherDisplay,

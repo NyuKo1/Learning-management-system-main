@@ -29,7 +29,7 @@ public class Faculty extends BaseEntity<Long> {
     @ManyToOne(optional = false)
     private Teacher dean;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Address address;
 
     @OneToMany(mappedBy = "faculty")

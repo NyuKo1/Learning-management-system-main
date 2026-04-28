@@ -13,6 +13,22 @@ burger.addEventListener('click', () => {
   actions?.classList.toggle('mobile-open');
 });
 
+// Dark mode
+const darkToggle = document.getElementById('darkToggle');
+const applyDark = (dark) => {
+  document.body.classList.toggle('dark', dark);
+  darkToggle.textContent = dark ? '☀️' : '🌙';
+};
+
+const savedDark = localStorage.getItem('sec-dark') === 'true';
+applyDark(savedDark);
+
+darkToggle.addEventListener('click', () => {
+  const isDark = document.body.classList.toggle('dark');
+  localStorage.setItem('sec-dark', isDark);
+  darkToggle.textContent = isDark ? '☀️' : '🌙';
+});
+
 // Contact form
 function handleSubmit(e) {
   e.preventDefault();

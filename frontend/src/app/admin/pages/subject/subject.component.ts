@@ -16,8 +16,8 @@ import { Validators } from '@angular/forms';
   styleUrls: ['./subject.component.scss'],
 })
 export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
-  title: string = 'Subjects';
-  name: string = 'subject';
+  title: string = 'Дисциплины';
+  name: string = 'дисциплина';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -26,49 +26,49 @@ export class SubjectComponent extends BaseComponent<Subject> implements OnInit {
     },
     {
       key: 'name',
-      name: 'Name',
+      name: 'Название',
       type: 'text',
       required: true,
     },
     {
       key: 'syllabus',
-      name: 'Syllabus',
+      name: 'Описание программы',
       type: 'lob',
       required: true,
     },
     {
       key: 'semester',
-      name: 'Semester',
+      name: 'Модуль (1–8)',
       type: 'number',
       required: true,
       validators: [Validators.min(1), Validators.max(8)],
-      errorMessage: 'Please enter semester between 1 and 8',
+      errorMessage: 'Введите номер модуля от 1 до 8',
     },
     {
       key: 'ects',
-      name: 'ECTS',
+      name: 'Уровень (1–5)',
       type: 'number',
       required: true,
-      validators: [Validators.min(1), Validators.max(10)],
-      errorMessage: 'Please enter ECTS between 1 and 10',
+      validators: [Validators.min(1), Validators.max(5)],
+      errorMessage: 'Введите уровень от 1 до 5',
     },
     {
       key: 'studyProgram',
-      name: 'Study program',
+      name: 'Программа обучения',
       type: 'select',
       required: true,
       display: getStudyProgramDisplay,
     },
     {
       key: 'professor',
-      name: 'Professor',
+      name: 'Преподаватель',
       type: 'select',
       required: true,
       display: getTeacherDisplay,
     },
     {
       key: 'assistant',
-      name: 'Assistant',
+      name: 'Ассистент',
       type: 'select',
       required: true,
       display: getTeacherDisplay,

@@ -18,10 +18,11 @@ export class SidenavComponent {
   lmsUrl = environment.lmsUrl;
 
   navItems: NavItem[] = [
-    { label: 'Дашборд',  icon: 'dashboard',  route: '/dashboard' },
-    { label: 'Лиды',     icon: 'person_add', route: '/leads' },
-    { label: 'Клиенты',  icon: 'group',      route: '/clients' },
-    { label: 'Курсы',    icon: 'school',     route: '/courses' },
-    { label: 'Платежи',  icon: 'payments',   route: '/payments' }
+    { label: 'Дашборд',   icon: 'dashboard',    route: '/dashboard' },
+    { label: 'Лиды',      icon: 'person_add',   route: '/leads' },
+    { label: 'Клиенты',   icon: 'group',        route: '/clients' },
+    { label: 'Курсы',     icon: 'school',       route: '/courses' },
+    { label: 'Платежи',   icon: 'payments',     route: '/payments' },
+    { label: 'Аналитика', icon: 'bar_chart',    route: '/analytics' }
   ];
 }

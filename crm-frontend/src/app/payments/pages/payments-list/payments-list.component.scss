@@ -1,8 +1,40 @@
 .payments-page { max-width: 1200px; }
 
+.payment-form {
+  margin-bottom: 24px;
+  padding: 24px;
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1e293b;
+
+  mat-icon { color: #4f46e5; font-size: 20px; }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 4px 16px;
+
+  mat-form-field { width: 100%; }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
 .summary-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -15,6 +47,7 @@
   align-items: center;
   gap: 14px;
   border: 1px solid #e2e8f0;
+  transition: background .25s, border-color .25s;
 }
 
 .sum-icon {
@@ -24,19 +57,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 
-  &.green { background: #f0fdf4; mat-icon { color: #16a34a; } }
-  &.blue  { background: #eff6ff; mat-icon { color: #3b82f6; } }
+  &.green  { background: #f0fdf4; mat-icon { color: #16a34a; } }
+  &.blue   { background: #eff6ff; mat-icon { color: #3b82f6; } }
+  &.yellow { background: #fefce8; mat-icon { color: #ca8a04; } }
 }
 
-.sum-val { font-size: 24px; font-weight: 800; color: #1e293b; }
+.sum-val { font-size: 22px; font-weight: 800; color: #1e293b; }
 .sum-lbl { font-size: 13px; color: #64748b; }
 
 .loading-center { display: flex; justify-content: center; padding: 60px; }
 .table-card { overflow: hidden; }
 
-.id-cell { color: #94a3b8; font-size: 13px; }
+.id-cell   { color: #94a3b8; font-size: 13px; }
 .course-cell { max-width: 200px; font-size: 13px; color: #64748b; }
-.amount-cell { font-weight: 700; color: #1e293b; }
-.method-cell { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: .5px; }
-.date-cell { font-size: 12px; color: #94a3b8; white-space: nowrap; }
+.amount-cell { font-weight: 700; color: #1e293b; white-space: nowrap; }
+.date-cell   { font-size: 12px; color: #94a3b8; white-space: nowrap; }
+
+.client-name-cell  { font-weight: 600; font-size: 14px; }
+.client-email-cell { font-size: 12px; color: #94a3b8; }
+
+.method-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #64748b;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+}
+
+// Dark mode
+html.dark .sum-card {
+  background: #1e293b;
+  border-color: #334155;
+}
+html.dark .sum-val { color: #f1f5f9; }
+html.dark .form-title { color: #f1f5f9; }
+html.dark .client-name-cell { color: #e2e8f0; }
+html.dark .amount-cell { color: #f1f5f9; }

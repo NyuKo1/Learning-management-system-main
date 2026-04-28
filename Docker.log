@@ -1,39 +1,47 @@
-Builds
-crm-frontend
+backend/crm-service
 [internal] load build definition from Dockerfile
-	transferring 439/0 0.009
-[internal] load metadata for docker.io/library/nginx:1.25-alpine
-[internal] load metadata for docker.io/library/node:18-alpine
+	transferring 352/0 0.013
+[internal] load metadata for docker.io/library/maven:3.8-amazoncorretto-17
+[internal] load metadata for docker.io/library/amazoncorretto:17-alpine3.15
 [internal] load .dockerignore
-[build 1/7] FROM docker.io/library/node:18-alpine@sha256:8d6421d663b4c28fd3ebc498332f249011d118945588d0a35cb9bc4b8ca09d9e
-[stage-1 1/3] FROM docker.io/library/nginx:1.25-alpine@sha256:516475cc129da42866742567714ddc681e5eed7b9ee0b9e9c015e464b4221a00
+[build 1/5] FROM docker.io/library/maven:3.8-amazoncorretto-17@sha256:6668995ffe1bdc06865f420ab21edcdf9835f53b35e1c40d492bc2be5a3e8893
+[stage-1 1/3] FROM docker.io/library/amazoncorretto:17-alpine3.15@sha256:1b7c14e3f8d6a6df1ad4b2e1798d561bc7c318117900193e467b938d0ca1edc4
 [internal] load build context
-	transferring 12464/0 0.037
-[stage-1 2/3] COPY .nginx/default.conf /etc/nginx/conf.d/default.conf
-[build 3/7] WORKDIR /app
-[build 4/7] COPY package*.json ./
-[build 5/7] RUN npm install --legacy-peer-deps
-[build 2/7] RUN apk add --no-cache python3 make g++
-[build 6/7] COPY ./ ./
-[build 7/7] RUN npm run build -- --configuration production
-	
-	> sec-crm@0.0.0 build
-	> ng build --configuration production
-	- Generating browser application bundles (phase: setup)...
-	✔ Browser application bundle generation complete.
-	✔ Browser application bundle generation complete.
-	
-	./src/app/auth/pages/login/login.component.ts:2:0-70 - Error: Module not found: Error: Can't resolve '../../../../../environments/environment' in '/app/src/app/auth/pages/login'
-	
-	./src/app/layout/topbar/topbar.component.ts:2:0-67 - Error: Module not found: Error: Can't resolve '../../../../environments/environment' in '/app/src/app/layout/topbar'
-	
-	Error: src/app/auth/pages/login/login.component.ts:5:29 - error TS2307: Cannot find module '../../../../../environments/environment' or its corresponding type declarations.
-	
-	5 import { environment } from '../../../../../environments/environment';
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	
-	
-	Error: src/app/layout/topbar/topbar.component.ts:3:29 - error TS2307: Cannot find module '../../../../environments/environment' or its corresponding type declarations.
-	
-	3 import { environment } from '../../../../environments/environment';
-	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	transferring 20642/0 0.02
+[build 2/5] COPY pom.xml /build/
+[build 3/5] COPY src /build/src/
+[build 4/5] WORKDIR /build/
+[build 5/5] RUN mvn package -q -Dspring.profiles.active="prod"
+	[ERROR] COMPILATION ERROR :
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[71,22] cannot find symbol
+	symbol:   method getCreatedAt()
+	location: variable l of type kz.sec.lms.crm.model.Lead
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[72,32] cannot find symbol
+	symbol:   method getCreatedAt()
+	location: variable l of type kz.sec.lms.crm.model.Lead
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[77,22] cannot find symbol
+	symbol:   method getCreatedAt()
+	location: variable p of type kz.sec.lms.crm.model.Payment
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[78,32] cannot find symbol
+	symbol:   method getCreatedAt()
+	location: variable p of type kz.sec.lms.crm.model.Payment
+	[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project crm-service: Compilation failure: Compilation failure:
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[71,22] cannot find symbol
+	[ERROR]   symbol:   method getCreatedAt()
+	[ERROR]   location: variable l of type kz.sec.lms.crm.model.Lead
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[72,32] cannot find symbol
+	[ERROR]   symbol:   method getCreatedAt()
+	[ERROR]   location: variable l of type kz.sec.lms.crm.model.Lead
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[77,22] cannot find symbol
+	[ERROR]   symbol:   method getCreatedAt()
+	[ERROR]   location: variable p of type kz.sec.lms.crm.model.Payment
+	[ERROR] /build/src/main/java/kz/sec/lms/crm/controller/StatsController.java:[78,32] cannot find symbol
+	[ERROR]   symbol:   method getCreatedAt()
+	[ERROR]   location: variable p of type kz.sec.lms.crm.model.Payment
+	[ERROR] -> [Help 1]
+	[ERROR]
+	[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+	[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+	[ERROR]
+	[ERROR] For more information about the errors and possible solutions, please read the following articles:
+	[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

@@ -54,6 +54,7 @@ public class SecurityConfig {
                 .antMatchers(
                         HttpMethod.GET,
                         "/users/username/*").authenticated()
+                .antMatchers(HttpMethod.POST, "/users/register-student").hasAuthority(ROLE_ADMIN)
                 .antMatchers("/users/**").hasAuthority(ROLE_ADMIN)
                 .anyRequest().hasAuthority(ROLE_ROOT)
                 .and()

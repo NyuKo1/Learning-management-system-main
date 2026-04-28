@@ -21,8 +21,8 @@ export class StudentComponent
   extends BaseUserComponent<Student>
   implements OnInit
 {
-  title: string = 'Students';
-  name: string = 'student';
+  title: string = 'Учащиеся';
+  name: string = 'учащийся';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -31,66 +31,66 @@ export class StudentComponent
     },
     {
       key: 'user',
-      name: 'Username',
+      name: 'Логин',
       type: 'text',
       required: true,
       display: getUserDisplay,
     },
     {
       key: 'password',
-      name: 'Password',
+      name: 'Пароль',
       type: 'password',
       required: true,
       validators: [Validators.minLength(8)],
-      errorMessage: 'Password must be at least 8 characters long',
+      errorMessage: 'Пароль должен содержать не менее 8 символов',
     },
     {
       key: 'firstName',
-      name: 'First name',
+      name: 'Имя',
       type: 'text',
       required: true,
     },
     {
       key: 'lastName',
-      name: 'Last name',
+      name: 'Фамилия',
       type: 'text',
       required: true,
     },
     {
       key: 'index',
-      name: 'Index',
+      name: 'Номер учащегося',
       type: 'text',
       required: true,
     },
     {
       key: 'yearOfEnrollment',
-      name: 'Year of enrollment',
+      name: 'Год зачисления',
       type: 'number',
       required: true,
       validators: [
         Validators.min(new Date().getFullYear() - 10),
         Validators.max(new Date().getFullYear()),
       ],
-      errorMessage: `Year of enrollment must be between ${
+      errorMessage: `Год зачисления должен быть от ${
         new Date().getFullYear() - 10
-      } and ${new Date().getFullYear()}`,
+      } до ${new Date().getFullYear()}`,
     },
     {
       key: 'studyProgram',
-      name: 'Study program',
+      name: 'Программа обучения',
       type: 'select',
       required: true,
       display: getStudyProgramDisplay,
     },
     {
       key: 'averageGrade',
-      name: 'Average grade',
+      name: 'Средний балл',
       type: 'skip',
       sortable: false,
     },
     {
       key: 'totalECTS',
-      name: 'Total ECTS',
+      name: 'Итого кредитов',
       type: 'skip',
       sortable: false,
     },

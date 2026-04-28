@@ -15,8 +15,7 @@ export class LeadsListComponent implements OnInit {
   filteredLeads: Lead[] = [];
   loading = true;
   filterStatus = '';
-
-  displayedColumns = ['fullName', 'phone', 'source', 'status', 'course', 'manager', 'createdAt', 'actions'];
+  search = '';
 
   statusLabels = LEAD_STATUS_LABELS;
   sourceLabels = LEAD_SOURCE_LABELS;
@@ -24,6 +23,15 @@ export class LeadsListComponent implements OnInit {
   statuses: { value: string; label: string }[] = [
     { value: '', label: 'Все статусы' },
     ...Object.entries(LEAD_STATUS_LABELS).map(([value, label]) => ({ value, label }))
+  ];
+
+  allStatuses: { value: LeadStatus; label: string; icon: string }[] = [
+    { value: 'NEW',       label: 'Новый',           icon: 'fiber_new' },
+    { value: 'CONTACTED', label: 'Контакт',          icon: 'phone' },
+    { value: 'QUALIFIED', label: 'Квалифицирован',   icon: 'verified' },
+    { value: 'PROPOSAL',  label: 'Предложение',      icon: 'description' },
+    { value: 'WON',       label: 'Стал клиентом',    icon: 'check_circle' },
+    { value: 'LOST',      label: 'Отказ',            icon: 'cancel' },
   ];
 
   constructor(
@@ -51,29 +59,68 @@ export class LeadsListComponent implements OnInit {
   }
 
   applyFilter(): void {
-    this.filteredLeads = this.filterStatus
-      ? this.leads.filter(l => l.status === this.filterStatus)
-      : [...this.leads];
+    let result = [...this.leads];
+    if (this.filterStatus) {
+      result = result.filter(l => l.status === this.filterStatus);
+    }
+    if (this.search) {
+      const q = this.search.toLowerCase();
+      result = result.filter(l =>
+        l.fullName.toLowerCase().includes(q) ||
+        (l.phone || '').includes(q) ||
+        (l.email || '').toLowerCase().includes(q)
+      );
+    }
+    this.filteredLeads = result;
   }
 
   openCreateDialog(): void {
-    const ref = this.dialog.open(LeadFormDialogComponent, { width: '520px' });
+    const ref = this.dialog.open(LeadFormDialogComponent, {
+      width: '540px',
+      data: null
+    });
     ref.afterClosed().subscribe(result => {
-      if (result) { this.loadLeads(); this.snack.open('Лид добавлен', 'OK', { duration: 3000 }); }
+      if (result) {
+        this.leads.unshift(result);
+        this.applyFilter();
+        this.snack.open('Лид добавлен', 'OK', { duration: 3000 });
+      }
+    });
+  }
+
+  editLead(lead: Lead): void {
+    const ref = this.dialog.open(LeadFormDialogComponent, {
+      width: '540px',
+      data: lead
+    });
+    ref.afterClosed().subscribe((result: Lead | null) => {
+      if (!result) return;
+      const idx = this.leads.findIndex(l => l.id === lead.id);
+      if (idx !== -1) this.leads[idx] = result;
+      this.applyFilter();
+      this.snack.open('Лид обновлён', 'OK', { duration: 3000 });
     });
   }
 
   updateStatus(lead: Lead, status: LeadStatus): void {
     this.api.updateLeadStatus(lead.id, status).subscribe({
-      next: () => { lead.status = status; this.snack.open('Статус обновлён', 'OK', { duration: 2000 }); },
+      next: (updated) => {
+        lead.status = updated.status || status;
+        this.applyFilter();
+        this.snack.open(`Статус: ${this.statusLabels[status]}`, 'OK', { duration: 2000 });
+      },
       error: () => this.snack.open('Ошибка обновления', 'OK', { duration: 2000 })
     });
   }
 
-  deleteLead(id: number): void {
-    if (!confirm('Удалить лид?')) return;
-    this.api.deleteLead(id).subscribe({
-      next: () => { this.leads = this.leads.filter(l => l.id !== id); this.applyFilter(); },
+  deleteLead(lead: Lead): void {
+    if (!confirm(`Удалить лид "${lead.fullName}"?`)) return;
+    this.api.deleteLead(lead.id).subscribe({
+      next: () => {
+        this.leads = this.leads.filter(l => l.id !== lead.id);
+        this.applyFilter();
+        this.snack.open('Лид удалён', 'OK', { duration: 2000 });
+      },
       error: () => this.snack.open('Ошибка удаления', 'OK', { duration: 2000 })
     });
   }
@@ -88,10 +135,12 @@ export class LeadsListComponent implements OnInit {
 
   private mockLeads(): Lead[] {
     return [
-      { id: 1, fullName: 'Арман Сейтказы', phone: '+7 701 123 4567', email: 'arman@mail.ru', status: 'NEW', source: 'WEBSITE', interestedCourseTitle: 'Python для начинающих', createdAt: '2024-04-25T10:00:00', updatedAt: '2024-04-25T10:00:00' },
-      { id: 2, fullName: 'Айгерим Нурланова', phone: '+7 702 234 5678', status: 'CONTACTED', source: 'SOCIAL', interestedCourseTitle: 'Веб-разработка', createdAt: '2024-04-24T14:30:00', updatedAt: '2024-04-25T09:00:00' },
-      { id: 3, fullName: 'Даниар Жаксыбеков', phone: '+7 705 345 6789', status: 'WON', source: 'REFERRAL', interestedCourseTitle: 'UI/UX Design', createdAt: '2024-04-20T11:00:00', updatedAt: '2024-04-23T16:00:00' },
-      { id: 4, fullName: 'Гульназ Ахметова', phone: '+7 707 456 7890', status: 'LOST', source: 'AD', createdAt: '2024-04-18T09:00:00', updatedAt: '2024-04-22T12:00:00' }
+      { id: 1, fullName: 'Арман Сейтказы',    phone: '+7 701 123 4567', email: 'arman@mail.ru',     status: 'NEW',       source: 'WEBSITE',   interestedCourseTitle: 'Python для начинающих', createdAt: '2024-04-25T10:00:00', updatedAt: '2024-04-25T10:00:00' },
+      { id: 2, fullName: 'Айгерим Нурланова',  phone: '+7 702 234 5678', email: 'aigul@gmail.com',   status: 'CONTACTED', source: 'SOCIAL',    interestedCourseTitle: 'Веб-разработка',         createdAt: '2024-04-24T14:30:00', updatedAt: '2024-04-25T09:00:00' },
+      { id: 3, fullName: 'Даниар Жаксыбеков',  phone: '+7 705 345 6789',                             status: 'QUALIFIED',  source: 'REFERRAL',  interestedCourseTitle: 'UI/UX Design',           createdAt: '2024-04-22T11:00:00', updatedAt: '2024-04-23T10:00:00' },
+      { id: 4, fullName: 'Сания Бейсова',       phone: '+7 708 456 7890',                             status: 'PROPOSAL',  source: 'AD',        interestedCourseTitle: 'Data Science',           createdAt: '2024-04-20T09:00:00', updatedAt: '2024-04-22T12:00:00' },
+      { id: 5, fullName: 'Гульназ Ахметова',    phone: '+7 707 567 8901',                             status: 'WON',       source: 'REFERRAL',  interestedCourseTitle: 'Python для начинающих', createdAt: '2024-04-18T09:00:00', updatedAt: '2024-04-22T12:00:00' },
+      { id: 6, fullName: 'Нурлан Сейткали',     phone: '+7 771 678 9012',                             status: 'LOST',      source: 'COLD_CALL',                                                  createdAt: '2024-04-15T08:00:00', updatedAt: '2024-04-16T12:00:00' }
     ];
   }
 }

@@ -26,6 +26,5 @@ public class FacultyDTO extends BaseDTO<Long> {
     @NotNull(message = "Dean is mandatory")
     private TeacherDTO dean;
 
-    @NotNull(message = "Address is mandatory")
     private AddressDTO address;
 }

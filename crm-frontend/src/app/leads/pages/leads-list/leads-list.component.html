@@ -11,12 +11,19 @@
 
   <!-- Filters -->
   <div class="filters-bar card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Поиск</mat-label>
+      <mat-icon matPrefix>search</mat-icon>
+      <input matInput [(ngModel)]="search" (ngModelChange)="applyFilter()" placeholder="Имя, телефон, email..." />
+    </mat-form-field>
+
     <mat-form-field appearance="outline" class="filter-select">
       <mat-label>Статус</mat-label>
       <mat-select [(ngModel)]="filterStatus" (ngModelChange)="applyFilter()">
         <mat-option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</mat-option>
       </mat-select>
     </mat-form-field>
+
     <span class="leads-count">{{ filteredLeads.length }} лидов</span>
   </div>
 
@@ -28,11 +35,11 @@
     <table class="data-table" *ngIf="filteredLeads.length; else emptyTpl">
       <thead>
         <tr>
-          <th>Имя</th>
+          <th>Клиент</th>
           <th>Телефон</th>
           <th>Источник</th>
           <th>Статус</th>
-          <th>Курс</th>
+          <th>Интерес к курсу</th>
           <th>Дата</th>
           <th></th>
         </tr>
@@ -43,7 +50,7 @@
             <div class="lead-name">{{ lead.fullName }}</div>
             <div class="lead-email" *ngIf="lead.email">{{ lead.email }}</div>
           </td>
-          <td>{{ lead.phone }}</td>
+          <td class="phone-cell">{{ lead.phone || '—' }}</td>
           <td>
             <span class="source-chip">{{ sourceLabels[lead.source] }}</span>
           </td>
@@ -53,23 +60,23 @@
             </span>
           </td>
           <td class="course-cell">{{ lead.interestedCourseTitle || '—' }}</td>
-          <td class="date-cell">{{ lead.createdAt | date:'dd.MM.yyyy' }}</td>
-          <td>
-            <button mat-icon-button [matMenuTriggerFor]="menu">
+          <td class="date-cell">{{ lead.createdAt | date:'dd.MM.yy' }}</td>
+          <td class="actions-cell">
+            <button mat-icon-button [matMenuTriggerFor]="menu" matTooltip="Действия">
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="updateStatus(lead, 'CONTACTED')">
-                <mat-icon>phone</mat-icon> Отметить: Контакт
-              </button>
-              <button mat-menu-item (click)="updateStatus(lead, 'WON')">
-                <mat-icon>check_circle</mat-icon> Стал клиентом
-              </button>
-              <button mat-menu-item (click)="updateStatus(lead, 'LOST')">
-                <mat-icon>cancel</mat-icon> Отказ
+              <button mat-menu-item (click)="editLead(lead)">
+                <mat-icon>edit</mat-icon> Редактировать
               </button>
               <mat-divider></mat-divider>
-              <button mat-menu-item class="delete-btn" (click)="deleteLead(lead.id)">
+              <button mat-menu-item *ngFor="let s of allStatuses"
+                      [disabled]="lead.status === s.value"
+                      (click)="updateStatus(lead, s.value)">
+                <mat-icon>{{ s.icon }}</mat-icon> {{ s.label }}
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item class="delete-item" (click)="deleteLead(lead)">
                 <mat-icon>delete</mat-icon> Удалить
               </button>
             </mat-menu>
@@ -81,8 +88,8 @@
     <ng-template #emptyTpl>
       <div class="empty-state">
         <div class="empty-icon">👥</div>
-        <h3>Лидов пока нет</h3>
-        <p>Добавьте первый лид, нажав «Добавить лид»</p>
+        <h3>Лидов не найдено</h3>
+        <p>Добавьте первый лид или измените фильтр</p>
       </div>
     </ng-template>
   </div>

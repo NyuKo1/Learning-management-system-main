@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Lead, LeadRequest } from '../models/lead.model';
 import { Client, ClientRequest } from '../models/client.model';
-import { Payment } from '../models/payment.model';
+import { Payment, PaymentRequest } from '../models/payment.model';
 import { CrmCourse } from '../models/course.model';
 
 @Injectable({ providedIn: 'root' })
@@ -55,7 +55,11 @@ export class CrmApiService {
   }
 
   getPaymentsByClient(clientId: number): Observable<Payment[]> {
-    return this.http.get<Payment[]>(`${this.base}/payments/client/${clientId}`);
+    return this.http.get<Payment[]>(`${this.base}/payments/user/${clientId}`);
+  }
+
+  createPayment(req: PaymentRequest): Observable<Payment> {
+    return this.http.post<Payment>(`${this.base}/payments`, req);
   }
 
   // ── COURSES ────────────────────────────────────────────
@@ -66,6 +70,18 @@ export class CrmApiService {
   // ── DASHBOARD STATS ────────────────────────────────────
   getDashboardStats(): Observable<DashboardStats> {
     return this.http.get<DashboardStats>(`${this.base}/dashboard/stats`);
+  }
+
+  getDashboardAnalytics(): Observable<AnalyticsData> {
+    return this.http.get<AnalyticsData>(`${this.base}/dashboard/analytics`);
+  }
+
+  // ── LMS STUDENT REGISTRATION ────────────────────────────
+  createLmsStudent(username: string, password: string): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>(
+      `${environment.apiUrl}/auth-service/users/register-student`,
+      { username, password }
+    );
   }
 }
 
@@ -78,4 +94,11 @@ export interface DashboardStats {
   revenueThisMonth: number;
   conversionRate: number;
   totalCourses: number;
+}
+
+export interface AnalyticsData {
+  monthly: { month: string; leads: number; revenue: number }[];
+  funnel: Record<string, number>;
+  methods: Record<string, number>;
+  topCourses: { title: string; sales: number; revenue: number }[];
 }

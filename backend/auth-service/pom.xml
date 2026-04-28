@@ -7,7 +7,7 @@
     <groupId>kz.sec.lms</groupId>
     <artifactId>auth-service</artifactId>
     <version>1.0</version>
-    <name>University of Toronto - Auth service</name>
+    <name>SEC LMS - Auth service</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -9,41 +9,41 @@ import { SidenavItem } from '@core/models/sidenav-item.model';
 export class TeacherServicesComponent implements OnInit {
   items: (SidenavItem | '-')[] = [
     {
-      text: 'My subjects',
+      text: 'Мои дисциплины',
       link: '/teacher-services/my-subjects',
     },
     {
-      text: 'Subject materials',
+      text: 'Материалы',
       link: '/teacher-services/subject-materials',
     },
     {
-      text: 'Subject notifications',
+      text: 'Объявления',
       link: '/teacher-services/subject-notifications',
     },
     {
-      text: 'Subject terms',
+      text: 'Занятия',
       link: '/teacher-services/subject-terms',
     },
     {
-      text: 'Subject enrollments',
+      text: 'Учащиеся в дисциплине',
       link: '/teacher-services/subject-enrollments',
     },
     '-',
     {
-      text: 'Exams',
+      text: 'Аттестации',
       link: '/teacher-services/exams',
     },
     {
-      text: 'Exam realizations',
+      text: 'Результаты',
       link: '/teacher-services/exam-realizations',
     },
     '-',
     {
-      text: 'Students',
+      text: 'Учащиеся',
       link: '/teacher-services/students',
     },
     {
-      text: 'Theses',
+      text: 'Итоговые проекты',
       link: '/teacher-services/theses',
     },
   ];

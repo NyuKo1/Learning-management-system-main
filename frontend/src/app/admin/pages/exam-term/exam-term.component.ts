@@ -19,8 +19,8 @@ export class ExamTermComponent
   extends BaseComponent<ExamTerm>
   implements OnInit
 {
-  title: string = 'Exam terms';
-  name: string = 'exam term';
+  title: string = 'Расписание аттестаций';
+  name: string = 'слот расписания';
   attributes: EntityAttribute[] = [
     {
       key: 'id',
@@ -29,28 +29,28 @@ export class ExamTermComponent
     },
     {
       key: 'startTime',
-      name: 'Start time',
+      name: 'Начало',
       type: 'datetime-local',
       required: true,
       display: formatDateTime,
     },
     {
       key: 'endTime',
-      name: 'End time',
+      name: 'Окончание',
       type: 'datetime-local',
       required: true,
       display: formatDateTime,
     },
     {
       key: 'exam',
-      name: 'Exam',
+      name: 'Аттестация',
       type: 'select',
       required: true,
       display: getExamDisplay,
     },
     {
       key: 'examPeriod',
-      name: 'Exam period',
+      name: 'Период аттестации',
       type: 'select',
       required: true,
       display: getExamPeriodDisplay,

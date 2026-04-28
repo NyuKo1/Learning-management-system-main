@@ -9,58 +9,58 @@ import { SidenavItem } from '@core/models/sidenav-item.model';
 export class AdminPanelComponent implements OnInit {
   items: (SidenavItem | '-')[] = [
     {
-      text: 'Faculties',
+      text: 'Направления',
       link: '/admin-panel/faculties',
     },
     {
-      text: 'Study programs',
+      text: 'Программы',
       link: '/admin-panel/study-programs',
     },
     {
-      text: 'Subjects',
+      text: 'Дисциплины',
       link: '/admin-panel/subjects',
     },
     {
-      text: 'Theses',
+      text: 'Итоговые проекты',
       link: '/admin-panel/theses',
     },
     '-',
     {
-      text: 'Students',
+      text: 'Учащиеся',
       link: '/admin-panel/students',
     },
     {
-      text: 'Teachers',
+      text: 'Преподаватели',
       link: '/admin-panel/teachers',
     },
     {
-      text: 'Administrators',
+      text: 'Администраторы',
       link: '/admin-panel/administrators',
     },
     '-',
     {
-      text: 'Exam periods',
+      text: 'Периоды аттестации',
       link: '/admin-panel/exam-periods',
     },
     {
-      text: 'Exam terms',
+      text: 'Расписание аттестаций',
       link: '/admin-panel/exam-terms',
     },
     {
-      text: 'Exam types',
+      text: 'Типы аттестаций',
       link: '/admin-panel/exam-types',
     },
     '-',
     {
-      text: 'Countries',
+      text: 'Страны',
       link: '/admin-panel/countries',
     },
     {
-      text: 'Cities',
+      text: 'Города',
       link: '/admin-panel/cities',
     },
     {
-      text: 'Addresses',
+      text: 'Адреса',
       link: '/admin-panel/addresses',
     },
   ];

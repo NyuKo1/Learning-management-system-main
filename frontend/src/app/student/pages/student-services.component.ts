@@ -9,38 +9,38 @@ import { SidenavItem } from '@core/models/sidenav-item.model';
 export class StudentServicesComponent implements OnInit {
   items: (SidenavItem | '-')[] = [
     {
-      text: '🛒 Course Marketplace',
+      text: '🛒 Каталог курсов',
       link: '/student-services/courses',
     },
     {
-      text: '📚 My Courses',
+      text: '📚 Мои курсы',
       link: '/student-services/my-courses',
     },
     '-',
     {
-      text: 'My subjects',
+      text: 'Мои дисциплины',
       link: '/student-services/my-subjects',
     },
     {
-      text: 'Subject enrollments',
+      text: 'Мои записи',
       link: '/student-services/subject-enrollments',
     },
     '-',
     {
-      text: 'Exam terms registration',
+      text: 'Запись на аттестацию',
       link: '/student-services/exam-terms-registration',
     },
     {
-      text: 'Exam realizations',
+      text: 'Результаты аттестаций',
       link: '/student-services/exam-realizations',
     },
     '-',
     {
-      text: 'My info',
+      text: 'Мой профиль',
       link: '/student-services/my-info',
     },
     {
-      text: 'My thesis',
+      text: 'Итоговый проект',
       link: '/student-services/my-thesis',
     },
   ];

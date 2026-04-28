@@ -41,7 +41,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `city` WRITE;
 /*!40000 ALTER TABLE `city` DISABLE KEYS */;
-INSERT INTO `city` (id, name, country_id) VALUES (1,'Toronto',1),(2,'Montreal',1),(3,'Vancouver',1),(4,'Ottawa',1),(5,'Calgary',1),(6,'Edmonton',1),(7,'Quebec City',1),(8,'Winnipeg',1),(9,'Hamilton',1),(10,'Kitchener',1);
+INSERT INTO `city` (id, name, country_id) VALUES (1,'Almaty',1),(2,'Astana',1),(3,'Shymkent',1),(4,'Karaganda',1),(5,'Aktobe',1),(6,'Taraz',1),(7,'Oskemen',1),(8,'Pavlodar',1),(9,'Semey',1),(10,'Atyrau',1);
 /*!40000 ALTER TABLE `city` ENABLE KEYS */;
 UNLOCK TABLES;
 

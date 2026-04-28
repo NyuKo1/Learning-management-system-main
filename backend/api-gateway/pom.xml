@@ -7,7 +7,7 @@
     <groupId>kz.sec.lms</groupId>
     <artifactId>api-gateway</artifactId>
     <version>1.0</version>
-    <name>University of Toronto - API gateway</name>
+    <name>SEC LMS - API gateway</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -1,0 +1,107 @@
+<div class="analytics-page">
+  <div class="page-header">
+    <div>
+      <h1>Аналитика</h1>
+      <p>Сводка показателей за последние 6 месяцев</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-center"><mat-spinner diameter="36"></mat-spinner></div>
+  <ng-container *ngIf="!loading">
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-icon blue"><mat-icon>payments</mat-icon></div>
+      <div class="kpi-body">
+        <div class="kpi-val">₸{{ (totalRevenue / 1000000).toFixed(2) }}M</div>
+        <div class="kpi-lbl">Выручка</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple"><mat-icon>person_add</mat-icon></div>
+      <div class="kpi-body">
+        <div class="kpi-val">{{ totalLeads }}</div>
+        <div class="kpi-lbl">Лидов</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green"><mat-icon>group</mat-icon></div>
+      <div class="kpi-body">
+        <div class="kpi-val">{{ totalClients }}</div>
+        <div class="kpi-lbl">Клиентов</div>
+      </div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon orange"><mat-icon>trending_up</mat-icon></div>
+      <div class="kpi-body">
+        <div class="kpi-val">{{ conversionRate }}%</div>
+        <div class="kpi-lbl">Конверсия</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <!-- Revenue bar chart -->
+    <div class="card chart-card">
+      <h2>Выручка по месяцам</h2>
+      <div class="bar-chart">
+        <div class="bar-col" *ngFor="let m of months">
+          <div class="bar-wrap">
+            <div class="bar-val">{{ formatRevenue(m.revenue) }}</div>
+            <div class="bar" [style.height]="barHeight(m.revenue)" style="background:#3b82f6"></div>
+          </div>
+          <div class="bar-lbl">{{ m.month }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead funnel -->
+    <div class="card chart-card">
+      <h2>Воронка продаж</h2>
+      <div class="funnel">
+        <div class="funnel-row" *ngFor="let f of funnel">
+          <div class="funnel-label">{{ f.label }}</div>
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" [style.width.%]="f.pct" [style.background]="f.color"></div>
+          </div>
+          <div class="funnel-count">{{ f.count }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-row">
+    <!-- Payment methods -->
+    <div class="card chart-card">
+      <h2>Способы оплаты</h2>
+      <div class="methods">
+        <div class="method-row" *ngFor="let m of paymentMethods">
+          <div class="method-info">
+            <span>{{ m.label }}</span>
+            <span class="method-pct">{{ m.pct }}%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="m.pct" [style.background]="m.color"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top courses -->
+    <div class="card chart-card">
+      <h2>Топ курсов по продажам</h2>
+      <div class="courses-table">
+        <div class="ct-row ct-header">
+          <span>Курс</span><span>Продаж</span><span>Выручка</span>
+        </div>
+        <div class="ct-row" *ngFor="let c of topCourses; let i = index">
+          <span class="ct-title"><span class="ct-rank">{{ i + 1 }}</span>{{ c.title }}</span>
+          <span class="ct-num">{{ c.sales }}</span>
+          <span class="ct-rev">₸{{ (c.revenue / 1000).toFixed(0) }}K</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+</div>

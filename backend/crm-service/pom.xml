@@ -6,7 +6,7 @@
     <groupId>kz.sec.lms</groupId>
     <artifactId>crm-service</artifactId>
     <version>1.0</version>
-    <name>University of Toronto - CRM service</name>
+    <name>SEC LMS - CRM service</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -68,6 +68,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.29</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.12</version>
         </dependency>
     </dependencies>
 

@@ -123,7 +123,7 @@ export class DialogFormComponent<T extends Base> implements OnInit {
     this.attributes
       .filter((attribute) => attribute.type === 'select')
       .forEach((attribute) => {
-        value[attribute.key] = value[attribute.key].data;
+        value[attribute.key] = value[attribute.key]?.data ?? null;
       });
 
     this.ids && (value.ids = this.ids);

@@ -4,16 +4,16 @@
   <div class="catalog-header">
     <div class="header-inner">
       <h1 class="catalog-title">
-        <mat-icon class="title-icon">store</mat-icon>
-        Course Catalog
+        <mat-icon class="title-icon">school</mat-icon>
+        Каталог курсов
       </h1>
       <p class="catalog-subtitle">
-        Explore expert-led courses — browse freely, purchase anytime to unlock full access
+        Обучайтесь у лучших экспертов — просматривайте курсы бесплатно, купите доступ чтобы начать
       </p>
       <div class="header-cta" *ngIf="!loading">
-        <span class="cta-badge">{{ filteredCourses.length }} courses available</span>
+        <span class="cta-badge">{{ filteredCourses.length }} курсов доступно</span>
         <a mat-stroked-button routerLink="/auth/login" *ngIf="!(authService.loggedIn())">
-          <mat-icon>login</mat-icon> Sign in to purchase
+          <mat-icon>login</mat-icon> Войти для покупки
         </a>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <input
         class="s-input"
         type="text"
-        placeholder="Search courses, instructors, topics…"
+        placeholder="Поиск по курсам, инструкторам, темам…"
         [(ngModel)]="searchQuery"
       />
       <button *ngIf="searchQuery" mat-icon-button class="s-clear" (click)="searchQuery = ''">
@@ -36,7 +36,7 @@
   <!-- Filters -->
   <div class="filters-bar">
     <div class="filter-group">
-      <span class="filter-label">Category</span>
+      <span class="filter-label">Категория</span>
       <div class="chips">
         <button *ngFor="let cat of categories" class="chip"
           [class.active]="selectedCategory === cat" (click)="selectedCategory = cat">
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="filter-group">
-      <span class="filter-label">Level</span>
+      <span class="filter-label">Уровень</span>
       <div class="chips">
         <button *ngFor="let lvl of levels" class="chip"
           [class.active]="selectedLevel === lvl" (click)="selectedLevel = lvl">
@@ -58,17 +58,17 @@
   <!-- Loading -->
   <div *ngIf="loading" class="loading-state">
     <mat-spinner diameter="48"></mat-spinner>
-    <p>Loading courses…</p>
+    <p>Загружаем курсы…</p>
   </div>
 
   <!-- Error -->
-  <div *ngIf="error" class="error-state">
+  <div *ngIf="error && !loading" class="error-state">
     <mat-icon>error_outline</mat-icon>
-    <p>Unable to load courses. Please try again later.</p>
+    <p>Не удалось загрузить курсы. Попробуйте позже.</p>
   </div>
 
   <!-- Grid -->
-  <div class="courses-grid" *ngIf="!loading && !error && filteredCourses.length > 0">
+  <div class="courses-grid" *ngIf="!loading && filteredCourses.length > 0">
     <div *ngFor="let course of filteredCourses" class="course-card">
       <div class="card-accent" [style.background-color]="course.color"></div>
       <div class="card-body">
@@ -99,7 +99,7 @@
 
         <div class="stats-row">
           <div class="stat"><mat-icon>schedule</mat-icon><span>{{ course.duration }}</span></div>
-          <div class="stat"><mat-icon>play_circle</mat-icon><span>{{ course.lessons }} lessons</span></div>
+          <div class="stat"><mat-icon>play_circle</mat-icon><span>{{ course.lessons }} уроков</span></div>
           <div class="stat"><mat-icon>group</mat-icon><span>{{ formatStudents(course.studentsCount) }}</span></div>
         </div>
 
@@ -121,7 +121,7 @@
           </div>
           <button class="buy-btn" (click)="buyCourse(course, $event)">
             <mat-icon>shopping_cart</mat-icon>
-            Buy Access
+            Купить доступ
           </button>
         </div>
       </div>
@@ -131,9 +131,9 @@
   <!-- Empty -->
   <div *ngIf="!loading && !error && filteredCourses.length === 0" class="empty-state">
     <mat-icon>search_off</mat-icon>
-    <h3>No courses found</h3>
-    <p>Try adjusting your search or filters</p>
-    <button mat-stroked-button (click)="reset()">Reset filters</button>
+    <h3>Курсы не найдены</h3>
+    <p>Попробуйте изменить поисковый запрос или фильтры</p>
+    <button mat-stroked-button (click)="reset()">Сбросить фильтры</button>
   </div>
 
 </div>

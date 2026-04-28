@@ -27,4 +27,9 @@ public class CourseController extends BaseController<Course, CourseDTO, Long> {
     public ResponseEntity<List<CourseDTO>> getAvailable() {
         return new ResponseEntity<>(service.findAvailable(), HttpStatus.OK);
     }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getCategories() {
+        return new ResponseEntity<>(service.findCategories(), HttpStatus.OK);
+    }
 }

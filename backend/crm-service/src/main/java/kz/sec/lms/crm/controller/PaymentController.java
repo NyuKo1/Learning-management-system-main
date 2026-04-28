@@ -21,6 +21,11 @@ public class PaymentController extends BaseController<Payment, PaymentDTO, Long>
         this.service = service;
     }
 
+    @GetMapping
+    public ResponseEntity<List<PaymentDTO>> getAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PaymentDTO>> getByUserId(@PathVariable String userId) {
         return new ResponseEntity<>(service.findByUserId(userId), HttpStatus.OK);
