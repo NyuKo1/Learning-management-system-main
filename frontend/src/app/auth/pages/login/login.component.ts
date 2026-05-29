@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
+import { SsoService } from '@core/services/sso.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,10 @@ export class LoginComponent implements OnInit {
     password: new FormControl(null, Validators.required),
   });
 
-  constructor(public authService: AuthService) {}
+  constructor(
+    public authService: AuthService,
+    private ssoService: SsoService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -23,7 +27,9 @@ export class LoginComponent implements OnInit {
     }
 
     this.authService.login(this.form.value).subscribe({
-      next: () => {},
+      next: () => {
+        this.ssoService.checkPendingSso();
+      },
       error: () => {
         window.alert('Wrong username or password! Please try again!');
       },

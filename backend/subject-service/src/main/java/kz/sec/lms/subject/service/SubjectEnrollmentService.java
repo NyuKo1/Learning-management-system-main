@@ -4,6 +4,7 @@ import ca.utoronto.lms.shared.exception.ForbiddenException;
 import ca.utoronto.lms.shared.exception.NotFoundException;
 import ca.utoronto.lms.shared.service.ExtendedService;
 import kz.sec.lms.subject.client.FacultyFeignClient;
+import kz.sec.lms.subject.client.NotifyFeignClient;
 import kz.sec.lms.subject.dto.SubjectDTO;
 import kz.sec.lms.subject.dto.SubjectEnrollmentDTO;
 import kz.sec.lms.subject.mapper.SubjectEnrollmentMapper;
@@ -11,6 +12,7 @@ import kz.sec.lms.subject.model.Subject;
 import kz.sec.lms.subject.model.SubjectEnrollment;
 import kz.sec.lms.subject.repository.SubjectEnrollmentRepository;
 import kz.sec.lms.subject.util.Utility;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +20,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static ca.utoronto.lms.shared.security.SecurityUtils.*;
 
+@Slf4j
 @Service
 public class SubjectEnrollmentService
         extends ExtendedService<SubjectEnrollment, SubjectEnrollmentDTO, Long> {
@@ -30,17 +35,20 @@ public class SubjectEnrollmentService
     private final SubjectEnrollmentMapper mapper;
     private final SubjectService subjectService;
     private final FacultyFeignClient facultyFeignClient;
+    private final NotifyFeignClient notifyFeignClient;
 
     public SubjectEnrollmentService(
             SubjectEnrollmentRepository repository,
             SubjectEnrollmentMapper mapper,
             SubjectService subjectService,
-            FacultyFeignClient facultyFeignClient) {
+            FacultyFeignClient facultyFeignClient,
+            NotifyFeignClient notifyFeignClient) {
         super(repository, mapper);
         this.repository = repository;
         this.mapper = mapper;
         this.subjectService = subjectService;
         this.facultyFeignClient = facultyFeignClient;
+        this.notifyFeignClient = notifyFeignClient;
     }
 
     @Override
@@ -286,6 +294,33 @@ public class SubjectEnrollmentService
         subjectEnrollment.setExtraPoints(subjectEnrollmentDTO.getExtraPoints());
         subjectEnrollment.setGrade(subjectEnrollmentDTO.getGrade());
 
-        return mapper.toDTO(repository.save(subjectEnrollment));
+        SubjectEnrollment saved = repository.save(subjectEnrollment);
+
+        sendGradeNotification(saved);
+
+        return mapper.toDTO(saved);
+    }
+
+    private void sendGradeNotification(SubjectEnrollment enrollment) {
+        if (enrollment.getGrade() == null) return;
+        try {
+            String subjectName = enrollment.getSubject() != null
+                    ? enrollment.getSubject().getName()
+                    : "";
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("userId", enrollment.getStudentId());
+            payload.put("type", "GRADE");
+            payload.put("title", "Новая оценка");
+            payload.put(
+                    "message",
+                    "По предмету "
+                            + subjectName
+                            + " выставлена оценка: "
+                            + enrollment.getGrade());
+            payload.put("subjectName", subjectName);
+            notifyFeignClient.sendNotification(payload);
+        } catch (Exception e) {
+            log.warn("Failed to send grade notification: {}", e.getMessage());
+        }
     }
 }

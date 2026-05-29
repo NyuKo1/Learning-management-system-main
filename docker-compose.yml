@@ -1,7 +1,7 @@
 services:
   database-auth-dev:
     image: mysql:8.0.30-debian
-    ports: 
+    ports:
       - 3307:3306
     volumes:
       - auth-data-dev:/var/lib/mysql
@@ -11,7 +11,7 @@ services:
 
   database-faculty-dev:
     image: mysql:8.0.30-debian
-    ports: 
+    ports:
       - 3308:3306
     volumes:
       - faculty-data-dev:/var/lib/mysql
@@ -21,7 +21,7 @@ services:
 
   database-subject-dev:
     image: mysql:8.0.30-debian
-    ports: 
+    ports:
       - 3309:3306
     volumes:
       - subject-data-dev:/var/lib/mysql
@@ -49,9 +49,28 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-crm
 
+  database-notify-dev:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3312:3306
+    volumes:
+      - notify-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-notify
+
+  redis-dev:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data-dev:/data
+
 volumes:
   auth-data-dev:
   faculty-data-dev:
   subject-data-dev:
   exam-data-dev:
   crm-data-dev:
+  notify-data-dev:
+  redis-data-dev:

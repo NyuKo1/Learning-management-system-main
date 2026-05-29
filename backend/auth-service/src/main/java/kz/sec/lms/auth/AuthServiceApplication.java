@@ -2,14 +2,17 @@ package kz.sec.lms.auth;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import kz.sec.lms.auth.sso.SsoProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableEurekaClient
+@EnableConfigurationProperties(SsoProperties.class)
 @EnableFeignClients({"kz.sec.lms.auth", "ca.utoronto.lms.shared"})
 @ComponentScan({"kz.sec.lms.auth", "ca.utoronto.lms.shared"})
 @OpenAPIDefinition(

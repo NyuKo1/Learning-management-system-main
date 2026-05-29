@@ -90,6 +90,36 @@ services:
       MYSQL_DATABASE: lms-crm
     restart: on-failure
 
+  database-notify:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3312:3306
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
+      interval: 20s
+      retries: 8
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - notify-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-notify
+    restart: on-failure
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - redis-data:/data
+    restart: on-failure
+
   # ── Spring Cloud Infrastructure ───────────────────────────────────────
   backend-config-server:
     build:
@@ -157,8 +187,14 @@ services:
         condition: service_healthy
       database-auth:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_EXPIRATION: ${JWT_ACCESS_EXPIRATION:-7200}
+      JWT_REFRESH_EXPIRATION: ${JWT_REFRESH_EXPIRATION:-86400}
+      SSO_ALLOWED_ORIGINS: ${SSO_ALLOWED_ORIGINS}
     restart: on-failure
 
   backend-faculty-service:
@@ -223,6 +259,24 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     restart: on-failure
 
+  backend-notify-service:
+    build:
+      context: ./backend/notify-service
+      dockerfile: Dockerfile
+    ports:
+      - 8086:8086
+    depends_on:
+      backend-discovery-server:
+        condition: service_healthy
+      database-notify:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
+      JWT_SECRET: ${JWT_SECRET}
+    restart: on-failure
+
   # ── Frontends ─────────────────────────────────────────────────────────
   frontend-landing:
     build:
@@ -260,3 +314,5 @@ volumes:
   subject-data:
   exam-data:
   crm-data:
+  notify-data:
+  redis-data:

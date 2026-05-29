@@ -1,9 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://database-auth:3306/lms-auth?createDatabaseIfNotExist=true
-  redis:
-    host: redis
-    port: 6379
+    url: jdbc:mysql://database-notify:3306/lms-notify?createDatabaseIfNotExist=true
 
 eureka:
   instance:

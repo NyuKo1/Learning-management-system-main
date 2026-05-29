@@ -1,0 +1,3 @@
+spring:
+  config:
+    import: optional:configserver:http://backend-config-server:8888

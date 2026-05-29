@@ -1,0 +1,62 @@
+/* SEC LMS — компонентные стили, не затрагивающие Material */
+
+.sec-feature-card {
+  background: var(--sec-surface);
+  border: 1px solid var(--sec-border);
+  border-radius: var(--sec-radius);
+  padding: 1.5rem;
+  box-shadow: var(--sec-shadow);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.sec-feature-card:hover {
+  box-shadow: var(--sec-shadow-md);
+  transform: translateY(-2px);
+}
+
+.sec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.sec-badge-success { background: rgba(16, 185, 129, 0.12); color: #059669; }
+.sec-badge-warning { background: rgba(245, 158, 11, 0.12); color: #d97706; }
+.sec-badge-error { background: rgba(239, 68, 68, 0.12); color: #dc2626; }
+.sec-badge-info { background: rgba(79, 70, 229, 0.12); color: #4f46e5; }
+
+.sec-login-card {
+  background: var(--sec-surface);
+  border: 1px solid var(--sec-border);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: var(--sec-shadow-md);
+  max-width: 420px;
+  width: 100%;
+}
+
+.sec-telegram-block {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), rgba(6, 182, 212, 0.04));
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+html.dark .sec-telegram-block {
+  background: rgba(79, 70, 229, 0.1);
+  border-color: rgba(129, 140, 248, 0.3);
+}
+
+.sec-course-accent { background: var(--sec-primary); }
+
+.sec-nav-brand {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: inherit;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
