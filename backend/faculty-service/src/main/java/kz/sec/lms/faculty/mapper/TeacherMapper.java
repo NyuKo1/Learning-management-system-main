@@ -2,8 +2,8 @@ package kz.sec.lms.faculty.mapper;
 
 import kz.sec.lms.faculty.dto.TeacherDTO;
 import kz.sec.lms.faculty.model.Teacher;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

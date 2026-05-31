@@ -1,7 +1,7 @@
 package kz.sec.lms.auth.security;
 
-import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
-import ca.utoronto.lms.shared.security.TokenUtils;
+import kz.sec.lms.shared.security.AuthenticationTokenFilter;
+import kz.sec.lms.shared.security.TokenUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;

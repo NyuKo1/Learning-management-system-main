@@ -22,28 +22,31 @@ export class SsoService {
     const token = this.authService.accessToken;
     const url = `${this.ssoUrl}/authorize?client_id=${encodeURIComponent(
       clientId
-    )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+    )}&redirect_uri=${encodeURIComponent(redirectUri)}&response_mode=json`;
 
-    fetch(url, {
-      headers: { Authorization: `Bearer ${token}` },
-      redirect: 'manual',
-    })
-      .then((response) => {
-        if (response.type === 'opaqueredirect' || response.status === 302) {
-          const location = response.headers.get('Location');
-          if (location) {
-            window.location.href = location;
-          }
-        } else if (response.status === 401) {
-          sessionStorage.setItem(
-            'sso_pending',
-            JSON.stringify({ clientId, redirectUri })
-          );
-          window.location.href = '/auth/login';
-        }
+    this.http
+      .get<{ redirectUri: string; code: string }>(url, {
+        headers: { Authorization: `Bearer ${token}` },
       })
-      .catch(() => {
-        window.alert('SSO request failed. Please try again.');
+      .subscribe({
+        next: (data) => {
+          if (data?.redirectUri) {
+            window.location.href = data.redirectUri;
+          } else {
+            console.error('SSO: no redirectUri in response', data);
+          }
+        },
+        error: (err) => {
+          if (err.status === 401) {
+            sessionStorage.setItem(
+              'sso_pending',
+              JSON.stringify({ clientId, redirectUri })
+            );
+            window.location.href = '/auth/login';
+          } else {
+            window.alert('SSO request failed. Please try again.');
+          }
+        },
       });
   }
 

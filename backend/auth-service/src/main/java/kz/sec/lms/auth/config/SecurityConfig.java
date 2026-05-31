@@ -1,6 +1,7 @@
 package kz.sec.lms.auth.config;
 
 import kz.sec.lms.auth.security.AuthTokenFilter;
+import kz.sec.lms.auth.sso.SsoProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,13 +18,23 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final SsoProperties ssoProperties;
+
+    public SecurityConfig(SsoProperties ssoProperties) {
+        this.ssoProperties = ssoProperties;
+    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
             throws Exception {
@@ -38,7 +49,23 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
+
+        // Build allowed origins from SsoProperties (comma-separated string)
+        // plus localhost dev origins. Falls back to permissive patterns if
+        // nothing is configured (legacy behaviour).
+        Set<String> origins = new LinkedHashSet<>();
+        String configured = ssoProperties.getAllowedOrigins();
+        if (configured != null && !configured.isBlank()) {
+            Arrays.stream(configured.split(","))
+                    .map(String::trim)
+                    .filter(s -> !s.isEmpty())
+                    .forEach(origins::add);
+        }
+        origins.add("http://localhost:4200");
+        origins.add("http://localhost:4201");
+        origins.add("http://localhost:3000");
+
+        config.setAllowedOrigins(new ArrayList<>(origins));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

@@ -4,7 +4,7 @@ import kz.sec.lms.faculty.dto.AddressDTO;
 import kz.sec.lms.faculty.mapper.AddressMapper;
 import kz.sec.lms.faculty.model.Address;
 import kz.sec.lms.faculty.repository.AddressRepository;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 
 @Service

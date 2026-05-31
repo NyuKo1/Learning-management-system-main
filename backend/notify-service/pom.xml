@@ -24,9 +24,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.bojanzdelar</groupId>
-            <artifactId>learning-management-system-shared-library</artifactId>
-            <version>1.1.2</version>
+            <groupId>kz.sec.lms</groupId>
+            <artifactId>shared-library</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
         <dependency>
@@ -115,10 +115,6 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

@@ -2,8 +2,8 @@ package kz.sec.lms.auth;
 
 import kz.sec.lms.auth.service.RoleService;
 import kz.sec.lms.auth.service.UserService;
-import ca.utoronto.lms.shared.dto.RoleDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.dto.RoleDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Component
 @RequiredArgsConstructor

@@ -1,6 +1,6 @@
 package kz.sec.lms.subject.controller;
 
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import kz.sec.lms.subject.dto.SubjectDTO;
 import kz.sec.lms.subject.model.Subject;
 import kz.sec.lms.subject.service.SubjectService;
@@ -18,6 +18,11 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
     public SubjectController(SubjectService service) {
         super(service);
         this.service = service;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
+        return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/study-program/{id}/all")

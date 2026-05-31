@@ -1,7 +1,7 @@
 package kz.sec.lms.faculty.dto;
 
-import ca.utoronto.lms.shared.dto.BaseDTO;
-import ca.utoronto.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.BaseDTO;
+import kz.sec.lms.shared.dto.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

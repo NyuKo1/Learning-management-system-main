@@ -75,7 +75,11 @@ export class AuthService {
   }
 
   loggedIn(): boolean {
-    return this.user;
+    return !!this.user && !!this.accessToken;
+  }
+
+  getRoles(): string[] {
+    return this.user?.roles ?? [];
   }
 
   login(user: User): Observable<Tokens> {

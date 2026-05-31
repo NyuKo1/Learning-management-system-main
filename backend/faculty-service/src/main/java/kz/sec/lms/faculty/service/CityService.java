@@ -4,7 +4,7 @@ import kz.sec.lms.faculty.dto.CityDTO;
 import kz.sec.lms.faculty.mapper.CityMapper;
 import kz.sec.lms.faculty.model.City;
 import kz.sec.lms.faculty.repository.CityRepository;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 
 @Service

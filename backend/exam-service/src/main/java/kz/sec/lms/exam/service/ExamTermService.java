@@ -9,8 +9,8 @@ import kz.sec.lms.exam.model.ExamRealization;
 import kz.sec.lms.exam.model.ExamTerm;
 import kz.sec.lms.exam.repository.ExamRealizationRepository;
 import kz.sec.lms.exam.repository.ExamTermRepository;
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamTermService extends ExtendedService<ExamTerm, ExamTermDTO, Long> {

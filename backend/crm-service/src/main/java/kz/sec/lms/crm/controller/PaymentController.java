@@ -30,9 +30,24 @@ public class PaymentController {
         return new ResponseEntity<>(service.save(dto), HttpStatus.CREATED);
     }
 
+    /**
+     * Smart routing: tries to parse userId as Long (clientId lookup),
+     * falls back to string userId (username/email) lookup if not numeric
+     * or if numeric lookup returns no results.
+     */
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PaymentDTO>> getByUserId(@PathVariable String userId) {
-        return new ResponseEntity<>(service.findByUserId(userId), HttpStatus.OK);
+        List<PaymentDTO> payments;
+        try {
+            Long clientId = Long.parseLong(userId);
+            payments = service.findByClientId(clientId);
+            if (payments.isEmpty()) {
+                payments = service.findByUserId(userId);
+            }
+        } catch (NumberFormatException e) {
+            payments = service.findByUserId(userId);
+        }
+        return new ResponseEntity<>(payments, HttpStatus.OK);
     }
 
     @GetMapping("/check")

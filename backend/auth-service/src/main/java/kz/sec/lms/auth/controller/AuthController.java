@@ -2,7 +2,7 @@ package kz.sec.lms.auth.controller;
 
 import kz.sec.lms.auth.dto.TokensDTO;
 import kz.sec.lms.auth.service.UserService;
-import ca.utoronto.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

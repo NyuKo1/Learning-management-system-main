@@ -44,7 +44,8 @@ export class ClientsListComponent implements OnInit {
   }
 
   goToLms(lmsUserId: number): void {
-    window.open(`${this.lmsUrl}/admin/students/${lmsUserId}`, '_blank');
+    // LMS admin student page reads ?userId=... and pre-filters
+    window.open(`${this.lmsUrl}/admin-panel/students?userId=${lmsUserId}`, '_blank');
   }
 
   openCreateLmsDialog(client: Client): void {
@@ -55,14 +56,26 @@ export class ClientsListComponent implements OnInit {
     });
     ref.afterClosed().subscribe(result => {
       if (!result?.success) return;
-      const target = this.clients.find(c => c.id === client.id);
-      if (target) {
-        target.hasLmsAccount = true;
-        target.lmsUserId = result.lmsUserId;
-      }
-      this.applySearch();
-      this.snack.open(`Аккаунт создан: ${result.username}`, 'OK', { duration: 4000 });
+
+      this.api.linkClientToLms(client.id, result.lmsUserId).subscribe({
+        next: (updated) => {
+          const idx = this.clients.findIndex(c => c.id === client.id);
+          if (idx !== -1) {
+            this.clients[idx] = updated;
+          }
+          this.applySearch();
+          this.snack.open(`LMS account created: ${result.username}`, 'OK', { duration: 4000 });
+        },
+        error: () => {
+          const target = this.clients.find(c => c.id === client.id);
+          if (target) {
+            target.hasLmsAccount = true;
+            target.lmsUserId = result.lmsUserId;
+          }
+          this.applySearch();
+          this.snack.open(`Account created (sync warning — reload to confirm)`, 'OK', { duration: 5000 });
+        }
+      });
     });
   }
-
 }

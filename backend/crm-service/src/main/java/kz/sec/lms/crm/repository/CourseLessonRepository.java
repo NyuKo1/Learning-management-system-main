@@ -1,7 +1,7 @@
 package kz.sec.lms.crm.repository;
 
 import kz.sec.lms.crm.model.CourseLesson;
-import ca.utoronto.lms.shared.repository.BaseRepository;
+import kz.sec.lms.shared.repository.BaseRepository;
 
 import java.util.List;
 

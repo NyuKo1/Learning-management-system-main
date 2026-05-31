@@ -6,8 +6,8 @@ import kz.sec.lms.faculty.model.Student;
 import kz.sec.lms.faculty.model.Thesis;
 import kz.sec.lms.faculty.repository.StudentRepository;
 import kz.sec.lms.faculty.repository.ThesisRepository;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

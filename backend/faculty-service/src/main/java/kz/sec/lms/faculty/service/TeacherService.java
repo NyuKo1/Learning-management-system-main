@@ -5,11 +5,11 @@ import kz.sec.lms.faculty.dto.TeacherDTO;
 import kz.sec.lms.faculty.mapper.TeacherMapper;
 import kz.sec.lms.faculty.model.Teacher;
 import kz.sec.lms.faculty.repository.TeacherRepository;
-import ca.utoronto.lms.shared.dto.RoleDTO;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.dto.RoleDTO;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_TEACHER;
-import static ca.utoronto.lms.shared.security.SecurityUtils.ROLE_TEACHER_ID;
+import static kz.sec.lms.shared.security.SecurityUtils.ROLE_TEACHER;
+import static kz.sec.lms.shared.security.SecurityUtils.ROLE_TEACHER_ID;
 
 @Service
 public class TeacherService extends ExtendedService<Teacher, TeacherDTO, Long> {

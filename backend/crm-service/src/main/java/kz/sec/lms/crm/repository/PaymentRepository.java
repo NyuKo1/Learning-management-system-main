@@ -1,7 +1,7 @@
 package kz.sec.lms.crm.repository;
 
 import kz.sec.lms.crm.model.Payment;
-import ca.utoronto.lms.shared.repository.BaseRepository;
+import kz.sec.lms.shared.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -11,6 +11,8 @@ public interface PaymentRepository extends BaseRepository<Payment, Long> {
     List<Payment> findByDeletedFalseOrderByCreatedAtDesc();
 
     List<Payment> findByUserIdAndDeletedFalseOrderByCreatedAtDesc(String userId);
+
+    List<Payment> findByClientIdAndDeletedFalseOrderByCreatedAtDesc(Long clientId);
 
     boolean existsByCourseIdAndUserIdAndDeletedFalse(Long courseId, String userId);
 

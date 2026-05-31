@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { EntityAttribute } from '@core/models/entity-attribute.model';
 import { Student } from '@core/models/student.model';
@@ -51,14 +52,27 @@ export class StudentComponent
     public override dialog: MatDialog,
     public override service: StudentService,
     public override userService: UserService,
-    public studyProgramService: StudyProgramService
+    public studyProgramService: StudyProgramService,
+    private activatedRoute: ActivatedRoute
   ) {
     super(userService);
   }
 
   ngOnInit(): void {
+    const userId = this.activatedRoute.snapshot.queryParams['userId'];
+
     this.getPage(this.tableData);
     this.getOptions('studyProgram', this.studyProgramService);
+
+    if (userId) {
+      setTimeout(() => {
+        const searchTableData: any = {
+          request: { search: String(userId), page: 0, size: 20 },
+          select: undefined,
+        };
+        this.getPage(searchTableData);
+      }, 500);
+    }
   }
 
   override process(value: any): void {

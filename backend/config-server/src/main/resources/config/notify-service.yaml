@@ -33,7 +33,7 @@ token:
 telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:}
-    username: ${TELEGRAM_BOT_USERNAME:}
+    username: ${TELEGRAM_BOT_USERNAME:sec_lms_bot}
 
 management:
   endpoints:

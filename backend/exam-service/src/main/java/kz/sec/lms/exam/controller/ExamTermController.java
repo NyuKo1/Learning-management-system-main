@@ -3,7 +3,7 @@ package kz.sec.lms.exam.controller;
 import kz.sec.lms.exam.dto.ExamTermDTO;
 import kz.sec.lms.exam.model.ExamTerm;
 import kz.sec.lms.exam.service.ExamTermService;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

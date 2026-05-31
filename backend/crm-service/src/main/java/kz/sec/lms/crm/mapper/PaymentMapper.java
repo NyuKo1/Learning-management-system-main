@@ -2,7 +2,7 @@ package kz.sec.lms.crm.mapper;
 
 import kz.sec.lms.crm.dto.PaymentDTO;
 import kz.sec.lms.crm.model.Payment;
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,6 +1,6 @@
 package kz.sec.lms.auth.model;
 
-import ca.utoronto.lms.shared.model.BaseEntity;
+import kz.sec.lms.shared.model.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

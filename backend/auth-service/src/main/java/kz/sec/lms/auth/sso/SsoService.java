@@ -1,6 +1,6 @@
 package kz.sec.lms.auth.sso;
 
-import ca.utoronto.lms.shared.exception.BadRequestException;
+import kz.sec.lms.shared.exception.BadRequestException;
 import kz.sec.lms.auth.dto.TokensDTO;
 import kz.sec.lms.auth.security.TokenGenerator;
 import lombok.RequiredArgsConstructor;

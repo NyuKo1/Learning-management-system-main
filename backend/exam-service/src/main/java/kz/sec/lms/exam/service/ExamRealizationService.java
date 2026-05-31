@@ -11,10 +11,10 @@ import kz.sec.lms.exam.model.ExamRealization;
 import kz.sec.lms.exam.model.ExamTerm;
 import kz.sec.lms.exam.repository.ExamRealizationRepository;
 import kz.sec.lms.exam.repository.ExamTermRepository;
-import ca.utoronto.lms.shared.exception.BadRequestException;
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.exception.BadRequestException;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamRealizationService

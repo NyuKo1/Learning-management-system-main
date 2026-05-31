@@ -7,8 +7,20 @@ export class AuthGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.auth.isLoggedInSnapshot()) return true;
-    this.router.navigate(['/auth/login']);
-    return false;
+    const token = this.auth.getToken();
+    if (!token || this.isExpired(token)) {
+      this.auth.logout();
+      return false;
+    }
+    return true;
+  }
+
+  private isExpired(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp < Math.floor(Date.now() / 1000);
+    } catch {
+      return true;
+    }
   }
 }

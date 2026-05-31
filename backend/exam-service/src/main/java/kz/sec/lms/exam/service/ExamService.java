@@ -6,8 +6,8 @@ import kz.sec.lms.exam.dto.SubjectDTO;
 import kz.sec.lms.exam.mapper.ExamMapper;
 import kz.sec.lms.exam.model.Exam;
 import kz.sec.lms.exam.repository.ExamRepository;
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class ExamService extends ExtendedService<Exam, ExamDTO, Long> {

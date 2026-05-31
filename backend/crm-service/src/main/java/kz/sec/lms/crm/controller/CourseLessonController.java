@@ -3,7 +3,7 @@ package kz.sec.lms.crm.controller;
 import kz.sec.lms.crm.dto.CourseLessonDTO;
 import kz.sec.lms.crm.model.CourseLesson;
 import kz.sec.lms.crm.service.CourseLessonService;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

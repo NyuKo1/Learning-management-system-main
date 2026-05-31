@@ -1,7 +1,7 @@
 package kz.sec.lms.faculty.client;
 
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 

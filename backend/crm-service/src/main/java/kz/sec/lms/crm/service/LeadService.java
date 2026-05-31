@@ -4,7 +4,7 @@ import kz.sec.lms.crm.dto.LeadDTO;
 import kz.sec.lms.crm.mapper.LeadMapper;
 import kz.sec.lms.crm.model.Lead;
 import kz.sec.lms.crm.repository.LeadRepository;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

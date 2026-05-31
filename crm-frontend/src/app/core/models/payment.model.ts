@@ -22,7 +22,7 @@ export interface PaymentRequest {
   courseId?: number;
   customerName: string;
   email?: string;
-  cardNumber?: string;
+  cardLastFour?: string;
   amount: number;
   currency?: string;
   method?: PaymentMethod;

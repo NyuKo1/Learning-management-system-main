@@ -6,8 +6,8 @@ import kz.sec.lms.notify.model.NotificationLog;
 import kz.sec.lms.notify.model.TelegramSubscription;
 import kz.sec.lms.notify.repository.NotificationLogRepository;
 import kz.sec.lms.notify.repository.TelegramSubscriptionRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,14 +15,35 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class TelegramNotifyService {
 
     private final SecNotifyBot bot;
     private final TelegramSubscriptionRepository subscriptionRepo;
     private final NotificationLogRepository logRepo;
 
+    public TelegramNotifyService(
+            @Autowired(required = false) SecNotifyBot bot,
+            TelegramSubscriptionRepository subscriptionRepo,
+            NotificationLogRepository logRepo) {
+        this.bot = bot;
+        this.subscriptionRepo = subscriptionRepo;
+        this.logRepo = logRepo;
+    }
+
+    public boolean isBotConfigured() {
+        return bot != null;
+    }
+
+    public String getBotUsername() {
+        return bot != null ? bot.getBotUsername() : "";
+    }
+
     public boolean sendNotification(NotificationRequest request) {
+        if (bot == null) {
+            log.warn("Telegram bot not configured — skipping notification for user {}", request.getUsername());
+            return false;
+        }
+
         Optional<TelegramSubscription> subOpt = findSubscription(request);
 
         if (subOpt.isEmpty()) {

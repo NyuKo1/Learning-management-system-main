@@ -1,6 +1,6 @@
 package kz.sec.lms.crm.config;
 
-import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
+import kz.sec.lms.shared.security.AuthenticationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,7 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity
@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/clients/**").hasAuthority(ROLE_ADMIN)
                 .antMatchers(HttpMethod.POST, "/clients/**").hasAuthority(ROLE_ADMIN)
                 .antMatchers(HttpMethod.PUT, "/clients/**").hasAuthority(ROLE_ADMIN)
+                .antMatchers(HttpMethod.PATCH, "/clients/**").hasAuthority(ROLE_ADMIN)
                 .anyRequest().hasAuthority(ROLE_ADMIN)
                 .and()
                 .build();

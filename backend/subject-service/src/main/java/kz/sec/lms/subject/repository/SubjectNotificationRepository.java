@@ -1,6 +1,6 @@
 package kz.sec.lms.subject.repository;
 
-import ca.utoronto.lms.shared.repository.BaseRepository;
+import kz.sec.lms.shared.repository.BaseRepository;
 import kz.sec.lms.subject.model.SubjectNotification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

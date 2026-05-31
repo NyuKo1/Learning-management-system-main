@@ -22,9 +22,10 @@ public class SsoController {
     private final SsoService ssoService;
 
     @GetMapping("/authorize")
-    public ResponseEntity<Void> authorize(
+    public ResponseEntity<?> authorize(
             @RequestParam("client_id") String clientId,
             @RequestParam("redirect_uri") String redirectUri,
+            @RequestParam(value = "response_mode", defaultValue = "redirect") String responseMode,
             Authentication authentication) {
 
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -36,6 +37,14 @@ public class SsoController {
 
         String separator = redirectUri.contains("?") ? "&" : "?";
         String location = redirectUri + separator + "code=" + code;
+
+        if ("json".equalsIgnoreCase(responseMode)) {
+            Map<String, String> body = new HashMap<>();
+            body.put("redirectUri", location);
+            body.put("code", code);
+            return ResponseEntity.ok(body);
+        }
+
         return ResponseEntity.status(HttpStatus.FOUND)
                 .location(URI.create(location))
                 .build();

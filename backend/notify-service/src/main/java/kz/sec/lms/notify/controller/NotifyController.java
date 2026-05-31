@@ -6,6 +6,7 @@ import kz.sec.lms.notify.repository.TelegramSubscriptionRepository;
 import kz.sec.lms.notify.service.TelegramNotifyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,18 +46,45 @@ public class NotifyController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Links the authenticated user's LMS account to their Telegram subscription.
+     * The username is taken from the JWT principal (body.username is ignored to
+     * prevent users from linking someone else's Telegram).
+     */
     @PostMapping("/link")
-    public ResponseEntity<Map<String, Object>> linkUser(@RequestBody Map<String, Object> body) {
-        Long userId = Long.parseLong(body.get("userId").toString());
-        String username = body.get("username").toString();
+    public ResponseEntity<Map<String, Object>> linkUser(
+            Authentication authentication,
+            @RequestBody Map<String, Object> body) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(Map.of("linked", false, "reason", "unauthenticated"));
+        }
+        String username = authentication.getName();
+        Long userId = body.get("userId") != null
+                ? Long.parseLong(body.get("userId").toString())
+                : null;
 
         Optional<TelegramSubscription> sub = subscriptionRepo.findByUsername(username);
         if (sub.isPresent()) {
             TelegramSubscription s = sub.get();
-            s.setUserId(userId);
+            if (userId != null) {
+                s.setUserId(userId);
+            }
             subscriptionRepo.save(s);
             return ResponseEntity.ok(Map.of("linked", true));
         }
         return ResponseEntity.ok(Map.of("linked", false, "reason", "No Telegram subscription for username"));
+    }
+
+    @GetMapping("/bot-info")
+    public ResponseEntity<Map<String, String>> getBotInfo() {
+        Map<String, String> info = new HashMap<>();
+        if (telegramService.isBotConfigured()) {
+            info.put("username", telegramService.getBotUsername());
+            info.put("configured", "true");
+        } else {
+            info.put("username", "");
+            info.put("configured", "false");
+        }
+        return ResponseEntity.ok(info);
     }
 }

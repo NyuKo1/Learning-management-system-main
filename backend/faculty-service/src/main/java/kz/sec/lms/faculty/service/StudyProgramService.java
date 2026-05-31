@@ -5,8 +5,8 @@ import kz.sec.lms.faculty.mapper.StudyProgramMapper;
 import kz.sec.lms.faculty.model.StudyProgram;
 import kz.sec.lms.faculty.repository.FacultyRepository;
 import kz.sec.lms.faculty.repository.StudyProgramRepository;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

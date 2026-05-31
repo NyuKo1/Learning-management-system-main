@@ -4,7 +4,7 @@ import kz.sec.lms.crm.dto.CourseLessonDTO;
 import kz.sec.lms.crm.mapper.CourseLessonMapper;
 import kz.sec.lms.crm.model.CourseLesson;
 import kz.sec.lms.crm.repository.CourseLessonRepository;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

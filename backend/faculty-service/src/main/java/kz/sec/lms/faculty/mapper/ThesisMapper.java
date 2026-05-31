@@ -1,6 +1,6 @@
 package kz.sec.lms.faculty.mapper;
 
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import kz.sec.lms.faculty.dto.StudentDTO;
 import kz.sec.lms.faculty.dto.ThesisDTO;
 import kz.sec.lms.faculty.model.Student;

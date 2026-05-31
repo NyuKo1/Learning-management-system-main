@@ -1,9 +1,9 @@
 package kz.sec.lms.auth.mapper;
 
 import kz.sec.lms.auth.model.User;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 
 import java.util.List;

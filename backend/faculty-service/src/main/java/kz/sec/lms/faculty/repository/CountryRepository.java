@@ -1,7 +1,7 @@
 package kz.sec.lms.faculty.repository;
 
 import kz.sec.lms.faculty.model.Country;
-import ca.utoronto.lms.shared.repository.BaseRepository;
+import kz.sec.lms.shared.repository.BaseRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

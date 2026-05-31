@@ -5,11 +5,11 @@ import kz.sec.lms.auth.mapper.UserMapper;
 import kz.sec.lms.auth.model.User;
 import kz.sec.lms.auth.repository.UserRepository;
 import kz.sec.lms.auth.security.TokenGenerator;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class UserService extends BaseService<User, UserDetailsDTO, Long> {

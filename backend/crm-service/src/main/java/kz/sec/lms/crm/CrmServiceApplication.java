@@ -10,14 +10,14 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients({"kz.sec.lms.crm", "ca.utoronto.lms.shared"})
-@ComponentScan({"kz.sec.lms.crm", "ca.utoronto.lms.shared"})
+@EnableFeignClients({"kz.sec.lms.crm", "kz.sec.lms.shared"})
+@ComponentScan({"kz.sec.lms.crm", "kz.sec.lms.shared"})
 @OpenAPIDefinition(
         info =
                 @Info(
-                        title = "CRM API",
+                        title = "SEC CRM — Client & Sales Management API",
                         version = "1.0",
-                        description = "Documentation CRM API v1.0"))
+                        description = "SmartEduControl CRM — Leads, Clients, Payments & Analytics v1.0"))
 public class CrmServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(CrmServiceApplication.class, args);

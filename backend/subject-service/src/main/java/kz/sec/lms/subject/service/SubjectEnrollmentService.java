@@ -1,8 +1,8 @@
 package kz.sec.lms.subject.service;
 
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.ExtendedService;
 import kz.sec.lms.subject.client.FacultyFeignClient;
 import kz.sec.lms.subject.client.NotifyFeignClient;
 import kz.sec.lms.subject.dto.SubjectDTO;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Slf4j
 @Service
@@ -266,7 +266,7 @@ public class SubjectEnrollmentService
 
         kz.sec.lms.subject.model.Subject subject =
                 subjectService.findEntityById(subjectId)
-                        .orElseThrow(() -> new ca.utoronto.lms.shared.exception.NotFoundException("Subject not found"));
+                        .orElseThrow(() -> new kz.sec.lms.shared.exception.NotFoundException("Subject not found"));
 
         SubjectEnrollment enrollment = new SubjectEnrollment();
         enrollment.setStudentId(studentId);

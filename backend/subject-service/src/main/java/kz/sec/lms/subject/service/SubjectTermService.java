@@ -1,8 +1,8 @@
 package kz.sec.lms.subject.service;
 
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.ExtendedService;
 import kz.sec.lms.subject.client.FacultyFeignClient;
 import kz.sec.lms.subject.dto.SubjectDTO;
 import kz.sec.lms.subject.dto.SubjectTermDTO;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class SubjectTermService extends ExtendedService<SubjectTerm, SubjectTermDTO, Long> {

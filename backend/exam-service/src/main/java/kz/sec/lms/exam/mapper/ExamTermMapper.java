@@ -7,7 +7,7 @@ import kz.sec.lms.exam.dto.SubjectDTO;
 import kz.sec.lms.exam.model.Exam;
 import kz.sec.lms.exam.model.ExamPeriod;
 import kz.sec.lms.exam.model.ExamTerm;
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

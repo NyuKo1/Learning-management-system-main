@@ -4,7 +4,7 @@ import kz.sec.lms.exam.dto.ExamRealizationDTO;
 import kz.sec.lms.exam.model.ExamRealization;
 import kz.sec.lms.exam.service.ExamRealizationService;
 import kz.sec.lms.exam.util.ExamRealizationPDFExporter;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

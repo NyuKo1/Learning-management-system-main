@@ -44,8 +44,10 @@ public class StatsController {
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalLeads", totalLeads);
         stats.put("newLeadsToday", leadRepository.countByStatusAndDeletedFalse("NEW"));
+        stats.put("qualifiedLeads", leadRepository.countByStatusAndDeletedFalse("QUALIFIED"));
         stats.put("totalClients", totalClients);
         stats.put("newClientsThisMonth", totalClients);
+        stats.put("lmsLinkedClients", clientRepository.countWithLmsAccount());
         stats.put("totalRevenue", totalRevenue);
         stats.put("revenueThisMonth", totalRevenue);
         stats.put("conversionRate", conversionRate);

@@ -43,6 +43,6 @@ public class NotificationLog {
     @Column(name = "success")
     private boolean success;
 
-    @Column(name = "error_message", length = 1024)
+    @Column(name = "error_message", columnDefinition = "TEXT")
     private String errorMessage;
 }

@@ -35,6 +35,18 @@ export class AuthService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  refreshTokens(): Observable<AuthResponse> {
+    const refreshToken = localStorage.getItem(this.REFRESH_KEY);
+    return this.http
+      .post<AuthResponse>(`${environment.apiUrl}/auth-service/refresh`, { refreshToken })
+      .pipe(
+        tap((tokens) => {
+          localStorage.setItem(this.TOKEN_KEY, tokens.accessToken);
+          localStorage.setItem(this.REFRESH_KEY, tokens.refreshToken);
+        })
+      );
+  }
+
   isLoggedIn(): Observable<boolean> {
     return this.loggedIn$.asObservable();
   }
@@ -65,7 +77,7 @@ export class AuthService {
 
   hasCrmAccess(): boolean {
     const roles = this.getPayload()?.roles ?? [];
-    return roles.some(r => ['ROLE_CRM_MANAGER', 'ROLE_CRM_ADMIN', 'ROLE_ADMIN'].includes(r));
+    return roles.some(r => ['ROLE_ADMIN', 'ROLE_ROOT'].includes(r));
   }
 
   private hasToken(): boolean {

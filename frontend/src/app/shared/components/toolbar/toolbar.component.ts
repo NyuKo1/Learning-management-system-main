@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
+import { SsoService } from '@core/services/sso.service';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -11,10 +12,9 @@ export class ToolbarComponent implements OnInit {
   isDarkMode: boolean = false;
   crmUrl = environment.crmUrl;
 
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService, private sso: SsoService) {}
 
   ngOnInit(): void {
-    // Проверка сохраненной темы при загрузке
     this.isDarkMode = localStorage.getItem('theme') === 'dark';
     this.applyTheme();
   }
@@ -23,6 +23,17 @@ export class ToolbarComponent implements OnInit {
     this.isDarkMode = !this.isDarkMode;
     localStorage.setItem('theme', this.isDarkMode ? 'dark' : 'light');
     this.applyTheme();
+  }
+
+  get hasCrmRole(): boolean {
+    return this.authService
+      .getRoles()
+      .some((r) => ['ROLE_ADMIN', 'ROLE_ROOT'].includes(r));
+  }
+
+  openCrm(): void {
+    const returnUrl = `${window.location.origin}${this.crmUrl}/sso/callback`;
+    this.sso.initiateLogin('crm', returnUrl);
   }
 
   private applyTheme(): void {

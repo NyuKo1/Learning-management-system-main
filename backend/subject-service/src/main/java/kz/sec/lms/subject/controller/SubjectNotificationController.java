@@ -1,6 +1,6 @@
 package kz.sec.lms.subject.controller;
 
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import kz.sec.lms.subject.dto.SubjectNotificationDTO;
 import kz.sec.lms.subject.model.SubjectNotification;
 import kz.sec.lms.subject.service.SubjectNotificationService;

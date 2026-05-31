@@ -14,6 +14,11 @@ export interface LinkResult {
   reason?: string;
 }
 
+export interface BotInfo {
+  username: string;
+  configured: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class NotifyService {
   private url = `${environment.baseUrl}/notify-service/notify`;
@@ -31,5 +36,9 @@ export class NotifyService {
       userId,
       username,
     });
+  }
+
+  getBotInfo(): Observable<BotInfo> {
+    return this.http.get<BotInfo>(`${this.url}/bot-info`);
   }
 }

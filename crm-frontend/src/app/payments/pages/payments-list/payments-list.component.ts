@@ -85,6 +85,12 @@ export class PaymentsListComponent implements OnInit {
       ? this.courses.find(c => c.id === this.form.courseId)?.title || this.form.customCourseTitle
       : this.form.customCourseTitle;
 
+    // PCI: never transmit full card number — mask client-side to last 4 digits.
+    const cleanedCard = (this.form.cardNumber || '').replace(/\s/g, '');
+    const cardLastFour = this.form.method === 'CARD' && cleanedCard.length >= 4
+      ? cleanedCard.slice(-4)
+      : undefined;
+
     const req = {
       customerName: this.form.customerName,
       email: this.form.email || undefined,
@@ -93,7 +99,7 @@ export class PaymentsListComponent implements OnInit {
       amount: this.form.amount!,
       currency: '₸',
       method: this.form.method,
-      cardNumber: this.form.method === 'CARD' && this.form.cardNumber ? this.form.cardNumber : undefined
+      cardLastFour
     };
 
     this.api.createPayment(req).subscribe({

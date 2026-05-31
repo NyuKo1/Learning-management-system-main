@@ -1,7 +1,7 @@
 package kz.sec.lms.faculty.util;
 
 import kz.sec.lms.faculty.dto.StudentDTO;
-import ca.utoronto.lms.shared.util.PDFExporter;
+import kz.sec.lms.shared.util.PDFExporter;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

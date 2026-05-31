@@ -4,7 +4,7 @@ import kz.sec.lms.exam.dto.ExamTypeDTO;
 import kz.sec.lms.exam.mapper.ExamTypeMapper;
 import kz.sec.lms.exam.model.ExamType;
 import kz.sec.lms.exam.repository.ExamTypeRepository;
-import ca.utoronto.lms.shared.service.BaseService;
+import kz.sec.lms.shared.service.BaseService;
 import org.springframework.stereotype.Service;
 
 @Service

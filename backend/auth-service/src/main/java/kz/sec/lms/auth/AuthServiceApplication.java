@@ -13,14 +13,14 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableConfigurationProperties(SsoProperties.class)
-@EnableFeignClients({"kz.sec.lms.auth", "ca.utoronto.lms.shared"})
-@ComponentScan({"kz.sec.lms.auth", "ca.utoronto.lms.shared"})
+@EnableFeignClients({"kz.sec.lms.auth", "kz.sec.lms.shared"})
+@ComponentScan({"kz.sec.lms.auth", "kz.sec.lms.shared"})
 @OpenAPIDefinition(
         info =
                 @Info(
-                        title = "Auth API",
+                        title = "SEC LMS — Auth Service API",
                         version = "1.0",
-                        description = "Documentation Auth API v1.0"))
+                        description = "SmartEduControl Authentication & SSO Service v1.0"))
 public class AuthServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(AuthServiceApplication.class, args);

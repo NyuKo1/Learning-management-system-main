@@ -1,6 +1,6 @@
 package kz.sec.lms.subject.config;
 
-import ca.utoronto.lms.shared.security.AuthenticationTokenFilter;
+import kz.sec.lms.shared.security.AuthenticationTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,7 +10,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Configuration
 @EnableWebSecurity

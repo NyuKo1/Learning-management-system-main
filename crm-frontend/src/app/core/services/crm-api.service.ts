@@ -49,6 +49,10 @@ export class CrmApiService {
     return this.http.post<Client>(`${this.base}/clients`, req);
   }
 
+  linkClientToLms(clientId: number, lmsUserId: number): Observable<Client> {
+    return this.http.patch<Client>(`${this.base}/clients/${clientId}/link-lms`, { lmsUserId });
+  }
+
   // ── PAYMENTS ───────────────────────────────────────────
   getPayments(): Observable<Payment[]> {
     return this.http.get<Payment[]>(`${this.base}/payments/all`);

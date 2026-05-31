@@ -3,20 +3,22 @@ package kz.sec.lms.auth.controller;
 import kz.sec.lms.auth.dto.RegisterStudentDTO;
 import kz.sec.lms.auth.model.User;
 import kz.sec.lms.auth.service.UserService;
-import ca.utoronto.lms.shared.controller.BaseController;
-import ca.utoronto.lms.shared.dto.RoleDTO;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.dto.RoleDTO;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @RestController
 @RequestMapping("/users")
@@ -34,8 +36,17 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
     }
 
     @GetMapping("/username/{username}")
-    public ResponseEntity<UserDetails> getUserByUsername(@PathVariable String username) {
-        return new ResponseEntity<>(service.findByUsername(username), HttpStatus.OK);
+    public ResponseEntity<Map<String, Object>> getUserByUsername(@PathVariable String username) {
+        UserDetailsDTO details = service.findByUsername(username);
+        Map<String, Object> safe = new LinkedHashMap<>();
+        safe.put("id", details.getId());
+        safe.put("username", details.getUsername());
+        if (details.getAuthorities() != null) {
+            safe.put("roles", details.getAuthorities().stream()
+                    .map(a -> a.getAuthority())
+                    .collect(Collectors.toList()));
+        }
+        return new ResponseEntity<>(safe, HttpStatus.OK);
     }
 
     @GetMapping("/username/{username}/id")

@@ -1,6 +1,6 @@
 package kz.sec.lms.subject.controller;
 
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import kz.sec.lms.subject.dto.EnrollmentRequest;
 import kz.sec.lms.subject.dto.SubjectEnrollmentDTO;
 import kz.sec.lms.subject.model.SubjectEnrollment;

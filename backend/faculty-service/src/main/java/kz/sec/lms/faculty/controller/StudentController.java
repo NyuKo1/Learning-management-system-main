@@ -5,7 +5,7 @@ import kz.sec.lms.faculty.model.Student;
 import kz.sec.lms.faculty.service.StudentService;
 import kz.sec.lms.faculty.util.StudentPDFExporter;
 import kz.sec.lms.faculty.util.StudentsOnSubjectPDFExporter;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

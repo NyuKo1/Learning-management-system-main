@@ -4,7 +4,7 @@ import kz.sec.lms.faculty.dto.TeacherDTO;
 import kz.sec.lms.faculty.model.Teacher;
 import kz.sec.lms.faculty.service.TeacherService;
 import kz.sec.lms.faculty.util.TeacherPDFExporter;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

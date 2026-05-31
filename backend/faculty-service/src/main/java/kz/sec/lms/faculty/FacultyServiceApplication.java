@@ -10,14 +10,14 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients({"kz.sec.lms.faculty", "ca.utoronto.lms.shared"})
-@ComponentScan({"kz.sec.lms.faculty", "ca.utoronto.lms.shared"})
+@EnableFeignClients({"kz.sec.lms.faculty", "kz.sec.lms.shared"})
+@ComponentScan({"kz.sec.lms.faculty", "kz.sec.lms.shared"})
 @OpenAPIDefinition(
         info =
                 @Info(
-                        title = "Faculty API",
+                        title = "SEC LMS — Faculty Service API",
                         version = "1.0",
-                        description = "Documentation Faculty API v1.0"))
+                        description = "SmartEduControl Faculty, Teacher & Student Management v1.0"))
 public class FacultyServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(FacultyServiceApplication.class, args);

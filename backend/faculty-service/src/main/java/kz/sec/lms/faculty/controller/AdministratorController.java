@@ -3,7 +3,7 @@ package kz.sec.lms.faculty.controller;
 import kz.sec.lms.faculty.dto.AdministratorDTO;
 import kz.sec.lms.faculty.model.Administrator;
 import kz.sec.lms.faculty.service.AdministratorService;
-import ca.utoronto.lms.shared.controller.BaseController;
+import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

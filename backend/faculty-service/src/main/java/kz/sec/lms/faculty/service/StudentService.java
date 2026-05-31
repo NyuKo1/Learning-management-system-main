@@ -6,12 +6,12 @@ import kz.sec.lms.faculty.dto.StudentDTO;
 import kz.sec.lms.faculty.mapper.StudentMapper;
 import kz.sec.lms.faculty.model.Student;
 import kz.sec.lms.faculty.repository.StudentRepository;
-import ca.utoronto.lms.shared.dto.RoleDTO;
-import ca.utoronto.lms.shared.dto.UserDTO;
-import ca.utoronto.lms.shared.dto.UserDetailsDTO;
-import ca.utoronto.lms.shared.exception.ForbiddenException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.dto.RoleDTO;
+import kz.sec.lms.shared.dto.UserDTO;
+import kz.sec.lms.shared.dto.UserDetailsDTO;
+import kz.sec.lms.shared.exception.ForbiddenException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.service.ExtendedService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Service
 public class StudentService extends ExtendedService<Student, StudentDTO, Long> {

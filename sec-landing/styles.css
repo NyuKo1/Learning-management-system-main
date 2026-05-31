@@ -959,3 +959,36 @@ body.dark .dashboard-mockup {
 }
 body.dark .mockup-card-num { color: #f1f5f9; }
 body.dark .mockup-chart { background: #0f172a; }
+
+.demo-credentials {
+  margin-top: 32px;
+  padding: 16px 24px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 12px;
+  display: inline-block;
+}
+.demo-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,.6);
+  margin-bottom: 10px;
+}
+.demo-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.demo-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  text-decoration: none;
+  font-family: monospace;
+  transition: all .2s;
+}
+.lms-btn { background: rgba(79,70,229,.25); color: #c7d2fe; border: 1px solid rgba(79,70,229,.4); }
+.lms-btn:hover { background: rgba(79,70,229,.4); }
+.crm-btn { background: rgba(14,165,233,.25); color: #bae6fd; border: 1px solid rgba(14,165,233,.4); }
+.crm-btn:hover { background: rgba(14,165,233,.4); }

@@ -10,6 +10,11 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
   },
   {
+    path: 'auth/sso',
+    loadChildren: () =>
+      import('./auth/sso-entry.module').then((m) => m.SsoEntryModule),
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then((m) => m.AuthModule),
     canActivate: [LoggedInAuthGuard],

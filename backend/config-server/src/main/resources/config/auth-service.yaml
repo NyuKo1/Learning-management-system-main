@@ -41,16 +41,16 @@ sso:
   allowed-origins: ${SSO_ALLOWED_ORIGINS:http://localhost:8080,http://localhost:4200,http://localhost:4201}
   allowed-clients:
     - client-id: crm
-      client-secret: crm-secret-change-in-prod
+      client-secret: ${SSO_CRM_SECRET:crm-secret-change-in-prod}
       redirect-uris:
-        - http://localhost:4201/sso/callback
+        - ${SSO_CRM_REDIRECT_URI:http://localhost:4201/sso/callback}
         - http://localhost:3000/sso/callback
     - client-id: lms
-      client-secret: lms-secret-change-in-prod
+      client-secret: ${SSO_LMS_SECRET:lms-secret-change-in-prod}
       redirect-uris:
-        - http://localhost:4200/auth/sso/callback
+        - ${SSO_LMS_REDIRECT_URI:http://localhost:4200/auth/sso/callback}
     - client-id: lms-mobile
-      client-secret: mobile-secret-change-in-prod
+      client-secret: ${SSO_MOBILE_SECRET:mobile-secret-change-in-prod}
       redirect-uris:
         - myapp://sso/callback
 

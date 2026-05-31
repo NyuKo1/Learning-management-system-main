@@ -9,7 +9,7 @@ import kz.sec.lms.crm.mapper.PaymentMapper;
 import kz.sec.lms.crm.model.Payment;
 import kz.sec.lms.crm.repository.CourseRepository;
 import kz.sec.lms.crm.repository.PaymentRepository;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.service.ExtendedService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.getStudentId;
+import static kz.sec.lms.shared.security.SecurityUtils.getStudentId;
 
 @Slf4j
 @Service
@@ -128,6 +128,13 @@ public class PaymentService extends ExtendedService<Payment, PaymentDTO, Long> {
     public List<PaymentDTO> findByUserId(String userId) {
         List<PaymentDTO> payments = mapper.toDTO(
             repository.findByUserIdAndDeletedFalseOrderByCreatedAtDesc(userId)
+        );
+        return payments.isEmpty() ? payments : mapMissingValues(payments);
+    }
+
+    public List<PaymentDTO> findByClientId(Long clientId) {
+        List<PaymentDTO> payments = mapper.toDTO(
+            repository.findByClientIdAndDeletedFalseOrderByCreatedAtDesc(clientId)
         );
         return payments.isEmpty() ? payments : mapMissingValues(payments);
     }

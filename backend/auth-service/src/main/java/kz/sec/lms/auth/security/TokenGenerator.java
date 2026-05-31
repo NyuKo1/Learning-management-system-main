@@ -3,9 +3,9 @@ package kz.sec.lms.auth.security;
 import kz.sec.lms.auth.client.FacultyFeignClient;
 import kz.sec.lms.auth.model.User;
 import kz.sec.lms.auth.repository.UserRepository;
-import ca.utoronto.lms.shared.exception.BadRequestException;
-import ca.utoronto.lms.shared.exception.NotFoundException;
-import ca.utoronto.lms.shared.security.TokenUtils;
+import kz.sec.lms.shared.exception.BadRequestException;
+import kz.sec.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.security.TokenUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static ca.utoronto.lms.shared.security.SecurityUtils.*;
+import static kz.sec.lms.shared.security.SecurityUtils.*;
 
 @Component
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package kz.sec.lms.crm.repository;
 
 import kz.sec.lms.crm.model.Course;
-import ca.utoronto.lms.shared.repository.BaseRepository;
+import kz.sec.lms.shared.repository.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;

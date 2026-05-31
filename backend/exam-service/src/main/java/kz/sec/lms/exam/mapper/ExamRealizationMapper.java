@@ -3,7 +3,7 @@ package kz.sec.lms.exam.mapper;
 import kz.sec.lms.exam.dto.ExamRealizationDTO;
 import kz.sec.lms.exam.dto.SubjectEnrollmentDTO;
 import kz.sec.lms.exam.model.ExamRealization;
-import ca.utoronto.lms.shared.mapper.BaseMapper;
+import kz.sec.lms.shared.mapper.BaseMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

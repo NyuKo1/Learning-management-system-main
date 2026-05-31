@@ -4,6 +4,7 @@ import kz.sec.lms.notify.model.TelegramSubscription;
 import kz.sec.lms.notify.repository.TelegramSubscriptionRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
+@ConditionalOnProperty(name = "telegram.bot.token", matchIfMissing = false)
 public class SecNotifyBot extends TelegramLongPollingBot {
 
     private final TelegramSubscriptionRepository subscriptionRepo;

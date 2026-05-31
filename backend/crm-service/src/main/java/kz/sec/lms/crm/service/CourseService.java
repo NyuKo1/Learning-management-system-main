@@ -1,13 +1,13 @@
 package kz.sec.lms.crm.service;
 
-import ca.utoronto.lms.shared.exception.NotFoundException;
+import kz.sec.lms.shared.exception.NotFoundException;
 import kz.sec.lms.crm.client.SubjectFeignClient;
 import kz.sec.lms.crm.dto.CourseDTO;
 import kz.sec.lms.crm.dto.SubjectSimpleDTO;
 import kz.sec.lms.crm.mapper.CourseMapper;
 import kz.sec.lms.crm.model.Course;
 import kz.sec.lms.crm.repository.CourseRepository;
-import ca.utoronto.lms.shared.service.ExtendedService;
+import kz.sec.lms.shared.service.ExtendedService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

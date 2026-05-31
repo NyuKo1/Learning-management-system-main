@@ -17,7 +17,8 @@ import { StudentService } from '@core/services/student.service';
 export class InfoComponent implements OnInit {
   student: Student;
   telegramStatus: TelegramSubscriptionStatus | null = null;
-  botUsername: string = 'smarteducontrol_notify_bot';
+  botUsername: string = '';
+  telegramConfigured = false;
 
   getUserDisplay = getUserDisplay;
   getStudyProgramDisplay = getStudyProgramDisplay;
@@ -31,6 +32,13 @@ export class InfoComponent implements OnInit {
   ngOnInit(): void {
     this.getStudent();
     this.getTelegramStatus();
+    this.notifyService.getBotInfo().subscribe({
+      next: (info) => {
+        this.botUsername = info.username;
+        this.telegramConfigured = info.configured === 'true';
+      },
+      error: () => {},
+    });
   }
 
   getStudent() {

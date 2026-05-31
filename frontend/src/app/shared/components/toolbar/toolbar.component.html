@@ -47,14 +47,13 @@
         class="md:text-lg"
         >Admin Panel</a
       >
-      <a
-        *ngIf="authService.validateRoles(['ROLE_ADMIN', 'ROLE_TEACHER'], 'any')"
+      <button
+        *ngIf="hasCrmRole && authService.loggedIn()"
         mat-button
-        [href]="crmUrl"
-        target="_blank"
+        (click)="openCrm()"
         class="md:text-lg crm-link"
-        >CRM →</a
-      >
+        matTooltip="Open CRM"
+      >CRM →</button>
       <a
         *ngIf="!authService.loggedIn()"
         routerLink="/auth/login"

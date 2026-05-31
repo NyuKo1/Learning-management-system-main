@@ -1,6 +1,6 @@
 package kz.sec.lms.exam.dto;
 
-import ca.utoronto.lms.shared.dto.BaseDTO;
+import kz.sec.lms.shared.dto.BaseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
