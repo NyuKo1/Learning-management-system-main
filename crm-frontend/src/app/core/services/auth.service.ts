@@ -38,7 +38,9 @@ export class AuthService {
   refreshTokens(): Observable<AuthResponse> {
     const refreshToken = localStorage.getItem(this.REFRESH_KEY);
     return this.http
-      .post<AuthResponse>(`${environment.apiUrl}/auth-service/refresh`, { refreshToken })
+      .get<AuthResponse>(`${environment.apiUrl}/auth-service/refresh`, {
+        headers: { Authorization: `Bearer ${refreshToken}` },
+      })
       .pipe(
         tap((tokens) => {
           localStorage.setItem(this.TOKEN_KEY, tokens.accessToken);

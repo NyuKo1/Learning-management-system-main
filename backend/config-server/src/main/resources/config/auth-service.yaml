@@ -54,6 +54,14 @@ sso:
       redirect-uris:
         - myapp://sso/callback
 
+brand:
+  name: ${BRAND_NAME:SEC}
+  product-name: ${BRAND_PRODUCT_NAME:SmartEduControl}
+  primary-color: ${BRAND_PRIMARY_COLOR:#4f46e5}
+  logo-url: ${BRAND_LOGO_URL:/branding/logo.png}
+  favicon-url: ${BRAND_FAVICON_URL:/branding/favicon.ico}
+  support-email: ${BRAND_SUPPORT_EMAIL:support@sec.kz}
+
 management:
   endpoints:
     web:

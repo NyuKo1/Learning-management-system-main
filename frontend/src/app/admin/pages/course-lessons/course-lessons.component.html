@@ -1,0 +1,91 @@
+<div class="lessons-page">
+  <h2>Course Materials</h2>
+
+  <div *ngIf="loadingCourses" class="loading">Loading courses…</div>
+
+  <div *ngIf="!loadingCourses" class="course-picker">
+    <mat-form-field appearance="outline" class="course-select">
+      <mat-label>Course</mat-label>
+      <mat-select [(ngModel)]="selectedCourseId" (selectionChange)="onCourseChange()">
+        <mat-option *ngFor="let c of courses" [value]="c.id">{{ c.title }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="startCreate()" [disabled]="!selectedCourseId">
+      <mat-icon>add</mat-icon> Add Lesson
+    </button>
+  </div>
+
+  <div *ngIf="errorMsg" class="error-banner">{{ errorMsg }}</div>
+
+  <div class="layout">
+    <!-- Left: lesson list -->
+    <div class="lessons-list">
+      <h3>Lessons ({{ lessons.length }})</h3>
+      <div *ngIf="loadingLessons" class="loading">Loading…</div>
+      <div *ngIf="!loadingLessons && lessons.length === 0" class="empty">
+        No lessons yet. Click "Add Lesson" to create the first one.
+      </div>
+      <div *ngFor="let l of lessons" class="lesson-item" [class.active]="editing?.id === l.id">
+        <div class="lesson-meta">
+          <span class="lesson-order">#{{ l.orderIndex }}</span>
+          <span class="lesson-duration" *ngIf="l.duration">{{ l.duration }}</span>
+        </div>
+        <div class="lesson-title">{{ l.title }}</div>
+        <div class="lesson-desc" *ngIf="l.description">{{ l.description }}</div>
+        <div class="lesson-actions">
+          <button mat-icon-button (click)="startEdit(l)" matTooltip="Edit"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button color="warn" (click)="remove(l)" matTooltip="Delete"><mat-icon>delete</mat-icon></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: editor -->
+    <div class="editor" *ngIf="editorOpen">
+      <h3>{{ editing ? 'Edit Lesson' : 'New Lesson' }}</h3>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Title</mat-label>
+        <input matInput [(ngModel)]="draft.title" name="title" required />
+      </mat-form-field>
+
+      <div class="row">
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Order</mat-label>
+          <input matInput type="number" [(ngModel)]="draft.orderIndex" name="orderIndex" min="1" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="half">
+          <mat-label>Duration (e.g. 15:30)</mat-label>
+          <input matInput [(ngModel)]="draft.duration" name="duration" placeholder="15:30" />
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Short description</mat-label>
+        <textarea matInput rows="2" [(ngModel)]="draft.description" name="description"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Video URL (optional)</mat-label>
+        <input matInput [(ngModel)]="draft.videoUrl" name="videoUrl" placeholder="https://..." />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full">
+        <mat-label>Content (Markdown supported)</mat-label>
+        <textarea matInput rows="14" [(ngModel)]="draft.content" name="content"
+          placeholder="## Introduction&#10;&#10;Welcome to lesson 1.&#10;&#10;```python&#10;print('Hello')&#10;```"></textarea>
+      </mat-form-field>
+
+      <div class="editor-actions">
+        <button mat-stroked-button (click)="cancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving…' : (editing ? 'Update' : 'Create') }}
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="!editorOpen" class="editor-placeholder">
+      <mat-icon>menu_book</mat-icon>
+      <p>Select a lesson to edit or click "Add Lesson" to create new course material.</p>
+    </div>
+  </div>
+</div>

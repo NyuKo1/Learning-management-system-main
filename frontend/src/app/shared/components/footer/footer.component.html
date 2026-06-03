@@ -1,3 +1,11 @@
 <mat-toolbar color="primary" class="text-center">
-  <p class="m-auto text-sm">© SEC LMS — SmartEduControl | Learning Management Platform</p>
+  <p class="m-auto text-sm">
+    © {{ (branding.current$ | async)?.productName }} — Learning Management Platform
+    <span *ngIf="(branding.current$ | async)?.supportEmail">
+      ·
+      <a [href]="'mailto:' + (branding.current$ | async)?.supportEmail" class="underline">
+        {{ (branding.current$ | async)?.supportEmail }}
+      </a>
+    </span>
+  </p>
 </mat-toolbar>

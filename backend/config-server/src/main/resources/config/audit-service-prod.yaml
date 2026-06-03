@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://database-audit:3306/lms-audit?createDatabaseIfNotExist=true
+
+eureka:
+  instance:
+    hostname: backend-audit-service
+  client:
+    service-url:
+      defaultZone: http://backend-discovery-server:8761/eureka

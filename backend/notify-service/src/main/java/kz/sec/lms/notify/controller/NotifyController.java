@@ -4,6 +4,7 @@ import kz.sec.lms.notify.dto.NotificationRequest;
 import kz.sec.lms.notify.model.TelegramSubscription;
 import kz.sec.lms.notify.repository.TelegramSubscriptionRepository;
 import kz.sec.lms.notify.service.TelegramNotifyService;
+import kz.sec.lms.shared.audit.Audited;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ public class NotifyController {
         return ResponseEntity.ok(Map.of("sent", sent));
     }
 
+    @Audited(sensitive = true)
     @GetMapping("/subscription/{userId}")
     public ResponseEntity<Map<String, Object>> getSubscription(@PathVariable Long userId) {
         Optional<TelegramSubscription> sub = subscriptionRepo.findByUserIdAndActiveTrue(userId);

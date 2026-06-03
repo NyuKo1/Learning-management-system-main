@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@core/services/auth.service';
 import { SsoService } from '@core/services/sso.service';
+import { BrandingService } from '@core/services/branding.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,8 @@ export class LoginComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
-    private ssoService: SsoService
+    private ssoService: SsoService,
+    public branding: BrandingService
   ) {}
 
   ngOnInit(): void {}

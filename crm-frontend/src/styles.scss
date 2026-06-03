@@ -170,3 +170,12 @@ html.dark {
   .mat-chip { background: #334155 !important; color: #e2e8f0 !important; }
   .mat-divider { border-color: #334155 !important; }
 }
+
+/* Branding — --brand-primary is overridden at runtime by BrandingService from BRAND_PRIMARY_COLOR env */
+:root {
+  --brand-primary: #0ea5e9;
+}
+
+.brand-bg { background-color: var(--brand-primary) !important; }
+.brand-text { color: var(--brand-primary) !important; }
+.brand-border { border-color: var(--brand-primary) !important; }

@@ -22,6 +22,7 @@
 | Exam Service | 8084 | 3310 |
 | CRM Service | 8085 | 3311 |
 | Notify Service | 8086 | 3312 |
+| Audit Service | 8087 | 3313 |
 | Config Server | 8888 | — |
 | Discovery Server | 8761 | — |
 | Redis | — | 6379 |
@@ -72,6 +73,50 @@ mysql -h 127.0.0.1 -P 3310 -u root -proot lms-exam < backend/exam-service/src/ma
 | TELEGRAM_BOT_USERNAME | Bot username without @ (optional) | `my_notify_bot` |
 | MYSQL_ROOT_PASSWORD | MySQL root password | `strongpassword` |
 | SSO_ALLOWED_ORIGINS | Comma-separated allowed origins | `http://localhost:4200,http://localhost:4201` |
+| AUDIT_INTERNAL_TOKEN | Shared secret services use to authenticate to audit-service | `openssl rand -hex 32` |
+| AUDIT_RETENTION_DAYS | Days to keep audit events before cleanup | `90` |
+| BRAND_NAME | Short brand name in toolbar | `AcmeSchool` |
+| BRAND_PRODUCT_NAME | Long product name (title, footer) | `AcmeSchool LMS` |
+| BRAND_PRIMARY_COLOR | CSS primary color (hex) | `#2563eb` |
+| BRAND_LOGO_URL | Path/URL to logo image | `/branding/logo.png` |
+| BRAND_FAVICON_URL | Path/URL to favicon | `/branding/favicon.ico` |
+| BRAND_SUPPORT_EMAIL | Footer support contact | `support@acme.kz` |
+
+## Customizing branding per customer
+
+Each customer deployment is configured via env vars in `.env`. The defaults render
+as "SmartEduControl" with the SEC indigo color. Override per customer:
+
+```bash
+BRAND_NAME=AcmeSchool
+BRAND_PRODUCT_NAME="AcmeSchool LMS"
+BRAND_PRIMARY_COLOR=#2563eb
+BRAND_LOGO_URL=/branding/acme-logo.png
+BRAND_FAVICON_URL=/branding/acme-favicon.ico
+BRAND_SUPPORT_EMAIL=support@acme.kz
+```
+
+Logo and favicon files live on the host at `/srv/sec/branding/` and are mounted
+read-only into both the LMS and CRM nginx containers (see `docker-compose.prod.yml`).
+Drop the customer's `logo.png` and `favicon.ico` there before bringing the stack up.
+
+## Audit log
+
+Every write (POST/PUT/PATCH/DELETE) on every backend service is logged to the
+`audit-service` (port 8087) and stored in `lms-audit` MySQL on port 3313.
+Sensitive GET endpoints are logged via the `@Audited(sensitive=true)` annotation
+in the controller (already applied on user/client/lead/payment/subscription endpoints).
+
+- **Retention:** configurable via `AUDIT_RETENTION_DAYS` (default 90).
+- **Cleanup:** daily job at 03:00 server-local time deletes events older than retention.
+- **Admin UI:** `/admin-panel/audit-log` in the LMS (requires `ROLE_ADMIN`).
+- **Internal auth:** services authenticate to audit-service via the shared
+  `AUDIT_INTERNAL_TOKEN` env (generate a strong random value per deployment).
+- **Failure mode:** if audit-service is unreachable, events are written to
+  `/var/log/sec/audit-fallback.log` inside the calling container and the user
+  request still succeeds.
+- **PII redaction:** request bodies are redacted before persistence — fields
+  named `password`, `*secret*`, `*token*`, `card_number` are replaced with `***`.
 
 ## Architecture
 
@@ -81,4 +126,4 @@ mysql -h 127.0.0.1 -P 3310 -u root -proot lms-exam < backend/exam-service/src/ma
 - **Spring Cloud Config** — centralized configuration from `config-server/src/main/resources/config/`
 - **MySQL 8** — separate database per service
 - **Redis** — SSO authorization code storage
-- Shared library: local Maven module `kz.sec.lms:shared-library:1.0.0` (in `backend/shared-library/`)
+- Shared library: local Maven module `kz.sec.lms:shared-library:1.1.0` (in `backend/shared-library/`)

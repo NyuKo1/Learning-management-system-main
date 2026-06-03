@@ -26,12 +26,13 @@ export class PaymentPageComponent implements OnInit {
     private crmService: CrmService,
     private authService: AuthService
   ) {
+    // Placeholder payment — accepts any non-empty values; backend always returns SUCCESS.
     this.form = this.fb.group({
-      customerName: ['', [Validators.required, Validators.minLength(3)]],
-      email: ['', [Validators.required, Validators.email]],
-      cardNumber: ['', [Validators.required, Validators.pattern(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/)]],
-      cardExpiry: ['', [Validators.required, Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/)]],
-      cardCvv: ['', [Validators.required, Validators.pattern(/^\d{3,4}$/)]],
+      customerName: ['', Validators.required],
+      email: ['', Validators.required],
+      cardNumber: ['', Validators.required],
+      cardExpiry: ['', Validators.required],
+      cardCvv: ['', Validators.required],
     });
   }
 

@@ -45,6 +45,18 @@ export class CrmService {
     return this.http.get<CourseLesson[]>(`${this.lessonsUrl}/course/${courseId}`);
   }
 
+  createLesson(lesson: CourseLesson): Observable<CourseLesson> {
+    return this.http.post<CourseLesson>(this.lessonsUrl, lesson);
+  }
+
+  updateLesson(id: number, lesson: CourseLesson): Observable<CourseLesson> {
+    return this.http.put<CourseLesson>(`${this.lessonsUrl}/${id}`, lesson);
+  }
+
+  deleteLesson(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.lessonsUrl}/${id}`);
+  }
+
   getCourseDetail(courseId: number): Observable<CourseCatalog> {
     return this.http.get<CourseCatalog>(`${this.coursesUrl}/${courseId}`);
   }

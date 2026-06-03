@@ -88,7 +88,8 @@ public class SecurityConfig {
                         HttpMethod.GET,
                         "/actuator/**",
                         "/docs/**",
-                        "/refresh").permitAll()
+                        "/refresh",
+                        "/branding").permitAll()
                 .antMatchers(
                         HttpMethod.POST,
                         "/login").anonymous()

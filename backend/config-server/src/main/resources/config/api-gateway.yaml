@@ -52,6 +52,12 @@ spring:
             - Path=/api/notify-service/**
           filters:
             - RewritePath=/api/notify-service/(?<path>.*), /$\{path}
+        - id: audit-service
+          uri: lb://AUDIT-SERVICE
+          predicates:
+            - Path=/api/audit-service/**
+          filters:
+            - RewritePath=/api/audit-service/(?<path>.*), /$\{path}
 
 springdoc:
   swagger-ui:
@@ -69,6 +75,8 @@ springdoc:
         url: /api/crm-service/docs
       - name: notify-service
         url: /api/notify-service/docs
+      - name: audit-service
+        url: /api/audit-service/docs
 
 eureka:
   instance:

@@ -3,6 +3,7 @@ package kz.sec.lms.crm.controller;
 import kz.sec.lms.crm.dto.ClientDTO;
 import kz.sec.lms.crm.model.Client;
 import kz.sec.lms.crm.service.ClientService;
+import kz.sec.lms.shared.audit.Audited;
 import kz.sec.lms.shared.controller.BaseController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class ClientController extends BaseController<Client, ClientDTO, Long> {
         this.service = service;
     }
 
+    @Audited(sensitive = true)
     @GetMapping("/all")
     public ResponseEntity<List<ClientDTO>> getAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);

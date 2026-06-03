@@ -3,6 +3,12 @@
     <button mat-icon-button (click)="toggleSidenav.emit()">
       <mat-icon>menu</mat-icon>
     </button>
+    <img
+      [src]="(branding.current$ | async)?.logoUrl"
+      [alt]="(branding.current$ | async)?.productName"
+      class="brand-logo"
+    />
+    <span class="brand-name">{{ (branding.current$ | async)?.productName }}</span>
   </div>
 
   <div class="topbar-right">
@@ -10,6 +16,15 @@
        class="lms-switch-btn" matTooltip="Перейти в LMS">
       <mat-icon>school</mat-icon>
       <span>LMS</span>
+    </a>
+
+    <a *ngIf="hasAdmin"
+       [href]="lmsUrl + '/admin-panel/audit-log'"
+       target="_blank"
+       class="lms-switch-btn"
+       matTooltip="Журнал аудита (открывается в LMS)">
+      <mat-icon>fact_check</mat-icon>
+      <span>Audit</span>
     </a>
 
     <button mat-icon-button (click)="toggleDark()"

@@ -107,6 +107,23 @@ services:
       MYSQL_DATABASE: lms-notify
     restart: unless-stopped
 
+  database-audit:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3313:3306
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost', '-u', 'root', '-p$$MYSQL_ROOT_PASSWORD']
+      interval: 20s
+      retries: 8
+      start_period: 30s
+      timeout: 10s
+    volumes:
+      - audit-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: lms-audit
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     ports:
@@ -210,6 +227,13 @@ services:
       SSO_CRM_REDIRECT_URI: ${SSO_CRM_REDIRECT_URI:-http://localhost:4201/sso/callback}
       SSO_CRM_ORIGIN: ${SSO_CRM_ORIGIN:-http://localhost:4201}
       SSO_MOBILE_SECRET: ${SSO_MOBILE_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
+      BRAND_NAME: ${BRAND_NAME:-SEC}
+      BRAND_PRODUCT_NAME: ${BRAND_PRODUCT_NAME:-SmartEduControl}
+      BRAND_PRIMARY_COLOR: ${BRAND_PRIMARY_COLOR:-#4f46e5}
+      BRAND_LOGO_URL: ${BRAND_LOGO_URL:-/branding/logo.png}
+      BRAND_FAVICON_URL: ${BRAND_FAVICON_URL:-/branding/favicon.ico}
+      BRAND_SUPPORT_EMAIL: ${BRAND_SUPPORT_EMAIL:-support@sec.kz}
     restart: unless-stopped
 
   backend-faculty-service:
@@ -232,6 +256,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
     restart: unless-stopped
 
   backend-subject-service:
@@ -254,6 +279,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
     restart: unless-stopped
 
   backend-exam-service:
@@ -276,6 +302,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
     restart: unless-stopped
 
   backend-crm-service:
@@ -300,6 +327,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
       JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
     restart: unless-stopped
 
   backend-notify-service:
@@ -324,6 +352,31 @@ services:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_BOT_USERNAME: ${TELEGRAM_BOT_USERNAME}
       JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
+    restart: unless-stopped
+
+  backend-audit-service:
+    build:
+      context: ./backend
+      dockerfile: audit-service/Dockerfile
+    ports:
+      - 8087:8087
+    healthcheck:
+      test: wget --spider --quiet 'http://localhost:8087/actuator/health/' || exit 1
+      interval: 30s
+      retries: 5
+      start_period: 90s
+      timeout: 10s
+    depends_on:
+      backend-discovery-server:
+        condition: service_healthy
+      database-audit:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      JWT_SECRET: ${JWT_SECRET}
+      AUDIT_INTERNAL_TOKEN: ${AUDIT_INTERNAL_TOKEN}
+      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-90}
     restart: unless-stopped
 
   # ── Frontends ─────────────────────────────────────────────────────────
@@ -344,6 +397,8 @@ services:
     depends_on:
       backend-api-gateway:
         condition: service_healthy
+    volumes:
+      - /srv/sec/branding:/usr/share/nginx/html/branding:ro
     restart: unless-stopped
 
   frontend-crm:
@@ -355,6 +410,8 @@ services:
     depends_on:
       backend-api-gateway:
         condition: service_healthy
+    volumes:
+      - /srv/sec/branding:/usr/share/nginx/html/branding:ro
     restart: unless-stopped
 
 volumes:
@@ -364,4 +421,5 @@ volumes:
   exam-data:
   crm-data:
   notify-data:
+  audit-data:
   redis-data:

@@ -20,8 +20,9 @@ public class SubjectController extends BaseController<Subject, SubjectDTO, Long>
         this.service = service;
     }
 
+    @Override
     @GetMapping("/all")
-    public ResponseEntity<List<SubjectDTO>> getAllSubjects() {
+    public ResponseEntity<List<SubjectDTO>> getAll() {
         return new ResponseEntity<>(this.service.findAll(), HttpStatus.OK);
     }
 

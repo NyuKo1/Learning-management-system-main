@@ -1,0 +1,41 @@
+server:
+  port: 8087
+
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://localhost:3313/lms-audit?createDatabaseIfNotExist=true
+    username: root
+    password: root
+  jackson:
+    default-property-inclusion: non_empty
+
+springdoc:
+  api-docs:
+    path: /docs
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+token:
+  secret: ${JWT_SECRET:GieJX^>%Pd;Z]#&?kmZY4SRZNlWsjr%JJiH!q9KM~,Zd./[oh*=dus&p_M3Ab#B}
+
+audit:
+  internal-token: ${AUDIT_INTERNAL_TOKEN:dev-internal-token}
+  retention-days: ${AUDIT_RETENTION_DAYS:90}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@core/services/auth.service';
 import { SsoService } from '@core/services/sso.service';
+import { BrandingService } from '@core/services/branding.service';
 import { environment } from 'environments/environment';
 
 @Component({
@@ -12,7 +13,11 @@ export class ToolbarComponent implements OnInit {
   isDarkMode: boolean = false;
   crmUrl = environment.crmUrl;
 
-  constructor(public authService: AuthService, private sso: SsoService) {}
+  constructor(
+    public authService: AuthService,
+    private sso: SsoService,
+    public branding: BrandingService
+  ) {}
 
   ngOnInit(): void {
     this.isDarkMode = localStorage.getItem('theme') === 'dark';

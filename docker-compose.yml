@@ -59,6 +59,16 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lms-notify
 
+  database-audit-dev:
+    image: mysql:8.0.30-debian
+    ports:
+      - 3313:3306
+    volumes:
+      - audit-data-dev:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lms-audit
+
   redis-dev:
     image: redis:7-alpine
     ports:
@@ -73,4 +83,5 @@ volumes:
   exam-data-dev:
   crm-data-dev:
   notify-data-dev:
+  audit-data-dev:
   redis-data-dev:

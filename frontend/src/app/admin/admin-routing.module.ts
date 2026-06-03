@@ -83,6 +83,16 @@ const routes: Routes = [
         path: 'course-catalog',
         component: CourseCatalogComponent,
       },
+      {
+        path: 'course-lessons',
+        loadChildren: () =>
+          import('./pages/course-lessons/course-lessons.module').then((m) => m.CourseLessonsModule),
+      },
+      {
+        path: 'audit-log',
+        loadChildren: () =>
+          import('./pages/audit-log/audit-log.module').then((m) => m.AuditLogModule),
+      },
     ],
   },
 ];

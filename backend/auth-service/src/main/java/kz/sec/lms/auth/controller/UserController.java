@@ -3,6 +3,7 @@ package kz.sec.lms.auth.controller;
 import kz.sec.lms.auth.dto.RegisterStudentDTO;
 import kz.sec.lms.auth.model.User;
 import kz.sec.lms.auth.service.UserService;
+import kz.sec.lms.shared.audit.Audited;
 import kz.sec.lms.shared.controller.BaseController;
 import kz.sec.lms.shared.dto.RoleDTO;
 import kz.sec.lms.shared.dto.UserDTO;
@@ -12,11 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static kz.sec.lms.shared.security.SecurityUtils.*;
 
@@ -30,23 +28,18 @@ public class UserController extends BaseController<User, UserDetailsDTO, Long> {
         this.service = service;
     }
 
+    @Audited(sensitive = true)
     @GetMapping("/{id}/public")
     public ResponseEntity<List<UserDTO>> getPublic(@PathVariable Set<Long> id) {
         return new ResponseEntity<>(service.findByIdPublic(id), HttpStatus.OK);
     }
 
+    @Audited(sensitive = true)
     @GetMapping("/username/{username}")
-    public ResponseEntity<Map<String, Object>> getUserByUsername(@PathVariable String username) {
+    public ResponseEntity<UserDetailsDTO> getUserByUsername(@PathVariable String username) {
         UserDetailsDTO details = service.findByUsername(username);
-        Map<String, Object> safe = new LinkedHashMap<>();
-        safe.put("id", details.getId());
-        safe.put("username", details.getUsername());
-        if (details.getAuthorities() != null) {
-            safe.put("roles", details.getAuthorities().stream()
-                    .map(a -> a.getAuthority())
-                    .collect(Collectors.toList()));
-        }
-        return new ResponseEntity<>(safe, HttpStatus.OK);
+        details.setPassword(null);
+        return new ResponseEntity<>(details, HttpStatus.OK);
     }
 
     @GetMapping("/username/{username}/id")

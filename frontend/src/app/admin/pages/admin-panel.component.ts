@@ -26,6 +26,9 @@ export class AdminPanelComponent implements OnInit {
     { text: 'Addresses', link: '/admin-panel/addresses' },
     '-',
     { text: 'Course Catalog (CRM)', link: '/admin-panel/course-catalog' },
+    { text: 'Course Materials', link: '/admin-panel/course-lessons' },
+    '-',
+    { text: 'Audit Log', link: '/admin-panel/audit-log' },
   ];
 
   constructor() {}

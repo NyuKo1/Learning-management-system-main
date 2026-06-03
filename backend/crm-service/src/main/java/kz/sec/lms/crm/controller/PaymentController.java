@@ -2,6 +2,7 @@ package kz.sec.lms.crm.controller;
 
 import kz.sec.lms.crm.dto.PaymentDTO;
 import kz.sec.lms.crm.service.PaymentService;
+import kz.sec.lms.shared.audit.Audited;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class PaymentController {
         this.service = service;
     }
 
+    @Audited(sensitive = true)
     @GetMapping("/all")
     public ResponseEntity<List<PaymentDTO>> getAll() {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
@@ -35,6 +37,7 @@ public class PaymentController {
      * falls back to string userId (username/email) lookup if not numeric
      * or if numeric lookup returns no results.
      */
+    @Audited(sensitive = true)
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<PaymentDTO>> getByUserId(@PathVariable String userId) {
         List<PaymentDTO> payments;

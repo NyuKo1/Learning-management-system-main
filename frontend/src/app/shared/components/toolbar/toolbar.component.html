@@ -2,8 +2,8 @@
     <mat-toolbar-row class="mat-elevation-z8 h-20 md:h-28 transition-all">
         <a routerLink="/" class="flex items-center justify-center h-full w-full p-2">
             <img
-                    src="assets/logo.png"
-                    alt="Logo"
+                    [src]="branding.snapshot.logoUrl"
+                    [alt]="branding.snapshot.productName"
                     class="max-h-full w-auto object-contain"
             />
         </a>

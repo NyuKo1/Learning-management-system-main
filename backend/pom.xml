@@ -21,5 +21,6 @@
         <module>exam-service</module>
         <module>crm-service</module>
         <module>notify-service</module>
+        <module>audit-service</module>
     </modules>
 </project>
