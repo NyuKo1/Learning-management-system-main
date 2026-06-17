@@ -101,8 +101,10 @@ export interface DashboardStats {
 }
 
 export interface AnalyticsData {
-  monthly: { month: string; leads: number; revenue: number }[];
-  funnel: Record<string, number>;
-  methods: Record<string, number>;
-  topCourses: { title: string; sales: number; revenue: number }[];
+  // All fields are optional: crm-service uses Jackson `non_empty`, so empty
+  // collections are omitted from the response.
+  monthly?: { month: string; leads: number; revenue: number }[];
+  funnel?: Record<string, number>;
+  methods?: Record<string, number>;
+  topCourses?: { title: string; sales: number; revenue: number }[];
 }

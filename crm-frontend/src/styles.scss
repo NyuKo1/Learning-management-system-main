@@ -171,6 +171,42 @@ html.dark {
   .mat-divider { border-color: #334155 !important; }
 }
 
+/* ── Dark: feature-component containers & text ───────
+   Component styles are view-encapsulated and hardcode light backgrounds / near-black
+   text, so the global dark theme can't reach them on its own. These global rules use
+   plain class selectors + !important to override the encapsulated component styles. */
+html.dark {
+  /* Containers that hardcode a light/white background in component scss */
+  .stat-card, .kpi-card, .chart-card, .sum-card, .table-card,
+  .quick-action, .funnel-card, .client-card, .course-card,
+  .dialog-container, .form-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+  }
+
+  .lms-banner {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+    color: #e2e8f0 !important;
+  }
+
+  /* Near-black text that would otherwise blend into the dark surfaces */
+  .stat-value, .kpi-val, .sum-val, .cstat-val,
+  .funnel-count, .method-pct, .ct-title,
+  .course-title, .course-price, .amount-cell,
+  .section-title, .form-title, .dialog-title,
+  .quick-action, .lms-banner-title {
+    color: #f1f5f9 !important;
+  }
+
+  /* Mid-dark text → readable light grey */
+  .method-info, .ct-num { color: #cbd5e1 !important; }
+
+  /* Headings inside cards / empty & error states */
+  .chart-card h2, .card h2, .card h3, .funnel-card h2,
+  .api-error-state h3 { color: #f1f5f9 !important; }
+}
+
 /* Branding — --brand-primary is overridden at runtime by BrandingService from BRAND_PRIMARY_COLOR env */
 :root {
   --brand-primary: #0ea5e9;

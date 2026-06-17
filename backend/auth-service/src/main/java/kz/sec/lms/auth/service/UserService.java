@@ -100,6 +100,10 @@ public class UserService extends BaseService<User, UserDetailsDTO, Long> {
                 .getId();
     }
 
+    public boolean existsByUsername(String username) {
+        return this.repository.findByUsername(username).isPresent();
+    }
+
     public TokensDTO login(UserDTO userDTO) {
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(

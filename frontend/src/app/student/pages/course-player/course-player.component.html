@@ -52,7 +52,8 @@
 
         <!-- Video placeholder -->
         <div class="video-area" *ngIf="activeLesson.videoUrl">
-          <iframe [src]="activeLesson.videoUrl" allowfullscreen class="video-frame"></iframe>
+          <video *ngIf="activeVideoFile" [src]="activeVideoFile" controls class="video-frame"></video>
+          <iframe *ngIf="activeVideoEmbed" [src]="activeVideoEmbed" allowfullscreen class="video-frame"></iframe>
         </div>
         <div class="video-placeholder" *ngIf="!activeLesson.videoUrl">
           <mat-icon>play_circle_outline</mat-icon>

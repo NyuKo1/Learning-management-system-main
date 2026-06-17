@@ -108,6 +108,32 @@ public class StudentService extends ExtendedService<Student, StudentDTO, Long> {
                 .getId();
     }
 
+    /**
+     * Provision a minimal student record for an already-existing auth user (e.g. a
+     * course buyer created from the CRM). No academic study program is required.
+     * Idempotent: returns the existing student id if one already exists for the user.
+     */
+    @Transactional
+    public Long provision(Long userId, String username) {
+        return repository
+                .findByUserId(userId)
+                .map(Student::getId)
+                .orElseGet(() -> {
+                    String local =
+                            username != null && username.contains("@")
+                                    ? username.substring(0, username.indexOf('@'))
+                                    : username;
+                    Student student = new Student();
+                    student.setUserId(userId);
+                    student.setFirstName(local != null && !local.isBlank() ? local : "Student");
+                    student.setLastName("");
+                    student.setIndex("CRM-" + userId);
+                    student.setYearOfEnrollment(java.time.Year.now().getValue());
+                    // studyProgram intentionally left null — CRM students have none.
+                    return repository.save(student).getId();
+                });
+    }
+
     public List<StudentDTO> findBySubjectId(Long id) {
         Set<Long> studentIds = new HashSet<>(subjectFeignClient.getStudentIdsBySubjectId(id));
         List<StudentDTO> students = mapper.toDTO(repository.findByIdInAndDeletedFalse(studentIds));

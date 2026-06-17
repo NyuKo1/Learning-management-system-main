@@ -173,8 +173,10 @@ body {
 }
 .btn-crm:hover { background: #0284c7; transform: translateY(-2px); }
 
-.btn-white { background: white; color: var(--dark); }
-.btn-white:hover { background: var(--light); }
+/* White button sits on dark sections in both themes — keep literal dark text
+   (var(--dark) would invert to light → white-on-white). */
+.btn-white { background: white; color: #0f172a; }
+.btn-white:hover { background: #f8fafc; }
 
 .btn-outline-white { border: 1.5px solid rgba(255,255,255,.5); color: white; }
 .btn-outline-white:hover { background: rgba(255,255,255,.1); border-color: white; }
@@ -319,7 +321,8 @@ body {
 
 .mockup-sidebar {
   width: 140px;
-  background: var(--dark);
+  /* Always-dark (white nav text): literal so it doesn't invert in dark mode. */
+  background: #0f172a;
   padding: 16px 0;
   flex-shrink: 0;
 }
@@ -517,7 +520,8 @@ body {
 
 /* BRIDGE */
 .bridge-card {
-  background: linear-gradient(135deg, var(--dark), var(--dark2));
+  /* Always-dark card (white text): literal colours so it doesn't invert in dark mode. */
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   border-radius: var(--radius);
   padding: 32px 24px;
   text-align: center;
@@ -691,8 +695,10 @@ body {
 }
 
 /* ===== CTA ===== */
+/* Always-dark section (white text): literal dark colours so it does not invert
+   in dark mode and leave white text on a light background. */
 .cta {
-  background: linear-gradient(135deg, var(--dark) 0%, var(--dark2) 100%);
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   text-align: center;
 }
 
@@ -770,7 +776,9 @@ body {
 .form-group textarea:focus { border-color: var(--lms); }
 
 /* ===== FOOTER ===== */
-.footer { background: var(--dark); padding: 60px 0 0; }
+/* Always-dark section (white text): use a literal dark colour so it does not
+   invert with --dark in dark mode (which would turn the bg light → white-on-white). */
+.footer { background: #0f172a; padding: 60px 0 0; }
 
 .footer-inner {
   display: grid;
@@ -963,7 +971,9 @@ body.dark .mockup-chart { background: #0f172a; }
 .demo-credentials {
   margin-top: 32px;
   padding: 16px 24px;
-  background: rgba(255,255,255,.08);
+  /* Dark card so the white labels/buttons stay readable on the LIGHT-theme hero
+     (the hero is a light gradient in light mode) as well as the dark-theme hero. */
+  background: rgba(15, 23, 42, 0.9);
   border: 1px solid rgba(255,255,255,.15);
   border-radius: 12px;
   display: inline-block;

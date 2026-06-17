@@ -68,13 +68,16 @@ export class AnalyticsComponent implements OnInit {
   }
 
   private buildFromAnalytics(data: AnalyticsData): void {
-    this.months = data.monthly.map(m => ({
+    // crm-service serializes with Jackson `non_empty`, so empty aggregations
+    // (e.g. no payments with a method) are omitted from the JSON entirely.
+    // Default every field so a partial/empty payload never crashes the page.
+    this.months = (data.monthly || []).map(m => ({
       month: m.month,
       revenue: Number(m.revenue) || 0,
       leads: m.leads
     }));
 
-    const funnelEntries = Object.entries(data.funnel);
+    const funnelEntries = Object.entries(data.funnel || {});
     const maxCount = Math.max(...funnelEntries.map(([, v]) => v), 1);
     this.funnel = funnelEntries.map(([key, count]) => ({
       label: STATUS_LABELS[key] || key,
@@ -83,7 +86,7 @@ export class AnalyticsComponent implements OnInit {
       color: STATUS_COLORS[key] || '#64748b'
     }));
 
-    const methodEntries = Object.entries(data.methods);
+    const methodEntries = Object.entries(data.methods || {});
     const totalMethods = methodEntries.reduce((s, [, v]) => s + v, 0) || 1;
     this.paymentMethods = methodEntries.map(([key, count]) => ({
       label: METHOD_LABELS[key] || key,

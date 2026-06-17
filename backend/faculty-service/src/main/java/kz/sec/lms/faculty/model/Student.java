@@ -33,6 +33,8 @@ public class Student extends BaseEntity<Long> {
 
     @OneToOne private Thesis thesis;
 
-    @ManyToOne(optional = false)
+    // Optional: students provisioned from the CRM (course buyers) have no academic
+    // study program. The academic LMS-admin flow still sets it.
+    @ManyToOne
     private StudyProgram studyProgram;
 }

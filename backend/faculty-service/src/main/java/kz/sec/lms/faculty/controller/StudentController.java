@@ -67,6 +67,15 @@ public class StudentController extends BaseController<Student, StudentDTO, Long>
         return new ResponseEntity<>(this.service.findIdByUserId(id), HttpStatus.OK);
     }
 
+    // Minimal student provisioning for accounts created outside the academic flow
+    // (e.g. CRM course buyers). Requires ROLE_ADMIN (caller forwards the admin token).
+    @PostMapping("/provision")
+    public ResponseEntity<Long> provision(
+            @RequestParam Long userId,
+            @RequestParam(required = false) String username) {
+        return new ResponseEntity<>(this.service.provision(userId, username), HttpStatus.CREATED);
+    }
+
     @GetMapping("/{id}/thesis/id")
     public ResponseEntity<Long> getThesisId(@PathVariable Long id) {
         return new ResponseEntity<>(this.service.findThesisId(id), HttpStatus.OK);

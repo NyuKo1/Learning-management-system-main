@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CourseCatalog } from '@core/models/course-catalog.model';
 import { CourseLesson } from '@core/models/course-lesson.model';
@@ -15,6 +15,8 @@ export class TeacherCoursePlayerComponent implements OnInit {
   course: CourseCatalog | null = null;
   lessons: CourseLesson[] = [];
   activeLesson: CourseLesson | null = null;
+  activeVideoFile: string | null = null;
+  activeVideoEmbed: SafeResourceUrl | null = null;
   loading = true;
   error = false;
 
@@ -33,14 +35,41 @@ export class TeacherCoursePlayerComponent implements OnInit {
       next: ({ course, lessons }) => {
         this.course = course;
         this.lessons = lessons;
-        if (lessons.length > 0) this.activeLesson = lessons[0];
+        if (lessons.length > 0) { this.activeLesson = lessons[0]; this.updateVideo(); }
         this.loading = false;
       },
       error: () => { this.error = true; this.loading = false; },
     });
   }
 
-  selectLesson(lesson: CourseLesson): void { this.activeLesson = lesson; }
+  selectLesson(lesson: CourseLesson): void { this.activeLesson = lesson; this.updateVideo(); }
+
+  private updateVideo(): void {
+    this.activeVideoFile = null;
+    this.activeVideoEmbed = null;
+    const url = this.activeLesson?.videoUrl?.trim();
+    if (!url) return;
+
+    if (/\.(mp4|webm|ogg|ogv|mov|m4v)(\?.*)?$/i.test(url)) {
+      this.activeVideoFile = url;
+    } else {
+      this.activeVideoEmbed = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.toEmbedUrl(url)
+      );
+    }
+  }
+
+  private toEmbedUrl(url: string): string {
+    const yt = url.match(
+      /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/
+    );
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+
+    const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+
+    return url;
+  }
 
   getLevelLabel(level: string): string {
     const map: Record<string, string> = { BEGINNER: 'Начинающий', INTERMEDIATE: 'Средний', ADVANCED: 'Продвинутый' };

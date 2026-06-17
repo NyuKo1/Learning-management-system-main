@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { CourseCatalog } from '@core/models/course-catalog.model';
 import { CourseLesson } from '@core/models/course-lesson.model';
@@ -15,6 +15,10 @@ export class CoursePlayerComponent implements OnInit {
   course: CourseCatalog | null = null;
   lessons: CourseLesson[] = [];
   activeLesson: CourseLesson | null = null;
+  /** Direct media file URL (.mp4/.webm/...) rendered with <video>. */
+  activeVideoFile: string | null = null;
+  /** Sanitized embeddable URL (YouTube/Vimeo/...) rendered in an <iframe>. */
+  activeVideoEmbed: SafeResourceUrl | null = null;
   loading = true;
   error = false;
 
@@ -35,6 +39,7 @@ export class CoursePlayerComponent implements OnInit {
         this.lessons = lessons;
         if (lessons.length > 0) {
           this.activeLesson = lessons[0];
+          this.updateVideo();
         }
         this.loading = false;
       },
@@ -47,6 +52,42 @@ export class CoursePlayerComponent implements OnInit {
 
   selectLesson(lesson: CourseLesson): void {
     this.activeLesson = lesson;
+    this.updateVideo();
+  }
+
+  /** Resolve the lesson's videoUrl into either a <video> file src or a safe
+   *  embeddable <iframe> URL. Computed once per lesson to avoid re-sanitizing
+   *  on every change-detection cycle. */
+  private updateVideo(): void {
+    this.activeVideoFile = null;
+    this.activeVideoEmbed = null;
+    const url = this.activeLesson?.videoUrl?.trim();
+    if (!url) return;
+
+    if (/\.(mp4|webm|ogg|ogv|mov|m4v)(\?.*)?$/i.test(url)) {
+      // Direct media file → <video> (raw URL is fine in a URL context).
+      this.activeVideoFile = url;
+    } else {
+      // Embeddable page (YouTube/Vimeo/…) → <iframe> with a trusted resource URL.
+      this.activeVideoEmbed = this.sanitizer.bypassSecurityTrustResourceUrl(
+        this.toEmbedUrl(url)
+      );
+    }
+  }
+
+  private toEmbedUrl(url: string): string {
+    // YouTube: watch?v=ID, youtu.be/ID, /embed/ID, /shorts/ID → embed form
+    const yt = url.match(
+      /(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/|live\/)|youtu\.be\/)([\w-]{11})/
+    );
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+
+    // Vimeo: vimeo.com/123456 → player embed
+    const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+
+    // Already an embed URL or some other embeddable page — use as-is.
+    return url;
   }
 
   getLevelLabel(level: string): string {

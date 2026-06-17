@@ -6,6 +6,7 @@ import kz.sec.lms.auth.repository.UserRepository;
 import kz.sec.lms.shared.exception.BadRequestException;
 import kz.sec.lms.shared.exception.NotFoundException;
 import kz.sec.lms.shared.security.TokenUtils;
+import feign.FeignException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static kz.sec.lms.shared.security.SecurityUtils.*;
 
@@ -77,15 +79,30 @@ public class TokenGenerator {
                 user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         claims.put("roles", authorities);
 
+        // Accounts created outside the LMS (e.g. course buyers provisioned from the
+        // CRM via /users/register-student) have an auth user but no faculty-service
+        // record. The profile-id lookup must not block login in that case — the claim
+        // is simply omitted and LMS features that key on username still work.
         if (authorities.contains(ROLE_ADMIN)) {
-            claims.put("adminId", facultyFeignClient.getAdministratorIdByUserId(userId));
+            putIfPresent(claims, "adminId", () -> facultyFeignClient.getAdministratorIdByUserId(userId));
         } else if (authorities.contains(ROLE_TEACHER)) {
-            claims.put("teacherId", facultyFeignClient.getTeacherIdByUserId(userId));
+            putIfPresent(claims, "teacherId", () -> facultyFeignClient.getTeacherIdByUserId(userId));
         } else if (authorities.contains(ROLE_STUDENT)) {
-            claims.put("studentId", facultyFeignClient.getStudentIdByUserId(userId));
+            putIfPresent(claims, "studentId", () -> facultyFeignClient.getStudentIdByUserId(userId));
         }
 
         return claims;
+    }
+
+    private void putIfPresent(Map<String, Object> claims, String key, Supplier<Long> lookup) {
+        try {
+            Long value = lookup.get();
+            if (value != null) {
+                claims.put(key, value);
+            }
+        } catch (FeignException.NotFound ignored) {
+            // No faculty-service profile for this user — omit the claim, allow login.
+        }
     }
 
     private User validateUser(String username) {
