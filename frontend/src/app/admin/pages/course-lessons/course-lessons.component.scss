@@ -187,3 +187,31 @@
   color: #94a3b8;
   font-size: 13px;
 }
+
+/* ── Dark ── */
+:host-context(html.dark) {
+  .lessons-page h3 { color: #cbd5e1; }
+  .error-banner {
+    background: rgba(220, 38, 38, 0.15);
+    color: #fca5a5;
+  }
+  .lessons-list,
+  .editor {
+    background: #1e293b;
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .lesson-item {
+    border-color: rgba(255, 255, 255, 0.08);
+    &:hover { border-color: #818cf8; }
+    &.active { border-color: #818cf8; background: rgba(99, 102, 241, 0.15); }
+  }
+  .lesson-meta { color: #94a3b8; }
+  .lesson-order { background: rgba(99, 102, 241, 0.25); color: #c7d2fe; }
+  .lesson-desc { color: #94a3b8; }
+  .editor-placeholder {
+    background: #0f172a;
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #94a3b8;
+  }
+  .loading { color: #94a3b8; }
+}

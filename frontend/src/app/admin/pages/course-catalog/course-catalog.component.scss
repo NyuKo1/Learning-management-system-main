@@ -138,3 +138,26 @@ table { width: 100%; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ── Dark ── */
+:host-context(html.dark) {
+  .page-header {
+    h1 { color: #f1f5f9; }
+    p { color: #94a3b8; }
+  }
+  .count-label { color: #94a3b8; }
+  .edit-panel { background: #1e293b; color: rgba(255, 255, 255, 0.87); }
+  .picker-label { color: #94a3b8; }
+  .color-swatch.selected { border-color: #f1f5f9; box-shadow: 0 0 0 2px #1e293b inset; }
+  .icon-swatch {
+    background: #0f172a;
+    border-color: rgba(255, 255, 255, 0.12);
+    &:hover { background: #1e293b; border-color: rgba(255, 255, 255, 0.24); }
+    &.selected { background: rgba(14, 165, 233, 0.15); border-color: #0ea5e9; }
+  }
+  .course-preview {
+    background: #0f172a;
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  .preview-title { color: #f1f5f9; }
+}

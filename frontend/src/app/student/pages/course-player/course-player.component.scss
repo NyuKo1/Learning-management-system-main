@@ -296,3 +296,49 @@
   height: 100%;
   background: white;
 }
+
+/* ── Dark ── */
+:host-context(html.dark) {
+  .player-shell,
+  .lesson-main { background: #121212; }
+  .progress-info { color: #94a3b8; }
+  .lesson-sidebar {
+    background: #1e293b;
+    border-right-color: rgba(255, 255, 255, 0.08);
+  }
+  .sidebar-header {
+    background: #0f172a;
+    color: #f1f5f9;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    mat-icon { color: #94a3b8; }
+  }
+  .lesson-item {
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+    &:hover { background: rgba(255, 255, 255, 0.04); }
+    &.active {
+      background: rgba(59, 130, 246, 0.15);
+      .lesson-title { color: #93c5fd; }
+    }
+  }
+  .lesson-num { background: #334155; color: #cbd5e1; }
+  .lesson-title { color: #e2e8f0; }
+  .lesson-header {
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+    .lesson-heading { color: #f1f5f9; }
+    .lesson-desc { color: #94a3b8; }
+  }
+  .meta-chip { background: #1e293b; color: #94a3b8; }
+  .video-placeholder { background: #0f172a; }
+  .content-block {
+    color: #cbd5e1;
+    ::ng-deep {
+      h1, h2, h3 { color: #f1f5f9; }
+      .inline-code { background: #1e293b; color: #c4b5fd; }
+      .md-table {
+        th { background: #0f172a; color: #94a3b8; border-color: rgba(255, 255, 255, 0.1); }
+        td { border-color: rgba(255, 255, 255, 0.1); color: #cbd5e1; }
+        tr:nth-child(even) td { background: rgba(255, 255, 255, 0.03); }
+      }
+    }
+  }
+}

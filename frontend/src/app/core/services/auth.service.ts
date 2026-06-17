@@ -5,6 +5,7 @@ import { Tokens } from '@core/models/tokens.model';
 import { User } from '@core/models/user.model';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -83,10 +84,8 @@ export class AuthService {
   }
 
   login(user: User): Observable<Tokens> {
-    const request = this.http.post<Tokens>(`${this.url}/login`, user);
-
-    request.subscribe({
-      next: (tokens: Tokens) => {
+    return this.http.post<Tokens>(`${this.url}/login`, user).pipe(
+      tap((tokens: Tokens) => {
         this.saveAccessToken(tokens.accessToken);
         this.saveRefreshToken(tokens.refreshToken);
 
@@ -96,11 +95,8 @@ export class AuthService {
         } else {
           this.router.navigate(['/']);
         }
-      },
-      error: () => {},
-    });
-
-    return request;
+      })
+    );
   }
 
   refresh() {

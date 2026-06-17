@@ -37,7 +37,12 @@ export class ToolbarComponent implements OnInit {
   }
 
   openCrm(): void {
-    const returnUrl = `${window.location.origin}${this.crmUrl}/sso/callback`;
+    // crmUrl is absolute in dev ('http://localhost:4201') and relative in prod ('/crm').
+    // Resolving against the current origin handles both without double-prefixing the host.
+    const returnUrl = new URL(
+      `${this.crmUrl}/sso/callback`,
+      window.location.origin
+    ).href;
     this.sso.initiateLogin('crm', returnUrl);
   }
 

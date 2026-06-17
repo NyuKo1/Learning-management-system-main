@@ -161,3 +161,33 @@
   p { color: #64748b; margin-bottom: 4px; }
   .redirect-text { font-size: 13px; color: #94a3b8; margin-top: 16px; }
 }
+
+/* ── Dark ── */
+:host-context(html.dark) {
+  .payment-page { background: #121212; }
+  .back-btn { color: #94a3b8; }
+  .payment-card, .success-card {
+    background: #1e293b;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  }
+  .payment-header {
+    h1 { color: #f1f5f9; }
+    .course-name { color: #94a3b8; }
+  }
+  .order-summary {
+    background: #0f172a;
+    .summary-row { color: #cbd5e1; }
+    .total-row { border-top-color: rgba(255, 255, 255, 0.12); color: #f1f5f9; }
+    .total-price { color: #818cf8; }
+  }
+  .error-banner {
+    background: rgba(220, 38, 38, 0.15);
+    border-color: rgba(220, 38, 38, 0.4);
+    color: #fca5a5;
+  }
+  .form-section .section-title { color: #cbd5e1; }
+  .success-card {
+    h2 { color: #f1f5f9; }
+    p { color: #94a3b8; }
+  }
+}
